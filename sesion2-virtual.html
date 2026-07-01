@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 2 — Ventas + Contenido (Virtual)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#181b19;--card:#252825;--card2:#2c2f2c;--b1:#323632;--b2:#434742;
+  --teal:#3dbfa0;--tbg:rgba(61,191,160,.09);--tb:rgba(61,191,160,.3);
+  --coral:#e8614a;--cbg:rgba(232,97,74,.09);--cb:rgba(232,97,74,.3);
+  --lav:#9b8fe0;--lbg:rgba(155,143,224,.09);--lb:rgba(155,143,224,.3);
+  --sky:#5ba8d4;--skybg:rgba(91,168,212,.09);--skyb:rgba(91,168,212,.3);
+  --amber:#e0a847;--amberbg:rgba(224,168,71,.10);--amberb:rgba(224,168,71,.32);
+  --w:#f0ede6;--w2:#b0ac9f;--w3:#686460;--w4:#363833;
+  --f:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:var(--f);color:var(--w)}
+#deck{width:100vw;height:100vh;position:relative;overflow:hidden;aspect-ratio:16/9}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:5vh 6vw;opacity:0;pointer-events:none;transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1);transform:translateX(40px)}
+.slide.center{align-items:center;text-align:center}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--teal);z-index:200;transition:width .4s}
+#cnt{position:fixed;top:18px;right:24px;font-size:12px;color:var(--w3);z-index:100;letter-spacing:.5px}
+#sbadge{position:fixed;top:14px;left:24px;background:var(--tbg);border:1px solid var(--tb);border-radius:20px;padding:4px 14px;font-size:11px;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;z-index:100}
+#pv,#nx{position:fixed;top:50%;transform:translateY(-50%);background:var(--card);border:1px solid var(--b1);color:var(--w2);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:100;transition:all .2s}
+#pv{left:14px}#nx{right:14px}
+#pv:hover,#nx:hover{background:var(--b1);color:var(--w)}
+#dots{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:100}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--w4);cursor:pointer;transition:all .25s}
+.dot.act{width:18px;border-radius:3px;background:var(--teal)}
+
+.eye{font-size:1vw;letter-spacing:.18vw;text-transform:uppercase;color:var(--teal);margin-bottom:1.4vh;display:flex;align-items:center;gap:.5vw}
+.eye::before{content:'';width:1.4vw;height:1px;background:var(--teal)}
+.slide.center .eye{justify-content:center}.slide.center .eye::before{display:none}
+
+.h1{font-size:5.2vw;font-weight:800;line-height:1.0;letter-spacing:-.15vw}
+.h1 em{font-style:italic;font-weight:300}
+.h1 .c{color:var(--coral)}.h1 .t{color:var(--teal)}.h1 .l{color:var(--lav)}
+
+.h2{font-size:3vw;font-weight:800;line-height:1.12;letter-spacing:-.08vw}
+.h2 em{font-style:italic;font-weight:300}
+.h2 .c{color:var(--coral)}.h2 .t{color:var(--teal)}.h2 .l{color:var(--lav)}
+
+.body{font-size:1.55vw;color:var(--w2);line-height:1.65;max-width:55vw;font-weight:300;margin-top:1.4vh}
+.body.center{text-align:center}
+.body strong{color:var(--w);font-weight:500}
+
+.tbadge{display:inline-flex;align-items:center;gap:.4vw;background:var(--card);border:1px solid var(--b1);border-radius:.6vw;padding:.4vh 1vw;font-size:1.1vw;color:var(--w3);margin-top:1.8vh}
+.tbadge .ti{color:var(--teal);font-size:1.2vw}
+
+.capas{display:grid;grid-template-columns:1fr 1fr;gap:1vw;width:100%;max-width:88vw;margin-top:2vh}
+.capa{border-radius:1vw;padding:1.6vh 1.8vw;border:1.5px solid}
+.capa-label{font-size:.95vw;letter-spacing:.12vw;text-transform:uppercase;font-weight:700;margin-bottom:.9vh;display:flex;align-items:center;gap:.5vw}
+.capa-ico{font-size:1.3vw}
+.capa-txt{font-size:1.25vw;color:var(--w2);line-height:1.55;font-weight:300}
+.capa-txt strong{color:var(--w);font-weight:500}
+
+.promptbox{background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--teal);border-radius:0 .9vw .9vw 0;padding:1.6vh 1.8vw;margin-top:1.2vh;max-width:84vw;font-size:1.15vw;color:var(--w2);line-height:1.7;font-weight:300}
+.promptbox .ph{color:var(--teal);font-weight:500}
+
+.dsteps{display:flex;flex-direction:column;gap:.8vh;width:100%;max-width:78vw;margin-top:1.8vh}
+.ds{display:flex;gap:1.4vw;align-items:flex-start;background:var(--card);border:1px solid var(--b1);border-radius:.9vw;padding:1.1vh 1.5vw}
+.ds .dn{font-size:1.6vw;font-weight:800;color:var(--b2);min-width:2vw;flex-shrink:0;line-height:1.1}
+.ds .dc{font-size:1.2vw;color:var(--w);font-weight:500;margin-bottom:.2vh}
+.ds .dd{font-size:.95vw;color:var(--w3);font-weight:300;line-height:1.4}
+
+.oficios{display:grid;grid-template-columns:repeat(3,1fr);gap:.8vw;width:100%;max-width:88vw;margin-top:1.6vh}
+.of{background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:1.1vh 1.2vw}
+.of .on{font-size:.85vw;letter-spacing:.08vw;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:.5vh}
+.of .ot{font-size:.92vw;color:var(--w2);line-height:1.4;font-weight:300}
+
+.pasos{display:flex;flex-direction:column;gap:.7vh;margin-top:1.6vh;max-width:62vw;width:100%}
+.paso{display:flex;gap:1.2vw;align-items:flex-start;background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:.9vh 1.3vw}
+.paso .pn{font-size:1.5vw;font-weight:800;color:var(--b2);min-width:1.8vw;flex-shrink:0;line-height:1.1}
+.paso .pt{font-size:1.1vw;color:var(--w);font-weight:500;margin-bottom:.1vh}
+.paso .pd{font-size:.88vw;color:var(--w3);font-weight:300}
+
+.cierre-items{display:grid;grid-template-columns:repeat(3,1fr);gap:.8vw;width:100%;max-width:78vw;margin-top:1.6vh}
+.citem{background:var(--card);border:1px solid var(--b1);border-left:2px solid var(--teal);border-radius:0 .8vw .8vw 0;padding:1.1vh 1.2vw}
+.citem .ci-ico{font-size:1.4vw;margin-bottom:.5vh}
+.citem .ci-t{font-size:1.05vw;font-weight:600;margin-bottom:.2vh;color:var(--w)}
+.citem .ci-d{font-size:.85vw;color:var(--w3);line-height:1.4;font-weight:300}
+
+.entbox{display:flex;align-items:center;gap:1vw;background:var(--tbg);border:1px solid var(--tb);border-radius:.9vw;padding:1vh 1.6vw;margin-top:1.6vh;max-width:62vw;width:100%}
+.entbox .ei{font-size:1.6vw}
+.entbox .et{font-size:1.1vw;font-weight:600;color:var(--teal)}
+.entbox .ed{font-size:.9vw;color:var(--w3);font-weight:300;margin-top:.2vh}
+
+.qblock{background:var(--tbg);border:1px solid var(--tb);border-radius:1.1vw;padding:2vh 2.2vw;max-width:54vw;margin-top:1.8vh}
+.qblock p{font-size:1.5vw;font-weight:700;line-height:1.35;margin-bottom:.6vh}
+.qblock cite{font-size:.95vw;color:var(--w3);font-weight:300}
+
+.sub{font-size:1vw;color:var(--w3);font-weight:300;margin-top:.6vh}
+.vico{display:inline-flex;align-items:center;gap:.4vw;font-size:.95vw;color:var(--lav);background:var(--lbg);border:1px solid var(--lb);border-radius:.5vw;padding:.3vh .8vw}
+
+.tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:.7vw;width:100%;max-width:88vw;margin-top:1.4vh}
+.tcard{background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:1vh 1.1vw;position:relative}
+.tcard .tn{font-size:1.8vw;font-weight:800;color:var(--b2);position:absolute;top:.6vh;right:.8vw;line-height:1}
+.tcard .tt{font-size:.95vw;font-weight:600;color:var(--w);line-height:1.3;margin-bottom:.4vh;padding-right:1.8vw}
+.tcard .td{font-size:.82vw;color:var(--w3);line-height:1.35;font-weight:300}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div id="cnt"></div>
+<div id="sbadge">Sesión 2 (virtual) · Ventas + Contenido · 2h</div>
+<button id="pv" onclick="go(-1)">‹</button>
+<button id="nx" onclick="go(1)">›</button>
+<div id="dots"></div>
+<div id="deck">
+
+<!-- ══ 0 · PORTADA ══ -->
+<div class="slide center" id="s0">
+  <div class="glow" style="width:30vw;height:30vw;background:var(--teal);opacity:.07;top:-8vh;right:-8vw"></div>
+  <div class="glow" style="width:22vw;height:22vw;background:var(--lav);opacity:.06;bottom:-6vh;left:-6vw"></div>
+  <div class="eye" style="justify-content:center">Curso IA para Multiplicadores · Sesión Virtual</div>
+  <div class="h1" style="text-align:center">
+    Sesión 2<br>
+    <em>Ventas</em> <span class="t">+</span> <em>Contenido</em>
+  </div>
+  <div class="body center" style="max-width:48vw">2 horas · Modalidad virtual · Tu arsenal digital completo</div>
+  <div class="vico" style="margin-top:2vh">💻 Sesión por Zoom / Meet — pantalla compartida</div>
+  <div class="tbadge" style="margin-top:1.6vh"><span class="ti">🎯</span> WhatsApp, redes y diseño — y cómo enseñarlo a tus 10 personas</div>
+</div>
+
+<!-- ══ 1 · REVISIÓN TAREA ══ -->
+<div class="slide" id="s1">
+  <div class="eye">0:00 — Apertura · 10 min</div>
+  <div class="h2">¿Usaste la IA<br>esta semana?<br><em class="t">¿Le explicaste</em><br>a alguien?</div>
+  <div class="body">Compartan en el chat: ¿qué intentaron? ¿le funcionó? ¿qué pasó cuando le explicaron a esa persona?</div>
+  <div class="capas">
+    <div class="capa" style="background:var(--tbg);border-color:var(--tb)">
+      <div class="capa-label" style="color:var(--teal)"><span class="capa-ico">💻</span>Cómo lo usas tú</div>
+      <div class="capa-txt">No regañes a quien no hizo la tarea. Celebra fuerte a quien sí — eso motiva al resto a animarse hoy.</div>
+    </div>
+    <div class="capa" style="background:var(--cbg);border-color:var(--cb)">
+      <div class="capa-label" style="color:var(--coral)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">El relato de "le expliqué a mi vecina y entendió" es oro — pide que lo cuenten en detalle, sirve de ejemplo para todos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 2 · INTRO WHATSAPP ══ -->
+<div class="slide" id="s2">
+  <div class="eye">0:10 — Concepto</div>
+  <div class="h2">El problema más común<br>del <em class="c">emprendedor</em></div>
+  <div class="body" style="max-width:74vw">Pasan el día respondiendo los <strong>mismos mensajes de WhatsApp</strong>. El precio. La ubicación. Los horarios. "Lo pienso". El cliente molesto.<br><br>La IA puede escribir esas respuestas <strong>una sola vez</strong>. Después se guardan en Respuestas Rápidas y se envían con un clic.</div>
+  <div class="tbadge" style="border-color:var(--tb);color:var(--teal)">💡 WhatsApp Business → Configuración → Herramientas para negocios → Respuestas rápidas</div>
+</div>
+
+<!-- ══ 3 · PROMPT WA ══ -->
+<div class="slide" id="s3">
+  <div class="eye">0:10 — Práctica guiada · 25 min</div>
+  <div class="h2">Las <em class="t">6 Respuestas</em><br>de WhatsApp</div>
+  <div class="promptbox">
+    "Actúa como experto en servicio al cliente para negocios pequeños. Soy dueño(a) de <span class="ph">[OFICIO]</span> en San Cristóbal, Bogotá. Crea 6 respuestas cortas para WhatsApp, tono cercano y colombiano (no robótico), para: 1) precio, 2) dónde estoy, 3) horarios, 4) "lo pienso", 5) cliente molesto, 6) seguimiento. Máximo 3 líneas cada una."
+  </div>
+  <div class="capas" style="margin-top:1.2vh">
+    <div class="capa" style="background:var(--tbg);border-color:var(--tb)">
+      <div class="capa-label" style="color:var(--teal)"><span class="capa-ico">💻</span>Cómo lo usas tú</div>
+      <div class="capa-txt">Compártelo en pantalla y arma tu propio set de 6 respuestas en vivo, explicando cada situación mientras lo escribes.</div>
+    </div>
+    <div class="capa" style="background:var(--cbg);border-color:var(--cb)">
+      <div class="capa-label" style="color:var(--coral)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Cuando enseñes esto, empieza solo con 2 respuestas (precio y ubicación) — no abrumes con las 6 de una vez a quien apenas empieza.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4 · EJEMPLOS WA ══ -->
+<div class="slide" id="s4">
+  <div class="eye">0:10 — Ejemplos por oficio</div>
+  <div class="h2" style="font-size:2.4vw">Así quedan<br><em class="t">las respuestas</em></div>
+  <div class="oficios">
+    <div class="of"><div class="on">✂️ Barbería · Precio</div><div class="ot">"Hola! Los cortes desde $15K. El clásico $18K, degradado $22K. ¿Te agendo? 💈"</div></div>
+    <div class="of"><div class="on">💇‍♀️ Peluquería · Lo pienso</div><div class="ot">"Claro, no hay afán 💜 Cuando te decidas avísame. ¡Vas a quedar divina! ✨"</div></div>
+    <div class="of"><div class="on">🍽️ Gastronomía · Precio</div><div class="ot">"El menú del día $12K: sopa, seco, jugo y postre 🍽️ ¿Para cuántos? Te aparto el pedido."</div></div>
+    <div class="of"><div class="on">🧵 Confección · Precio</div><div class="ot">"Los arreglos desde $8K (dobladillo) hasta $25K. ¿Me mandas foto para el precio exacto? 🧵"</div></div>
+    <div class="of"><div class="on">💎 Bisutería · Lo pienso</div><div class="ot">"Sin afán ✨ Si te decides avísame. Algunas piezas son edición limitada 😊"</div></div>
+    <div class="of"><div class="on">🎂 Repostería · Seguimiento</div><div class="ot">"Hola! ¿Ya decidiste el sabor de la torta? Recuerda que necesito 3 días antes 🎂"</div></div>
+  </div>
+  <div class="entbox">
+    <div class="ei">📱</div>
+    <div><div class="et">Entregable: 6 respuestas guardadas en el celular</div><div class="ed">Bonus: configurarlas en WhatsApp Business con atajos /precio /donde /horarios</div></div>
+  </div>
+</div>
+
+<!-- ══ 5 · BIO ══ -->
+<div class="slide" id="s5">
+  <div class="eye">0:45 — Práctica guiada · 20 min</div>
+  <div class="h2">Tu BIO<br><em class="t">que vende</em><br>en 150 caracteres</div>
+  <div class="promptbox" style="margin-top:14px">
+    "Escribe 3 opciones de BIO para Instagram para mi negocio de <span class="ph">[OFICIO]</span> en <span class="ph">[BARRIO]</span>. Mi cliente es <span class="ph">[descripción]</span>. Mi diferencial es <span class="ph">[qué me hace diferente]</span>. Máximo 150 caracteres. Cierra con llamado a WhatsApp. Incluye 1–2 emojis relevantes."
+  </div>
+  <div class="oficios" style="margin-top:1.4vh">
+    <div class="of"><div class="on">✂️ Barbería</div><div class="ot">✂️ Barbería en San Cristóbal | Cortes desde $15K | Agenda tu cita → WA</div></div>
+    <div class="of"><div class="on">💇 Peluquería</div><div class="ot">💇‍♀️ Transformaciones reales en tu barrio | Tintes y cortes | Escríbeme 👇</div></div>
+    <div class="of"><div class="on">🍽️ Gastronomía</div><div class="ot">🍽️ Almuerzos caseros en Altamira | Menú $12K | Pedidos antes 9am por WA</div></div>
+  </div>
+</div>
+
+<!-- ══ 6 · PLAN CONTENIDO ══ -->
+<div class="slide" id="s6">
+  <div class="eye">0:55 — Práctica guiada</div>
+  <div class="h2">Plan de contenido<br><em class="l">7 días</em><br>en 2 minutos</div>
+  <div class="promptbox" style="border-left-color:var(--lav)">
+    "Hazme un plan de contenido para 7 días para mi negocio de <span class="ph" style="color:var(--lav)">[OFICIO]</span> en Colombia. Tabla: Día / Tipo (post, reel, historia) / Tema / Primera línea del texto / Llamado a la acción. 3 días educativos, 2 de venta, 1 de testimonio, 1 personal."
+  </div>
+  <div class="capas" style="margin-top:1.2vh">
+    <div class="capa" style="background:var(--lbg);border-color:var(--lb)">
+      <div class="capa-label" style="color:var(--lav)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Si alguien se traba pensando "qué tema poner", dile: "piensa en una pregunta que te hayan hecho esta semana" — eso siempre da un tema real.</div>
+    </div>
+  </div>
+  <div class="entbox" style="background:var(--lbg);border-color:var(--lb)">
+    <div class="ei">📅</div>
+    <div><div class="et" style="color:var(--lav)">Entregable</div><div class="ed">BIO elegida + tabla de contenido 7 días guardada</div></div>
+  </div>
+</div>
+
+<!-- ══ 7 · CANVA (ADAPTADO VIRTUAL) ══ -->
+<div class="slide" id="s7">
+  <div class="eye">1:05 — Práctica guiada en vivo · 25 min</div>
+  <div class="h2">🎨 Diseñamos<br><em class="c">juntos en Canva</em></div>
+  <div class="pasos">
+    <div class="paso"><div class="pn" style="color:var(--teal)">1</div><div><div class="pt">Yo comparto pantalla y abro canva.com</div><div class="pd">Ustedes abren su propia cuenta en paralelo (crear con Gmail es gratis)</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--lav)">2</div><div><div class="pt">Buscamos juntos "post Instagram" → elegimos plantilla</div><div class="pd">Sigan el mismo paso en su pantalla mientras yo lo hago en la mía</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--coral)">3</div><div><div class="pt">Cada uno cambia el texto por su propio gancho</div><div class="pd">El de su plan de contenido — no el mío de ejemplo</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--sky)">4</div><div><div class="pt">Cambian colores y suben su foto si tienen</div><div class="pd">1–2 colores máximo. Simplicidad = calidad.</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--teal)">5</div><div><div class="pt">Descargan → ¡listo para publicar!</div><div class="pd">Quien termine antes lo comparte en el chat para inspirar al resto</div></div></div>
+  </div>
+  <div class="vico" style="margin-top:1vh">💻 Práctica guiada simultánea — todos en Canva al mismo tiempo, sin salas</div>
+</div>
+
+<!-- ══ 8 · REEL ══ -->
+<div class="slide" id="s8">
+  <div class="eye">1:30 — Práctica guiada · 20 min</div>
+  <div class="h2">Guion de<br><em class="s" style="color:var(--sky)">Reel 30s</em><br>que vende</div>
+  <div class="promptbox" style="border-left-color:var(--coral)">
+    "Crea un guion de 30 segundos para video vertical donde muestro <span class="ph" style="color:var(--coral)">[PROCESO O RESULTADO]</span> de mi negocio de <span class="ph" style="color:var(--coral)">[OFICIO]</span> en Bogotá. Gancho de 2 segundos, 3 puntos cortos, cierre con llamado a WhatsApp. Dime qué mostrar en cada parte."
+  </div>
+  <div class="oficios" style="margin-top:1vh">
+    <div class="of"><div class="on">✂️ Barbería</div><div class="ot">🎬 "¿Cansado de pagar caro por un corte que no te gusta? 😤"</div></div>
+    <div class="of"><div class="on">💇‍♀️ Peluquería</div><div class="ot">🎬 "Lo que ninguna peluquería te dice antes del tinte... 👀"</div></div>
+    <div class="of"><div class="on">🍽️ Gastronomía</div><div class="ot">🎬 "¿Sabías que este almuerzo vale $12.000 y se hace en 20 min? 🍽️"</div></div>
+  </div>
+  <div class="entbox" style="background:var(--cbg);border-color:var(--cb)">
+    <div class="ei">🎬</div>
+    <div><div class="et" style="color:var(--coral)">Entregable</div><div class="ed">Guion de Reel 30 segundos personalizado para tu oficio</div></div>
+  </div>
+</div>
+
+<!-- ══ 9 · CIERRE ══ -->
+<div class="slide" id="s9">
+  <div class="eye">1:50 — Cierre</div>
+  <div class="h2">Construiste en<br><em class="t">2 horas</em></div>
+  <div class="cierre-items">
+    <div class="citem"><div class="ci-ico">💬</div><div class="ci-t">6 respuestas de WhatsApp</div><div class="ci-d">Listas para guardar en Respuestas Rápidas</div></div>
+    <div class="citem"><div class="ci-ico">👤</div><div class="ci-t">BIO profesional para redes</div><div class="ci-d">150 caracteres que convierten visitas en clientes</div></div>
+    <div class="citem"><div class="ci-ico">📅</div><div class="ci-t">Plan de contenido 7 días</div><div class="ci-d">Toda la semana resuelta</div></div>
+    <div class="citem"><div class="ci-ico">🎨</div><div class="ci-t">1 post diseñado en Canva</div><div class="ci-d">Listo para publicar hoy mismo</div></div>
+    <div class="citem"><div class="ci-ico">🎬</div><div class="ci-t">Guion de Reel 30 segundos</div><div class="ci-d">Para grabar esta semana</div></div>
+    <div class="citem"><div class="ci-ico">🧑‍🏫</div><div class="ci-t">3 formas de enseñar esto</div><div class="ci-d">WhatsApp, BIO y Canva — ya sabes explicarlas</div></div>
+  </div>
+</div>
+
+<!-- ══ 10 · TAREA ══ -->
+<div class="slide center" id="s10">
+  <div class="glow" style="width:30vw;height:30vw;background:var(--teal);opacity:.05;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="eye" style="justify-content:center">Antes de la próxima sesión</div>
+  <div class="h1" style="text-align:center;font-size:3.4vw">Publica<br><span class="t">y enseña</span></div>
+  <div class="qblock" style="text-align:center;max-width:50vw">
+    <p style="font-size:1.4vw;color:var(--w)">1) Publiquen <strong style="color:var(--teal)">UN post</strong> esta semana — el que diseñaron hoy.</p>
+    <p style="font-size:1.4vw;color:var(--w)">2) Muéstrenle a alguien <strong style="color:var(--teal)">cómo diseñaron</strong> el post en Canva, paso a paso.</p>
+    <cite>Traigan captura con métricas y el relato de la enseñanza a la Sesión 3.</cite>
+  </div>
+</div>
+
+<!-- ══ 11 · FRASE FINAL ══ -->
+<div class="slide center" id="s11">
+  <div class="glow" style="width:36vw;height:24vw;background:var(--teal);opacity:.07;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="h1" style="text-align:center;font-size:2.6vw">
+    Lo que construyeron hoy es<br>
+    <em class="t">lo que una agencia<br>cobra millones por hacer.</em>
+  </div>
+  <div class="sub" style="margin-top:2vh;text-align:center">Sesión 3 → Negocio + Multiplicador · Próxima clase virtual</div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const dotsEl=document.getElementById('dots');
+const prog=document.getElementById('prog');
+const cnt=document.getElementById('cnt');
+let cur=0;
+const total=slides.length;
+
+slides.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='dot';
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function goTo(n,dir=1){
+  if(n<0||n>=total)return;
+  const prev=slides[cur];
+  prev.classList.remove('active');
+  prev.style.transform=dir>0?'translateX(-40px)':'translateX(40px)';
+  prev.style.opacity='0';
+  setTimeout(()=>{prev.style.transform='';prev.style.opacity='';},400);
+  cur=n;
+  const next=slides[cur];
+  next.style.transform=dir>0?'translateX(40px)':'translateX(-40px)';
+  next.style.opacity='0';
+  next.style.pointerEvents='all';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    next.style.transition='opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1)';
+    next.style.transform='translateX(0)';
+    next.style.opacity='1';
+    next.classList.add('active');
+    slides.forEach((s,i)=>{if(i!==cur){s.classList.remove('active');s.style.pointerEvents='none';s.style.opacity='';s.style.transform='';s.style.transition=''}});
+  }));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('act',i===cur));
+  prog.style.width=((cur/(total-1))*100)+'%';
+  cnt.textContent=(cur+1)+' / '+total;
+}
+
+function go(dir){goTo(cur+dir,dir)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);
+  e.preventDefault();
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50)go(dx<0?1:-1);
+},{passive:true});
+goTo(0);
+</script>
+</body>
+</html>

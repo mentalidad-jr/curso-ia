@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabla de Control Financiero Semanal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#191b1a;--card:#252826;--card2:#2c2f2c;--b1:#333531;--b2:#434742;
+  --teal:#3dbfa0;--tbg:rgba(61,191,160,.10);--tb:rgba(61,191,160,.32);
+  --coral:#e8614a;--cbg:rgba(232,97,74,.10);--cb:rgba(232,97,74,.32);
+  --amber:#e0a847;--amberbg:rgba(224,168,71,.10);--amberb:rgba(224,168,71,.32);
+  --w:#f0ede6;--w2:#b0ac9f;--w3:#686460;--w4:#363833;
+  --f:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:var(--bg);color:var(--w);font-family:var(--f)}
+body{padding-bottom:60px}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(25,27,26,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--b1);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tb-title{font-size:14px;font-weight:700;color:var(--w)}
+.tb-title span{display:block;font-size:11px;color:var(--w3);font-weight:400;margin-top:1px}
+
+.main{max-width:880px;margin:0 auto;padding:28px 24px 0}
+
+.hero{text-align:center;margin-bottom:24px}
+.hero h1{font-size:28px;font-weight:800;letter-spacing:-.8px;line-height:1.15}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--teal)}
+.hero p{font-size:14px;color:var(--w3);margin-top:8px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+.resumen-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.resumen-card{background:var(--card);border:1.5px solid var(--b1);border-radius:12px;padding:14px 16px;text-align:center}
+.resumen-card .rv{font-size:20px;font-weight:800;font-family:monospace;letter-spacing:-.3px}
+.resumen-card .rl{font-size:10.5px;color:var(--w3);margin-top:4px;font-weight:500}
+
+.panel{background:var(--card);border:1.5px solid var(--b1);border-radius:16px;padding:20px 22px;margin-bottom:18px}
+.panel-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w3);font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+
+table{width:100%;border-collapse:collapse}
+th{
+  font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--w3);
+  font-weight:600;text-align:left;padding:8px 8px;border-bottom:1px solid var(--b1);
+}
+td{padding:4px 4px;border-bottom:1px solid var(--card2)}
+td input, td select{
+  width:100%;background:var(--bg);border:1px solid var(--b1);border-radius:6px;
+  padding:7px 8px;font-size:12.5px;color:var(--w);font-family:var(--f);outline:none;
+}
+td input:focus{border-color:var(--teal)}
+td.ganancia-cell{font-family:monospace;font-weight:700;text-align:right;padding-right:10px;font-size:13px}
+.btn-del{
+  background:none;border:none;color:var(--w4);cursor:pointer;font-size:16px;
+  padding:4px;transition:color .15s;
+}
+.btn-del:hover{color:var(--coral)}
+
+.btn-row{display:flex;gap:10px;margin-top:14px}
+.btn{
+  border-radius:9px;padding:10px 16px;font-size:12.5px;font-weight:600;
+  cursor:pointer;font-family:var(--f);transition:all .2s;border:1.5px solid;
+}
+.btn-add{background:var(--tbg);color:var(--teal);border-color:var(--tb)}
+.btn-add:hover{background:var(--tb)}
+.btn-ghost{background:transparent;color:var(--w2);border-color:var(--b1);margin-left:auto}
+.btn-ghost:hover{border-color:var(--b2);color:var(--w)}
+
+.reglas-grid{display:flex;flex-direction:column;gap:8px}
+.regla-item{display:flex;gap:12px;align-items:flex-start;background:var(--card2);border-radius:9px;padding:10px 14px}
+.regla-item .rn{font-size:16px;font-weight:800;color:var(--b2);flex-shrink:0;min-width:20px}
+.regla-item .rt{font-size:12px;color:var(--w2);line-height:1.5;font-weight:300}
+.regla-item .rt strong{color:var(--w);font-weight:600}
+
+.alarm-box{
+  display:flex;gap:12px;align-items:center;background:var(--amberbg);
+  border:1px solid var(--amberb);border-radius:10px;padding:12px 16px;margin-top:14px;
+}
+.alarm-box .ai{font-size:24px}
+.alarm-box .at{font-size:12.5px;color:#d4b56a;line-height:1.5}
+
+.footer-note{text-align:center;font-size:11px;color:var(--w4);margin-top:24px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-title">Tabla de Control Financiero<span>Anota cada semana — 10 minutos, ningún cálculo de memoria</span></div>
+</div>
+
+<div class="main">
+
+  <div class="hero">
+    <h1>Tu negocio,<br><em>semana a semana</em></h1>
+    <p>Llena una fila por cada movimiento de dinero. Los totales se calculan solos. Guarda esta página o tómale captura cada domingo.</p>
+  </div>
+
+  <div class="resumen-row">
+    <div class="resumen-card"><div class="rv" style="color:var(--teal)" id="totalIngresos">$0</div><div class="rl">Total ingresos</div></div>
+    <div class="resumen-card"><div class="rv" style="color:var(--coral)" id="totalGastos">$0</div><div class="rl">Total gastos</div></div>
+    <div class="resumen-card"><div class="rv" id="totalGanancia">$0</div><div class="rl">Ganancia neta</div></div>
+    <div class="resumen-card"><div class="rv" id="totalMovs">0</div><div class="rl">Movimientos</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-label">
+      <span>📊 Mi tabla — esta semana</span>
+      <span style="color:var(--w4);font-size:10px;font-weight:400">Toca + para agregar una fila</span>
+    </div>
+    <table id="tabla">
+      <thead>
+        <tr>
+          <th style="width:80px">Fecha</th>
+          <th>Concepto</th>
+          <th style="width:90px">Ingreso</th>
+          <th style="width:90px">Gasto</th>
+          <th style="width:90px">Ganancia</th>
+          <th style="width:80px">Método</th>
+          <th style="width:30px"></th>
+        </tr>
+      </thead>
+      <tbody id="tablaBody"></tbody>
+    </table>
+    <div class="btn-row">
+      <button class="btn btn-add" onclick="agregarFila()">+ Agregar movimiento</button>
+      <button class="btn btn-ghost" onclick="limpiarTabla()">↺ Limpiar todo</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-label">📌 Las 5 reglas para no perder la plata</div>
+    <div class="reglas-grid">
+      <div class="regla-item"><div class="rn" style="color:var(--teal)">1</div><div class="rt"><strong>Anota TODO ingreso y TODO gasto.</strong> Aunque sea $1.000 — los pequeños gastos son los que más dañan al final del mes.</div></div>
+      <div class="regla-item"><div class="rn" style="color:var(--teal)">2</div><div class="rt"><strong>Separa gastos del negocio vs personales.</strong> Si mezclas los dos, nunca sabes si el negocio va bien o si es tu sueldo el que sobrevive.</div></div>
+      <div class="regla-item"><div class="rn" style="color:var(--teal)">3</div><div class="rt"><strong>Revisa cada domingo: ingresos, gastos, ganancia.</strong> 10 minutos, una vez a la semana, sin excusas.</div></div>
+      <div class="regla-item"><div class="rn" style="color:var(--teal)">4</div><div class="rt"><strong>Ajusta 1 cosa cada semana.</strong> Un precio que puedes subir, un gasto que puedes reducir, una venta más que puedes intentar.</div></div>
+      <div class="regla-item"><div class="rn" style="color:var(--teal)">5</div><div class="rt"><strong>Guarda la tabla semana a semana.</strong> En 3 meses vas a poder ver si el negocio está creciendo de verdad — eso vale más que cualquier sensación.</div></div>
+    </div>
+    <div class="alarm-box">
+      <div class="ai">⏰</div>
+      <div class="at"><strong>El truco que no falla:</strong> pon una alarma todos los domingos a las 9pm que diga "Anotar la semana". Eso es todo el sistema — no necesitas más.</div>
+    </div>
+  </div>
+
+  <div class="footer-note">MENTALIDAD JR · Curso IA para Multiplicadores · Sesión 3 — Negocio + Multiplicador</div>
+
+</div>
+
+<script>
+let filas = [];
+let contador = 0;
+
+function fmt(n){
+  if(isNaN(n) || n===null) return '$0';
+  return '$' + Math.round(n).toLocaleString('es-CO');
+}
+
+function hoy(){
+  const d = new Date();
+  return d.toISOString().split('T')[0];
+}
+
+function agregarFila(datos){
+  const id = contador++;
+  filas.push({ id, fecha: datos?.fecha || hoy(), concepto: datos?.concepto || '', ingreso: datos?.ingreso || '', gasto: datos?.gasto || '', metodo: datos?.metodo || 'Efectivo' });
+  render();
+}
+
+function actualizarFila(id, campo, valor){
+  const f = filas.find(x=>x.id===id);
+  if(f) f[campo] = valor;
+  render();
+}
+
+function eliminarFila(id){
+  filas = filas.filter(x=>x.id!==id);
+  render();
+}
+
+function limpiarTabla(){
+  if(filas.length && !confirm('¿Borrar todos los movimientos de esta tabla?')) return;
+  filas = [];
+  render();
+}
+
+function render(){
+  const body = document.getElementById('tablaBody');
+  body.innerHTML = filas.map(f=>{
+    const ingreso = parseFloat(f.ingreso) || 0;
+    const gasto = parseFloat(f.gasto) || 0;
+    const ganancia = ingreso - gasto;
+    const color = ganancia < 0 ? 'var(--coral)' : (ganancia > 0 ? 'var(--teal)' : 'var(--w3)');
+    return `
+    <tr>
+      <td><input type="date" value="${f.fecha}" onchange="actualizarFila(${f.id},'fecha',this.value)"></td>
+      <td><input type="text" value="${f.concepto}" placeholder="Ej: 3 cortes de cabello" onchange="actualizarFila(${f.id},'concepto',this.value)"></td>
+      <td><input type="number" value="${f.ingreso}" placeholder="0" onchange="actualizarFila(${f.id},'ingreso',this.value)"></td>
+      <td><input type="number" value="${f.gasto}" placeholder="0" onchange="actualizarFila(${f.id},'gasto',this.value)"></td>
+      <td class="ganancia-cell" style="color:${color}">${fmt(ganancia)}</td>
+      <td>
+        <select onchange="actualizarFila(${f.id},'metodo',this.value)">
+          <option ${f.metodo==='Efectivo'?'selected':''}>Efectivo</option>
+          <option ${f.metodo==='Nequi'?'selected':''}>Nequi</option>
+          <option ${f.metodo==='Transferencia'?'selected':''}>Transferencia</option>
+          <option ${f.metodo==='Tarjeta'?'selected':''}>Tarjeta</option>
+        </select>
+      </td>
+      <td><button class="btn-del" onclick="eliminarFila(${f.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+
+  const totalIngresos = filas.reduce((s,f)=>s+(parseFloat(f.ingreso)||0),0);
+  const totalGastos = filas.reduce((s,f)=>s+(parseFloat(f.gasto)||0),0);
+  const totalGanancia = totalIngresos - totalGastos;
+
+  document.getElementById('totalIngresos').textContent = fmt(totalIngresos);
+  document.getElementById('totalGastos').textContent = fmt(totalGastos);
+  const gananciaEl = document.getElementById('totalGanancia');
+  gananciaEl.textContent = fmt(totalGanancia);
+  gananciaEl.style.color = totalGanancia < 0 ? 'var(--coral)' : 'var(--teal)';
+  document.getElementById('totalMovs').textContent = filas.length;
+}
+
+// Inicializar con 3 filas vacías
+agregarFila();
+agregarFila();
+agregarFila();
+</script>
+</body>
+</html>

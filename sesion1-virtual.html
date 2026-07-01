@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 1 — IA Sin Miedo (Virtual)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#191b18;--bg2:#1e201d;--card:#252724;--card2:#2c2e2a;--b1:#333530;--b2:#444640;
+  --coral:#e8614a;--coral2:#f5876e;--cbg:rgba(232,97,74,.09);--cb:rgba(232,97,74,.3);
+  --teal:#3dbfa0;--teal2:#62d4b8;--tbg:rgba(61,191,160,.09);--tb:rgba(61,191,160,.3);
+  --lav:#9b8fe0;--lbg:rgba(155,143,224,.09);--lb:rgba(155,143,224,.3);
+  --sky:#5ba8d4;--skybg:rgba(91,168,212,.09);--skyb:rgba(91,168,212,.3);
+  --amber:#e0a847;--amberbg:rgba(224,168,71,.10);--amberb:rgba(224,168,71,.32);
+  --w:#f0ede6;--w2:#b0ac9f;--w3:#686460;--w4:#363833;
+  --f:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:var(--f);color:var(--w)}
+
+#deck{width:100vw;height:100vh;position:relative;overflow:hidden;aspect-ratio:16/9}
+
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:center;align-items:flex-start;
+  padding:5vh 6vw;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1);
+  transform:translateX(40px);
+}
+.slide.center{align-items:center;text-align:center}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+
+.glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--coral);z-index:200;transition:width .4s cubic-bezier(.4,0,.2,1)}
+#cnt{position:fixed;top:18px;right:24px;font-size:12px;color:var(--w3);z-index:100;letter-spacing:.5px}
+#sbadge{position:fixed;top:14px;left:24px;background:var(--cbg);border:1px solid var(--cb);border-radius:20px;padding:4px 14px;font-size:11px;color:var(--coral);letter-spacing:1.5px;text-transform:uppercase;z-index:100}
+
+#pv,#nx{position:fixed;top:50%;transform:translateY(-50%);background:var(--card);border:1px solid var(--b1);color:var(--w2);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:100;transition:all .2s}
+#pv{left:14px}#nx{right:14px}
+#pv:hover,#nx:hover{background:var(--b1);color:var(--w)}
+
+#dots{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:100}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--w4);cursor:pointer;transition:all .25s}
+.dot.act{width:18px;border-radius:3px;background:var(--coral)}
+
+.eye{font-size:1vw;min-font-size:11px;letter-spacing:.18vw;text-transform:uppercase;color:var(--coral);margin-bottom:1.4vh;display:flex;align-items:center;gap:.5vw}
+.eye::before{content:'';width:1.4vw;height:1px;background:var(--coral)}
+.slide.center .eye{justify-content:center}.slide.center .eye::before{display:none}
+
+.h1{font-size:5.2vw;font-weight:800;line-height:1.0;letter-spacing:-.15vw}
+.h1 em{font-style:italic;font-weight:300}
+.h1 .c{color:var(--coral)}.h1 .t{color:var(--teal)}.h1 .l{color:var(--lav)}.h1 .s{color:var(--sky)}
+
+.h2{font-size:3vw;font-weight:800;line-height:1.12;letter-spacing:-.08vw}
+.h2 em{font-style:italic;font-weight:300}
+.h2 .c{color:var(--coral)}.h2 .t{color:var(--teal)}.h2 .l{color:var(--lav)}.h2 .s{color:var(--sky)}
+
+.body{font-size:1.55vw;color:var(--w2);line-height:1.65;max-width:55vw;font-weight:300;margin-top:1.4vh}
+.body.center{text-align:center}
+.body strong{color:var(--w);font-weight:500}
+
+.tbadge{display:inline-flex;align-items:center;gap:.4vw;background:var(--card);border:1px solid var(--b1);border-radius:.6vw;padding:.4vh 1vw;font-size:1.1vw;color:var(--w3);margin-top:1.8vh}
+.tbadge .ti{color:var(--coral);font-size:1.2vw}
+
+/* DOS CAPAS: USAS TU / ENSEÑAS */
+.capas{display:grid;grid-template-columns:1fr 1fr;gap:1vw;width:100%;max-width:88vw;margin-top:2vh}
+.capa{border-radius:1vw;padding:1.6vh 1.8vw;border:1.5px solid}
+.capa-label{font-size:.95vw;letter-spacing:.12vw;text-transform:uppercase;font-weight:700;margin-bottom:.9vh;display:flex;align-items:center;gap:.5vw}
+.capa-ico{font-size:1.3vw}
+.capa-txt{font-size:1.25vw;color:var(--w2);line-height:1.55;font-weight:300}
+.capa-txt strong{color:var(--w);font-weight:500}
+
+/* RULES */
+.rules{display:flex;flex-direction:column;gap:.9vh;margin-top:2vh;max-width:62vw;width:100%}
+.rule{display:flex;align-items:center;gap:1.2vw;background:var(--card);border:1px solid var(--b1);border-radius:.9vw;padding:1.1vh 1.4vw}
+.rule .rn{font-size:1.9vw;font-weight:800;min-width:2vw;line-height:1}
+.rule .rt{font-size:1.25vw;font-weight:500;color:var(--w)}
+.rule .rd{font-size:1vw;color:var(--w3);margin-top:.2vh;font-weight:300}
+
+/* TWO COL */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1vw;width:100%;max-width:78vw;margin-top:2vh}
+.col{border-radius:1vw;padding:1.6vh 1.6vw;border:1.5px solid}
+.col h4{font-size:.95vw;letter-spacing:.12vw;text-transform:uppercase;margin-bottom:1.2vh;font-weight:700}
+.ci{display:flex;gap:.6vw;font-size:1.15vw;color:var(--w2);margin-bottom:.7vh;line-height:1.45;font-weight:300}
+.ci .ic{flex-shrink:0;font-size:1.15vw}
+
+/* PROMPT COMPARE */
+.pcompare{display:grid;grid-template-columns:1fr 1fr;gap:1vw;width:100%;max-width:84vw;margin-top:1.8vh}
+.pbad,.pgood{border-radius:1vw;padding:1.6vh 1.6vw;border:1.5px solid}
+.pbad{border-color:rgba(232,97,74,.3);background:rgba(50,15,10,.35)}
+.pgood{border-color:rgba(61,191,160,.3);background:var(--tbg)}
+.plabel{font-size:.9vw;letter-spacing:.12vw;text-transform:uppercase;font-weight:700;margin-bottom:.8vh;display:block}
+.ptext{font-size:1.15vw;color:var(--w2);line-height:1.5;font-weight:300}
+.presult{margin-top:.9vh;font-size:.95vw;color:var(--w3);font-style:italic;border-top:1px solid var(--b1);padding-top:.7vh}
+
+/* FORMULA */
+.formula{display:flex;flex-wrap:wrap;gap:.6vw;margin-top:2vh;max-width:84vw}
+.fp{border-radius:.8vw;padding:.9vh 1.2vw;border:1.5px solid;display:flex;flex-direction:column;gap:.2vh;flex:1;min-width:13vw}
+.fp .fn{font-size:.75vw;letter-spacing:.1vw;text-transform:uppercase;font-weight:700;margin-bottom:.1vh}
+.fp .ft{font-size:1.15vw;font-weight:700;color:var(--w)}
+.fp .fd{font-size:.95vw;color:var(--w3);font-weight:300;line-height:1.35}
+
+/* OFICIOS */
+.oficios{display:grid;grid-template-columns:repeat(3,1fr);gap:.8vw;width:100%;max-width:88vw;margin-top:1.6vh}
+.of{background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:1.1vh 1.2vw}
+.of .on{font-size:.85vw;letter-spacing:.08vw;text-transform:uppercase;color:var(--coral);font-weight:600;margin-bottom:.5vh}
+.of .ot{font-size:.95vw;color:var(--w2);line-height:1.45;font-weight:300}
+
+/* PASOS ENSEÑAR */
+.dsteps{display:flex;flex-direction:column;gap:.8vh;width:100%;max-width:78vw;margin-top:1.8vh}
+.ds{display:flex;gap:1.4vw;align-items:flex-start;background:var(--card);border:1px solid var(--b1);border-radius:.9vw;padding:1.1vh 1.5vw}
+.ds .dn{font-size:1.6vw;font-weight:800;color:var(--b2);min-width:2vw;flex-shrink:0;line-height:1.1}
+.ds .dc{font-size:1.2vw;color:var(--w);font-weight:500;margin-bottom:.2vh}
+.ds .dd{font-size:.95vw;color:var(--w3);font-weight:300;line-height:1.4}
+
+/* TARJETAS */
+.tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:.7vw;width:100%;max-width:88vw;margin-top:1.4vh}
+.tcard{background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:1vh 1.1vw;position:relative}
+.tcard .tn{font-size:1.8vw;font-weight:800;color:var(--b2);position:absolute;top:.6vh;right:.8vw;line-height:1}
+.tcard .tt{font-size:.95vw;font-weight:600;color:var(--w);line-height:1.3;margin-bottom:.4vh;padding-right:1.8vw}
+.tcard .td{font-size:.82vw;color:var(--w3);line-height:1.35;font-weight:300}
+
+/* CIERRE */
+.cierre-items{display:grid;grid-template-columns:repeat(3,1fr);gap:.8vw;width:100%;max-width:78vw;margin-top:1.6vh}
+.citem{background:var(--card);border:1px solid var(--b1);border-left:2px solid var(--teal);border-radius:0 .8vw .8vw 0;padding:1.1vh 1.2vw}
+.citem .ci-ico{font-size:1.4vw;margin-bottom:.5vh}
+.citem .ci-t{font-size:1.05vw;font-weight:600;margin-bottom:.2vh;color:var(--w)}
+.citem .ci-d{font-size:.85vw;color:var(--w3);line-height:1.4;font-weight:300}
+
+.entbox{display:flex;align-items:center;gap:1vw;background:var(--tbg);border:1px solid var(--tb);border-radius:.9vw;padding:1vh 1.6vw;margin-top:1.6vh;max-width:62vw;width:100%}
+.entbox .ei{font-size:1.6vw}
+.entbox .et{font-size:1.1vw;font-weight:600;color:var(--teal)}
+.entbox .ed{font-size:.9vw;color:var(--w3);font-weight:300;margin-top:.2vh}
+
+.qblock{background:var(--cbg);border:1px solid rgba(232,97,74,.2);border-radius:1.1vw;padding:2vh 2.2vw;max-width:54vw;margin-top:1.8vh}
+.qblock p{font-size:1.5vw;font-weight:700;line-height:1.35;letter-spacing:-.02vw;margin-bottom:.6vh}
+.qblock cite{font-size:.95vw;color:var(--w3);font-weight:300}
+
+.sub{font-size:1vw;color:var(--w3);font-weight:300;margin-top:.6vh}
+
+/* VIRTUAL ICON */
+.vico{display:inline-flex;align-items:center;gap:.4vw;font-size:.95vw;color:var(--lav);background:var(--lbg);border:1px solid var(--lb);border-radius:.5vw;padding:.3vh .8vw}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div id="cnt"></div>
+<div id="sbadge">Sesión 1 (virtual) · IA Sin Miedo · 2h</div>
+<button id="pv" onclick="go(-1)">‹</button>
+<button id="nx" onclick="go(1)">›</button>
+<div id="dots"></div>
+<div id="deck">
+
+<!-- ══ 0 · PORTADA ══ -->
+<div class="slide center" id="s0">
+  <div class="glow" style="width:30vw;height:30vw;background:var(--coral);opacity:.07;top:-8vh;right:-8vw"></div>
+  <div class="glow" style="width:22vw;height:22vw;background:var(--teal);opacity:.06;bottom:-6vh;left:-6vw"></div>
+  <div class="eye" style="justify-content:center">Curso IA para Multiplicadores · Sesión Virtual</div>
+  <div class="h1" style="text-align:center">
+    Sesión 1<br>
+    <em>IA</em> <span class="c">Sin</span> <em>Miedo</em>
+  </div>
+  <div class="body center" style="max-width:48vw">2 horas · Modalidad virtual · Todo con el celular o computador</div>
+  <div class="vico" style="margin-top:2vh">💻 Sesión por Zoom / Meet — pantalla compartida</div>
+  <div class="tbadge" style="margin-top:1.6vh"><span class="ti">🎯</span> Aprender a usar la IA — y a explicarle a alguien más cómo usarla</div>
+</div>
+
+<!-- ══ 1 · OBJETIVO DOBLE ══ -->
+<div class="slide center" id="s1">
+  <div class="glow" style="width:36vw;height:24vw;background:var(--lav);opacity:.06;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="eye" style="justify-content:center">El objetivo real de hoy</div>
+  <div class="h1" style="text-align:center;font-size:3.4vw">No basta con<br><span class="c">saber usarla</span>.<br>Hoy aprendes a<br><em class="t">explicarla</em>.</div>
+  <div class="body center" style="max-width:50vw">Cada uno de ustedes va a enseñarle esto a 10 personas más. Por eso, cada tema de hoy tiene dos partes: cómo lo usas tú, y cómo se lo explicas a alguien que nunca ha tocado una IA.</div>
+</div>
+
+<!-- ══ 2 · LAS 4 REGLAS ══ -->
+<div class="slide" id="s2">
+  <div class="eye">Antes de arrancar</div>
+  <div class="h2">Las 4 reglas<br><em class="t">de la sesión virtual</em></div>
+  <div class="rules">
+    <div class="rule"><div class="rn" style="color:var(--coral)">1</div><div><div class="rt">Cámara y micrófono activos al practicar</div><div class="rd">Así puedo ver tu pantalla o ayudarte si algo no funciona.</div></div></div>
+    <div class="rule"><div class="rn" style="color:var(--teal)">2</div><div><div class="rt">Resultado rápido</div><div class="rd">En los primeros 30 minutos todos producen algo real, aunque sea desde el celular.</div></div></div>
+    <div class="rule"><div class="rn" style="color:var(--lav)">3</div><div><div class="rt">Sin pena, sin importar la conexión</div><div class="rd">Si se cae el internet o algo no carga, lo resolvemos juntos — no hay preguntas malas.</div></div></div>
+    <div class="rule"><div class="rn" style="color:var(--sky)">4</div><div><div class="rt">Seguridad</div><div class="rd">Nunca compartas claves, contraseñas ni datos bancarios — ni en el chat de la llamada.</div></div></div>
+  </div>
+</div>
+
+<!-- ══ 3 · ROMPEHIELO ══ -->
+<div class="slide" id="s3">
+  <div class="eye">0:10 — Activación · 5 min</div>
+  <div class="h2">¿Qué actividad<br>te roba más<br><em class="c">tiempo al día?</em></div>
+  <div class="body">Que cada uno lo escriba en el chat de la llamada — sin levantar la mano. Leo en voz alta las 4–5 respuestas más comunes.</div>
+  <div class="capas">
+    <div class="capa" style="background:var(--cbg);border-color:var(--cb)">
+      <div class="capa-label" style="color:var(--coral)"><span class="capa-ico">💻</span>Cómo lo usas tú</div>
+      <div class="capa-txt">Escribe en el chat tu respuesta real — sin pensarla mucho. Eso te conecta con el resto del ejercicio.</div>
+    </div>
+    <div class="capa" style="background:var(--tbg);border-color:var(--tb)">
+      <div class="capa-label" style="color:var(--teal)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Cuando lo repitas con tus 10 personas, hazlo en voz alta o en su propio chat de WhatsApp grupal — funciona igual.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4 · QUÉ ES LA IA ══ -->
+<div class="slide" id="s4">
+  <div class="eye">0:20 — Concepto · 15 min</div>
+  <div class="h2">La IA es como<br>el <em class="t">vecino que</em><br><em class="t">sabe de todo</em></div>
+  <div class="two" style="margin-top:1.6vh">
+    <div class="col" style="border-color:rgba(232,97,74,.25);background:rgba(50,15,10,.3)">
+      <h4 style="color:var(--coral)">No es</h4>
+      <div class="ci"><span class="ic">✕</span><span>Un robot que hace cosas físicas</span></div>
+      <div class="ci"><span class="ic">✕</span><span>Algo que sabe todo — puede equivocarse</span></div>
+      <div class="ci"><span class="ic">✕</span><span>Tecnología cara o difícil de usar</span></div>
+    </div>
+    <div class="col" style="border-color:rgba(61,191,160,.25);background:var(--tbg)">
+      <h4 style="color:var(--teal)">Sí es</h4>
+      <div class="ci"><span class="ic">✓</span><span>Asistente disponible 24/7 en el celular</span></div>
+      <div class="ci"><span class="ic">✓</span><span>Escribe, diseña, analiza, calcula</span></div>
+      <div class="ci"><span class="ic">✓</span><span>Gratis y disponible ahora mismo</span></div>
+    </div>
+  </div>
+  <div class="capas" style="margin-top:1.4vh">
+    <div class="capa" style="background:var(--cbg);border-color:var(--cb)">
+      <div class="capa-label" style="color:var(--coral)"><span class="capa-ico">💻</span>Cómo lo usas tú</div>
+      <div class="capa-txt">Hoy mismo abre ChatGPT o Claude y haz una primera pregunta tonta — solo para sentir que responde.</div>
+    </div>
+    <div class="capa" style="background:var(--tbg);border-color:var(--tb)">
+      <div class="capa-label" style="color:var(--teal)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Di exactamente esta frase: <strong>"es como un vecino que sabe de todo y está gratis en tu celular."</strong> Nunca digas "algoritmo" ni "modelo".</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 5 · DEMO PROMPT MALO VS BUENO ══ -->
+<div class="slide" id="s5">
+  <div class="eye">0:20 — Demo en vivo · 15 min</div>
+  <div class="h2">Mismo pedido,<br>resultado <em class="c">brutalmente</em> distinto</div>
+  <div class="pcompare">
+    <div class="pbad">
+      <span class="plabel" style="color:var(--coral)">❌ Sin contexto</span>
+      <div class="ptext">"ayúdame con mi negocio"</div>
+      <div class="presult">Respuesta genérica inútil: "Defina su propuesta de valor…"</div>
+    </div>
+    <div class="pgood">
+      <span class="plabel" style="color:var(--teal)">✅ Con contexto</span>
+      <div class="ptext">"Soy dueña de peluquería en San Cristóbal. Una clienta dice que el tinte está caro. Dame una respuesta amable que no baje el precio."</div>
+      <div class="presult" style="color:var(--teal)">→ Mensaje listo para copiar y enviar hoy.</div>
+    </div>
+  </div>
+  <div class="capas" style="margin-top:1.4vh">
+    <div class="capa" style="background:var(--cbg);border-color:var(--cb)">
+      <div class="capa-label" style="color:var(--coral)"><span class="capa-ico">💻</span>Cómo lo usas tú</div>
+      <div class="capa-txt">Comparte tu pantalla y prueba los dos prompts en vivo — déjalos ver la diferencia con sus propios ojos.</div>
+    </div>
+    <div class="capa" style="background:var(--tbg);border-color:var(--tb)">
+      <div class="capa-label" style="color:var(--teal)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Repite esta demo exacta con tus 10 personas — usa un ejemplo de su propio oficio, no el de peluquería.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 6 · EJERCICIO MI NEGOCIO ══ -->
+<div class="slide" id="s6">
+  <div class="eye">0:35 — Práctica individual · 15 min</div>
+  <div class="h2">Ejercicio:<br><em class="t">'Mi negocio</em> en 5 líneas'</div>
+  <div class="body" style="font-size:1.3vw">Cada uno abre ChatGPT o Claude en su propio dispositivo. Comparte pantalla solo si necesitas ayuda.</div>
+  <div style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--teal);border-radius:0 .9vw .9vw 0;padding:1.6vh 1.8vw;margin-top:1.2vh;max-width:78vw;font-size:1.15vw;color:var(--w2);line-height:1.7;font-weight:300">
+    Soy <strong style="color:var(--teal)">[nombre]</strong>. Tengo un negocio de <strong style="color:var(--teal)">[oficio]</strong> en <strong style="color:var(--teal)">[barrio]</strong>. Mi cliente típico es <strong style="color:var(--teal)">[descripción]</strong>. Lo que más vendo es <strong style="color:var(--teal)">[producto/precio]</strong>. Mi mayor problema hoy es <strong style="color:var(--teal)">[problema]</strong>. Dame 3 ideas para conseguir más clientes esta semana.
+  </div>
+  <div class="tbadge"><span class="ti">⏱</span> 10 min práctica + 5 min compartir en el chat o con cámara</div>
+</div>
+
+<!-- ══ 7 · EJEMPLOS OFICIOS ══ -->
+<div class="slide" id="s7">
+  <div class="eye">0:35 — Ejemplos por oficio</div>
+  <div class="h2" style="font-size:2.4vw">Así lo escribe<br><em class="c">cada oficio</em></div>
+  <div class="oficios">
+    <div class="of"><div class="on">✂️ Barbería</div><div class="ot">Soy Carlos, barbería en San Cristóbal. Cliente: hombre 15–35. Vendo corte clásico $15.000. Problema: no vuelven seguido.</div></div>
+    <div class="of"><div class="on">💇‍♀️ Peluquería</div><div class="ot">Soy Marcela, peluquería en Juan Rey. Clienta: mujer 20–50. Vendo tintura y corte. Problema: no sé qué publicar.</div></div>
+    <div class="of"><div class="on">🍽️ Gastronomía</div><div class="ot">Soy Patricia, almuerzos en Altamira. Cliente: trabajador del sector. Vendo menú $12.000. Problema: nadie me conoce.</div></div>
+    <div class="of"><div class="on">🧵 Confección</div><div class="ot">Soy Rosa, arreglos de ropa. Clienta: mujer adulta. Vendo blusas y vestidos. Problema: no muestro mi trabajo en redes.</div></div>
+    <div class="of"><div class="on">💎 Bisutería</div><div class="ot">Soy Liliana, aretes y collares a mano. Clienta busca regalos únicos. Problema: solo vendo a conocidos.</div></div>
+    <div class="of"><div class="on">🎂 Repostería</div><div class="ot">Soy Carmen, tortas por encargo. Clienta celebra fechas especiales. Problema: pedidos de último momento.</div></div>
+  </div>
+  <div class="capas" style="margin-top:1.2vh">
+    <div class="capa" style="background:var(--tbg);border-color:var(--tb)">
+      <div class="capa-label" style="color:var(--teal)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Antes de tu mini-clase, prepara <strong>2 ejemplos del oficio real</strong> de tus 10 personas. No improvises con el de otro oficio.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 8 · LA FÓRMULA DE ORO ══ -->
+<div class="slide" id="s8">
+  <div class="eye">0:50 — La Fórmula · 15 min</div>
+  <div class="h2">La <em class="l">Fórmula</em> de Oro<br>del Prompt</div>
+  <div class="formula">
+    <div class="fp" style="background:rgba(232,97,74,.08);border-color:rgba(232,97,74,.25)"><span class="fn" style="color:var(--coral)">01 · ROL</span><span class="ft">Quién es la IA</span><span class="fd">"Actúa como experto en…"</span></div>
+    <div class="fp" style="background:rgba(61,191,160,.08);border-color:rgba(61,191,160,.25)"><span class="fn" style="color:var(--teal)">02 · CONTEXTO</span><span class="ft">Tu situación</span><span class="fd">Oficio, barrio, cliente, precio</span></div>
+    <div class="fp" style="background:rgba(139,127,212,.08);border-color:rgba(139,127,212,.25)"><span class="fn" style="color:var(--lav)">03 · OBJETIVO</span><span class="ft">Qué quieres</span><span class="fd">Exactamente qué buscas lograr</span></div>
+    <div class="fp" style="background:rgba(91,168,212,.08);border-color:rgba(91,168,212,.25)"><span class="fn" style="color:var(--sky)">04 · TONO</span><span class="ft">Cómo debe sonar</span><span class="fd">Cercano, formal, colombiano…</span></div>
+    <div class="fp" style="background:rgba(232,135,110,.08);border-color:rgba(232,135,110,.25)"><span class="fn" style="color:var(--coral2)">05 · FORMATO</span><span class="ft">Cómo lo quieres</span><span class="fd">Lista, tabla, 3 opciones…</span></div>
+  </div>
+  <div class="capas" style="margin-top:1.4vh">
+    <div class="capa" style="background:var(--lbg);border-color:var(--lb)">
+      <div class="capa-label" style="color:var(--lav)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Esta fórmula es lo único que tienen que memorizar. Escríbela en un papel o nota del celular y enséñala primero antes de cualquier práctica.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 9 · PRACTICA GUIADA EN VIVO ══ -->
+<div class="slide" id="s9">
+  <div class="eye">1:05 — Práctica guiada en vivo · 30 min</div>
+  <div class="h2">✍️ Practicamos<br><em class="c">todos juntos</em>,<br>cada uno en lo suyo</div>
+  <div class="dsteps">
+    <div class="ds"><div class="dn" style="color:var(--teal)">1</div><div><div class="dc">Yo comparto pantalla y armo un prompt paso a paso con la fórmula</div><div class="dd">Van escribiendo el mismo prompt al mismo tiempo, en su propio negocio</div></div></div>
+    <div class="ds"><div class="dn" style="color:var(--coral)">2</div><div><div class="dc">Voy mostrando una tarjeta de problema distinta cada 5 minutos</div><div class="dd">Si el problema no aplica a tu oficio, lo adaptas a tu propia situación</div></div></div>
+    <div class="ds"><div class="dn" style="color:var(--lav)">3</div><div><div class="dc">Al final, cada uno pega su mejor resultado en el chat</div><div class="dd">Leo 3–4 en voz alta y comentamos qué funcionó</div></div></div>
+  </div>
+  <div class="vico" style="margin-top:1.4vh">💻 Práctica individual guiada — sin salas, sin equipos. Todos al mismo ritmo, conmigo de referencia.</div>
+</div>
+
+<!-- ══ 10 · TARJETAS PROBLEMA — RONDA GUIADA ══ -->
+<div class="slide" id="s10">
+  <div class="eye">1:05 — Rondas de práctica · una por una</div>
+  <div class="h2" style="font-size:2vw">Vamos una<br><em class="c">a la vez</em></div>
+  <div class="body" style="font-size:1.2vw;margin-bottom:.6vh">Voy a ir mostrando estos problemas en orden. Tú escribes el prompt para <strong>tu propio negocio</strong>, no para el ejemplo — usa el problema solo como guía.</div>
+  <div class="tarjetas">
+    <div class="tcard"><div class="tn" style="color:var(--b2)">1</div><div class="tt">Clientes que no vuelven</div><div class="td">¿Cómo los fidelizas con IA y el celular?</div></div>
+    <div class="tcard"><div class="tn" style="color:var(--b2)">2</div><div class="tt">Nadie te conoce en el barrio</div><div class="td">¿Cómo te das a conocer sin pagar publicidad?</div></div>
+    <div class="tcard"><div class="tn" style="color:var(--b2)">3</div><div class="tt">No tienes precios claros</div><div class="td">¿Cómo calculas un precio justo con IA?</div></div>
+    <div class="tcard"><div class="tn" style="color:var(--b2)">4</div><div class="tt">Pocos seguidores nuevos</div><div class="td">¿Qué contenido publicar para atraer?</div></div>
+    <div class="tcard"><div class="tn" style="color:var(--b2)">5</div><div class="tt">Pedidos desordenados</div><div class="td">¿Cómo organizas con IA por WhatsApp?</div></div>
+    <div class="tcard"><div class="tn" style="color:var(--b2)">6</div><div class="tt">Solo te compran conocidos</div><div class="td">¿Cómo llegas a clientes nuevos?</div></div>
+  </div>
+  <div class="tbadge" style="margin-top:1vh"><span class="ti">⏱</span> ~5 min por ronda · tú marcas el avance compartiendo pantalla</div>
+</div>
+
+<!-- ══ 11 · CIERRE ══ -->
+<div class="slide" id="s11">
+  <div class="eye">1:35 — Cierre</div>
+  <div class="h2">Lo que lograron hoy<br>en <em class="t">90 minutos</em></div>
+  <div class="cierre-items">
+    <div class="citem"><div class="ci-ico">🧠</div><div class="ci-t">Entendieron qué es la IA</div><div class="ci-d">Y cómo explicarlo con la frase del vecino.</div></div>
+    <div class="citem"><div class="ci-ico">⚡</div><div class="ci-t">Aprendieron la Fórmula de Oro</div><div class="ci-d">Lista para enseñar tal cual a sus 10 personas.</div></div>
+    <div class="citem"><div class="ci-ico">✅</div><div class="ci-t">Generaron su primer resultado</div><div class="ci-d">Algo real, hecho con IA, en su propio negocio.</div></div>
+  </div>
+  <div class="entbox">
+    <div class="ei">📸</div>
+    <div><div class="et">Entregable: pantallazo + nota de cómo lo explicarías</div><div class="ed">Ficha 'Mi negocio en 5 líneas' + 1 frase de cómo se lo dirías a alguien sin experiencia</div></div>
+  </div>
+</div>
+
+<!-- ══ 12 · TAREA ══ -->
+<div class="slide center" id="s12">
+  <div class="glow" style="width:30vw;height:30vw;background:var(--teal);opacity:.05;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="eye" style="justify-content:center">Antes de la próxima sesión</div>
+  <div class="h1" style="text-align:center;font-size:3.4vw">Dos tareas,<br><span class="t">no una</span></div>
+  <div class="qblock" style="text-align:center;max-width:46vw;background:var(--tbg);border-color:rgba(61,191,160,.2)">
+    <p style="font-size:1.4vw;color:var(--w)">1) Usa la IA <strong style="color:var(--teal)">una vez</strong> esta semana en tu negocio.</p>
+    <p style="font-size:1.4vw;color:var(--w)">2) Explícale a <strong style="color:var(--teal)">una sola persona</strong> qué es la IA, con la frase del vecino.</p>
+    <cite>Traigan ambos pantallazos a la Sesión 2.</cite>
+  </div>
+</div>
+
+<!-- ══ 13 · FRASE FINAL ══ -->
+<div class="slide center" id="s13">
+  <div class="glow" style="width:36vw;height:24vw;background:var(--coral);opacity:.07;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="h1" style="text-align:center;font-size:2.6vw">
+    "La IA no te va a quitar el trabajo.<br>
+    <em class="c">Te lo va a quitar alguien<br>que sabe usar la IA<br>— y que sabe enseñarla."</em>
+  </div>
+  <div class="sub" style="margin-top:2vh;text-align:center">Sesión 2 → Ventas + Contenido · Próxima clase virtual</div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const dotsEl=document.getElementById('dots');
+const prog=document.getElementById('prog');
+const cnt=document.getElementById('cnt');
+let cur=0;
+const total=slides.length;
+
+slides.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='dot';
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function goTo(n,dir=1){
+  if(n<0||n>=total)return;
+  const prev=slides[cur];
+  prev.classList.remove('active');
+  prev.style.transform=dir>0?'translateX(-40px)':'translateX(40px)';
+  prev.style.opacity='0';
+  setTimeout(()=>{prev.style.transform='';prev.style.opacity='';},400);
+  cur=n;
+  const next=slides[cur];
+  next.style.transform=dir>0?'translateX(40px)':'translateX(-40px)';
+  next.style.opacity='0';
+  next.style.pointerEvents='all';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    next.style.transition='opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1)';
+    next.style.transform='translateX(0)';
+    next.style.opacity='1';
+    next.classList.add('active');
+    slides.forEach((s,i)=>{if(i!==cur){s.classList.remove('active');s.style.pointerEvents='none';s.style.opacity='';s.style.transform='';s.style.transition=''}});
+  }));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('act',i===cur));
+  prog.style.width=((cur/(total-1))*100)+'%';
+  cnt.textContent=(cur+1)+' / '+total;
+}
+
+function go(dir){goTo(cur+dir,dir)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);
+  e.preventDefault();
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50)go(dx<0?1:-1);
+},{passive:true});
+goTo(0);
+</script>
+</body>
+</html>

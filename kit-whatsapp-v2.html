@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit de Respuestas de WhatsApp — Curso IA Multiplicadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdfcfa;--card:#ffffff;--card2:#f7f4ef;--b1:#e4ddd2;--b2:#cfc6b6;
+  --teal:#1f8a6e;--tbg:#e3f3ee;--tb:#aedfcd;
+  --coral:#d14d36;--cbg:#fbe9e4;--cb:#f0bdac;
+  --lav:#6e5fc4;--lbg:#ece9fa;--lb:#cac1f0;
+  --amber:#b5791e;--amberbg:#faf0dc;--amberb:#ecce96;
+  --ink:#211f1a;--ink2:#4a443d;--ink3:#8a8378;--ink4:#c4bcae;
+  --f:'Plus Jakarta Sans',sans-serif;
+  --acc:var(--teal);--acc-bg:var(--tbg);--acc-b:var(--tb);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:var(--bg);color:var(--ink);font-family:var(--f)}
+body{padding-bottom:80px}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(253,252,250,.96);backdrop-filter:blur(14px);
+  border-bottom:2px solid var(--b1);
+  padding:14px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.tb-logo{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal)}
+.tb-title{font-size:15px;font-weight:700;color:var(--ink)}
+.tb-title span{display:block;font-size:11.5px;color:var(--ink3);font-weight:400;margin-top:1px}
+.nicho-select{margin-left:auto}
+.nicho-select select{
+  background:var(--card);border:2px solid var(--b1);color:var(--ink);
+  border-radius:10px;padding:9px 16px;font-size:13.5px;font-family:var(--f);
+  cursor:pointer;outline:none;font-weight:500;
+  transition:border-color .2s;
+}
+.nicho-select select:focus{border-color:var(--teal)}
+
+/* ── MAIN ── */
+.main{max-width:820px;margin:0 auto;padding:36px 28px 0}
+
+/* ── HERO ── */
+.hero{text-align:center;margin-bottom:32px;padding:44px 32px;background:linear-gradient(135deg,var(--tbg),var(--bg));border-radius:22px;border:2px solid var(--tb);position:relative;overflow:hidden}
+.hero::before{content:'💬';position:absolute;font-size:120px;opacity:.06;right:-10px;top:-20px;line-height:1}
+.hero-brand{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:12px}
+.hero h1{font-size:36px;font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:10px;color:var(--ink)}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--teal)}
+.hero p{font-size:16px;color:var(--ink3);max-width:480px;margin:0 auto;line-height:1.6}
+
+/* ── DATOS PANEL ── */
+.panel{background:var(--card);border:2px solid var(--b1);border-radius:18px;padding:22px 24px;margin-bottom:20px}
+.panel-label{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink3);font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.datos-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.datos-grid input{
+  background:var(--bg);border:2px solid var(--b1);border-radius:11px;
+  padding:12px 16px;font-size:14px;color:var(--ink);font-family:var(--f);outline:none;
+  transition:border-color .2s;font-weight:400;
+}
+.datos-grid input:focus{border-color:var(--teal)}
+.datos-grid input::placeholder{color:var(--ink4)}
+
+/* ── PROMPT MASTER ── */
+.prompt-master{background:var(--card);border:2px solid var(--b1);border-radius:18px;padding:22px 24px;margin-bottom:20px}
+.pm-label{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--coral);font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.pm-text{
+  background:var(--bg);border:1.5px solid var(--b1);border-radius:11px;
+  padding:16px 18px;font-size:14px;color:var(--ink2);line-height:1.75;font-family:'Courier New',monospace;
+  margin-bottom:12px;
+}
+.pm-text .ph{color:var(--coral);font-weight:700}
+.btn-sm{
+  background:var(--card2);border:1.5px solid var(--b1);color:var(--ink2);
+  border-radius:9px;padding:8px 16px;font-size:13px;cursor:pointer;font-family:var(--f);
+  font-weight:600;transition:all .2s;
+}
+.btn-sm:hover{border-color:var(--b2);color:var(--ink);background:var(--bg)}
+.btn-sm.copied{color:var(--teal);border-color:var(--tb);background:var(--tbg)}
+
+/* ── PROGRESO ── */
+.progreso{display:flex;align-items:center;gap:14px;margin-bottom:20px;background:var(--card2);border-radius:12px;padding:12px 18px;border:1.5px solid var(--b1)}
+.progreso-bar{flex:1;height:8px;background:var(--b1);border-radius:4px;overflow:hidden}
+.progreso-fill{height:100%;background:var(--teal);width:0%;transition:width .4s cubic-bezier(.4,0,.2,1);border-radius:4px}
+.progreso-label{font-size:13px;color:var(--ink2);white-space:nowrap;font-weight:600}
+
+/* ── SITUACIONES ── */
+.situaciones{display:flex;flex-direction:column;gap:12px}
+.situ-card{
+  background:var(--card);border:2px solid var(--b1);border-radius:18px;
+  overflow:hidden;transition:border-color .2s;
+}
+.situ-card:hover{border-color:var(--b2)}
+.situ-card.open{border-color:var(--acc,var(--teal))}
+.situ-head{
+  display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;
+  transition:background .15s;
+}
+.situ-head:hover{background:var(--card2)}
+.situ-ico{font-size:24px;line-height:1;flex-shrink:0}
+.situ-titulo{flex:1;font-size:16px;font-weight:700;color:var(--ink)}
+.situ-badge{font-size:12px;color:var(--ink3);background:var(--card2);border:1.5px solid var(--b1);border-radius:20px;padding:3px 12px;font-weight:500}
+.situ-card.open .situ-badge{color:var(--acc,var(--teal));border-color:var(--acc-b,var(--tb));background:var(--acc-bg,var(--tbg))}
+.situ-chev{font-size:13px;color:var(--ink3);transition:transform .2s}
+.situ-card.open .situ-chev{transform:rotate(180deg);color:var(--acc,var(--teal))}
+
+.situ-body{display:none;padding:0 22px 20px;border-top:2px solid var(--b1)}
+.situ-card.open .situ-body{display:block}
+.situ-body-inner{padding-top:18px}
+
+.textarea-resp{
+  width:100%;background:var(--bg);border:2px solid var(--b1);border-radius:12px;
+  padding:14px 16px;font-size:14.5px;color:var(--ink);font-family:var(--f);
+  outline:none;resize:vertical;min-height:80px;line-height:1.6;
+  transition:border-color .2s;margin-bottom:12px;
+}
+.textarea-resp:focus{border-color:var(--acc,var(--teal))}
+.textarea-resp::placeholder{color:var(--ink4)}
+
+.ejemplo-ref{
+  background:var(--acc-bg,var(--tbg));border:1.5px solid var(--acc-b,var(--tb));
+  border-radius:12px;padding:14px 16px;margin-bottom:12px;
+}
+.er-label{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--acc,var(--teal));font-weight:800;margin-bottom:6px;display:block}
+.er-text{font-size:14px;color:var(--ink2);line-height:1.55;font-style:italic}
+
+.copy-row{display:flex;justify-content:flex-end}
+
+/* ── BTN ROW ── */
+.btn-row{display:flex;gap:12px;margin-top:20px}
+.btn{
+  border-radius:12px;padding:14px 20px;font-size:14.5px;font-weight:700;
+  cursor:pointer;font-family:var(--f);transition:all .2s;border:2px solid;flex:1;
+}
+.btn-primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn-primary:hover{background:#1a7560;border-color:#1a7560}
+.btn-ghost{background:transparent;color:var(--ink2);border-color:var(--b1)}
+.btn-ghost:hover{border-color:var(--b2);color:var(--ink);background:var(--card2)}
+
+.footer-note{text-align:center;font-size:12px;color:var(--ink4);margin-top:32px;line-height:1.8}
+.footer-note strong{color:var(--ink3)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-logo">MENTALIDAD JR</div>
+  <div class="tb-title">Kit de Respuestas de WhatsApp<span>Las 6 situaciones que aparecen todos los días</span></div>
+  <div class="nicho-select">
+    <select id="nichoSelect" onchange="aplicarNicho()">
+      <option value="">🏢 Mi oficio (elige uno)</option>
+      <option value="barberia">✂️ Barbería</option>
+      <option value="peluqueria">💇‍♀️ Peluquería</option>
+      <option value="gastronomia">🍽️ Gastronomía</option>
+      <option value="confeccion">🧵 Confección</option>
+      <option value="bisuteria">💎 Bisutería</option>
+      <option value="reposteria">🎂 Repostería</option>
+      <option value="tatuajes">🎨 Tatuajes</option>
+    </select>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="hero">
+    <div class="hero-brand">MENTALIDAD JR · Sesión 2 — Ventas + Contenido</div>
+    <h1>Tus 6 respuestas,<br><em>listas para siempre</em></h1>
+    <p>Genera cada respuesta con la IA, pégala aquí y guárdala. Al final tienes tu kit completo para copiar a WhatsApp Business.</p>
+  </div>
+
+  <div class="panel">
+    <div class="panel-label">📋 Mis datos (se usan en el prompt)</div>
+    <div class="datos-grid">
+      <input type="text" id="oficio" placeholder="Tu oficio — Ej: Peluquería" oninput="actualizarPrompt()">
+      <input type="text" id="barrio" placeholder="Tu barrio — Ej: San Cristóbal" oninput="actualizarPrompt()">
+    </div>
+  </div>
+
+  <div class="prompt-master">
+    <div class="pm-label">⚡ El prompt completo — cópialo en ChatGPT o Claude</div>
+    <div class="pm-text" id="promptCompleto">
+      Actúa como experto en servicio al cliente para negocios pequeños. Soy dueño(a) de <span class="ph" id="phOficio">[tu oficio]</span> en <span class="ph" id="phBarrio">[tu barrio]</span>, Bogotá. Crea 6 respuestas cortas para WhatsApp, tono cercano y colombiano (no robótico), para: 1) cuando preguntan el precio, 2) cuando preguntan dónde estoy, 3) cuando preguntan los horarios, 4) cuando dicen "lo pienso", 5) cuando un cliente llega molesto, 6) seguimiento a quien preguntó pero no compró. Máximo 3 líneas cada una.
+    </div>
+    <div style="display:flex;justify-content:flex-end">
+      <button class="btn-sm" onclick="copiarPrompt()" id="btnCopiarPrompt">Copiar prompt completo</button>
+    </div>
+  </div>
+
+  <div class="progreso">
+    <div class="progreso-bar"><div class="progreso-fill" id="progresoFill"></div></div>
+    <div class="progreso-label"><span id="progresoCount">0</span> / 6 completadas</div>
+  </div>
+
+  <div class="situaciones" id="situaciones"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="copiarTodo()">📋 Copiar mis 6 respuestas completas</button>
+    <button class="btn btn-ghost" onclick="limpiarTodo()">↺ Empezar de nuevo</button>
+  </div>
+
+  <div class="footer-note">
+    💡 <strong>Siguiente paso:</strong> abre WhatsApp Business → Herramientas para negocios → Respuestas rápidas<br>
+    Crea un atajo /precio, /donde, /horarios y pega cada respuesta. ¡Sale con un solo clic!<br><br>
+    <strong>MENTALIDAD JR</strong> · Curso IA para Multiplicadores · Alcaldía Local de San Cristóbal · 2026
+  </div>
+</div>
+
+<script>
+const SITUACIONES = [
+  { id:'precio', ico:'💰', titulo:'1 · Cuando preguntan el precio', atajo:'/precio', ejemplos:{
+    barberia:'"Hola! Los cortes desde $15K. El clásico $18K, degradado $22K. ¿Te agendo? 💈"',
+    peluqueria:'"¡Hola linda! El tinte va desde $60K según largo y técnica. Te hago valoración gratis 💇‍♀️"',
+    gastronomia:'"El menú del día está a $12K: sopa, seco, jugo y postre 🍽️ ¿Para cuántos?"',
+    confeccion:'"Los arreglos van desde $8K (dobladillo) hasta $25K (ajuste completo) 🧵 ¿Me mandas foto?"',
+    bisuteria:'"Los aretes desde $15K, collares desde $25K. Cada pieza es única 💎 ¿Te muestro el catálogo?"',
+    reposteria:'"Las tortas desde $80K según tamaño y diseño. ¿Para cuántas personas y qué fecha? 🎂"',
+    tatuajes:'"¡Hola! Los precios dependen del tamaño y detalle. Pequeños desde $80K, medianos desde $200K. ¿Me mandas la idea o referencia? 🎨"',
+  }},
+  { id:'donde', ico:'📍', titulo:'2 · Cuando preguntan dónde estás', atajo:'/donde', ejemplos:{
+    barberia:'"Estamos en [dirección], cerca de [referencia]. ¡Te esperamos! 💈 ¿Te agendo cita?"',
+    peluqueria:'"Te quedamos en [dirección]. Si quieres te mando la ubicación por aquí 📍"',
+    gastronomia:'"Hacemos domicilios en toda la zona. También puedes recoger en [dirección] 🍽️"',
+    confeccion:'"Trabajo desde casa en [barrio]. Te puedo enviar la ubicación exacta 🧵"',
+    bisuteria:'"Vendo por catálogo y domicilio. ¿En qué barrio estás para coordinar la entrega? 💎"',
+    reposteria:'"Hago entregas a domicilio en toda la localidad 🎂 ¿Para dónde sería?"',
+    tatuajes:'"Mi estudio queda en [dirección], [barrio] 🎨 Trabajo con cita previa. ¿Te agendo?"',
+  }},
+  { id:'horarios', ico:'🕐', titulo:'3 · Cuando preguntan los horarios', atajo:'/horarios', ejemplos:{
+    barberia:'"Atendemos de lunes a sábado, 9am a 7pm 💈 ¿Qué día te queda mejor?"',
+    peluqueria:'"Trabajo de martes a sábado, 8am a 6pm 💇‍♀️ ¿Cuándo te gustaría venir?"',
+    gastronomia:'"Recibimos pedidos de lunes a sábado hasta las 9am para el almuerzo del mediodía 🍽️"',
+    confeccion:'"Atiendo con cita previa, lunes a viernes 🧵 ¿Qué día te sirve?"',
+    bisuteria:'"Respondo todos los días — ¡siempre estoy disponible por aquí! 💎"',
+    reposteria:'"Necesito pedidos con mínimo 3 días de anticipación 🎂 ¿Para qué fecha necesitas?"',
+    tatuajes:'"Atiendo martes a sábado, 10am a 7pm 🎨 El domingo solo por cita especial. ¿Qué día prefieres?"',
+  }},
+  { id:'lopienso', ico:'🤔', titulo:'4 · Cuando dicen "lo pienso"', atajo:'/lopienso', ejemplos:{
+    barberia:'"Tranquilo, sin presión 😊 La agenda se llena rápido los fines, pero aquí estoy 🙌"',
+    peluqueria:'"Claro, no hay afán 💜 Cuando te decidas avísame para separarte el espacio ✨"',
+    gastronomia:'"Perfecto, me avisas 😊 Los pedidos se cierran a las 9am, ¡hoy hay bandeja especial! 🍛"',
+    confeccion:'"Sin problema 🙂 Los turnos son por orden de llegada — esta semana hay espacio."',
+    bisuteria:'"Sin afán ✨ Algunas piezas son edición limitada. Avísame si te decides 😊"',
+    reposteria:'"Tranquilo 😊 Recuerda que necesito 3 días antes para garantizar la calidad 🎂"',
+    tatuajes:'"Claro, tómate el tiempo que necesites 🎨 Es una decisión importante. Cuando quieras charlamos la idea."',
+  }},
+  { id:'molesto', ico:'😤', titulo:'5 · Cuando un cliente llega molesto', atajo:'/molesto', ejemplos:{
+    barberia:'"Disculpa la situación 🙏 Cuéntame qué pasó para ayudarte a solucionarlo ya mismo."',
+    peluqueria:'"Lamento mucho que pasara esto 💛 Vamos a arreglarlo — cuéntame los detalles."',
+    gastronomia:'"Mil disculpas por el inconveniente 🙏 Dime qué pasó y lo solucionamos ahora."',
+    confeccion:'"Perdón por la molestia 🙏 Cuéntame qué salió mal para corregirlo enseguida."',
+    bisuteria:'"Disculpa el inconveniente 💛 Cuéntame qué pasó, quiero solucionarlo contigo."',
+    reposteria:'"Lamento el problema 🙏 Cuéntame qué pasó, vamos a resolverlo juntos."',
+    tatuajes:'"Lamento que esto haya pasado 🙏 Tu satisfacción es lo más importante. Cuéntame qué pasó y lo resolvemos."',
+  }},
+  { id:'seguimiento', ico:'👋', titulo:'6 · Seguimiento (preguntó pero no compró)', atajo:'/seguimiento', ejemplos:{
+    barberia:'"Hola! Vi que preguntaste por el corte — ¿seguimos separando la cita? 💈"',
+    peluqueria:'"¡Hola! ¿Cómo va todo? Quedé pendiente con el servicio que me preguntaste 💇‍♀️"',
+    gastronomia:'"¡Hola! ¿Te gustaría el menú de hoy? Los pedidos cierran a las 9am 🍽️"',
+    confeccion:'"Hola! Sigo pendiente con el arreglo que me preguntaste — ¿seguimos? 🧵"',
+    bisuteria:'"¡Hola! ¿Te decidiste por algún diseño? Me quedo pendiente 💎"',
+    reposteria:'"Hola! ¿Confirmamos la torta para la fecha que hablamos? 🎂"',
+    tatuajes:'"Hola! Quedé pensando en la idea del tatuaje que me compartiste 🎨 ¿Le seguimos? Puedo mostrarte bocetos."',
+  }},
+];
+
+let respuestas = {};
+let nichoActual = '';
+
+function aplicarNicho(){
+  nichoActual = document.getElementById('nichoSelect').value;
+  const map = {
+    barberia:'Barbería', peluqueria:'Peluquería', gastronomia:'Gastronomía / Almuerzos',
+    confeccion:'Confección y arreglos', bisuteria:'Bisutería', reposteria:'Repostería', tatuajes:'Tatuajes'
+  };
+  if(nichoActual) document.getElementById('oficio').value = map[nichoActual];
+  actualizarPrompt();
+  renderSituaciones();
+}
+
+function actualizarPrompt(){
+  const oficio = document.getElementById('oficio').value || '[tu oficio]';
+  const barrio = document.getElementById('barrio').value || '[tu barrio]';
+  document.getElementById('phOficio').textContent = oficio;
+  document.getElementById('phBarrio').textContent = barrio;
+}
+
+function copiarPrompt(){
+  const oficio = document.getElementById('oficio').value || '[tu oficio]';
+  const barrio = document.getElementById('barrio').value || '[tu barrio]';
+  const texto = `Actúa como experto en servicio al cliente para negocios pequeños. Soy dueño(a) de ${oficio} en ${barrio}, Bogotá. Crea 6 respuestas cortas para WhatsApp, tono cercano y colombiano (no robótico), para: 1) cuando preguntan el precio, 2) cuando preguntan dónde estoy, 3) cuando preguntan los horarios, 4) cuando dicen "lo pienso", 5) cuando un cliente llega molesto, 6) seguimiento a quien preguntó pero no compró. Máximo 3 líneas cada una.`;
+  navigator.clipboard.writeText(texto).then(()=>{
+    const btn = document.getElementById('btnCopiarPrompt');
+    btn.textContent='¡Copiado!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copiar prompt completo';btn.classList.remove('copied');},2500);
+  });
+}
+
+function renderSituaciones(){
+  const cont = document.getElementById('situaciones');
+  cont.innerHTML = SITUACIONES.map(s=>{
+    const ejemplo = nichoActual && s.ejemplos[nichoActual] ? s.ejemplos[nichoActual] : null;
+    const open = respuestas[s.id] ? ' open' : '';
+    return `
+    <div class="situ-card${open}" id="situ-${s.id}">
+      <div class="situ-head" onclick="toggleSitu('${s.id}')">
+        <span class="situ-ico">${s.ico}</span>
+        <span class="situ-titulo">${s.titulo}</span>
+        <span class="situ-badge" id="badge-${s.id}">${respuestas[s.id] ? '✓ Lista' : 'Pendiente'}</span>
+        <span class="situ-chev">▼</span>
+      </div>
+      <div class="situ-body">
+        <div class="situ-body-inner">
+          ${ejemplo ? `<div class="ejemplo-ref"><span class="er-label">💡 Ejemplo para tu oficio</span><div class="er-text">${ejemplo}</div></div>` : ''}
+          <textarea class="textarea-resp" id="resp-${s.id}"
+            placeholder="Pega aquí la respuesta que generó la IA para esta situación..."
+            oninput="actualizarRespuesta('${s.id}', this.value)">${respuestas[s.id]||''}</textarea>
+          <div class="copy-row">
+            <button class="btn-sm" onclick="copiarRespuesta('${s.id}',this)" id="copyBtn-${s.id}">Copiar esta respuesta</button>
+          </div>
+          <div style="margin-top:8px;font-size:12px;color:var(--ink3)">💡 Atajo sugerido en WhatsApp Business: <code style="background:var(--card2);padding:2px 7px;border-radius:5px;color:var(--teal);font-weight:700">${s.atajo}</code></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  actualizarProgreso();
+}
+
+function toggleSitu(id){
+  document.getElementById('situ-'+id).classList.toggle('open');
+}
+
+function actualizarRespuesta(id, valor){
+  respuestas[id] = valor;
+  const badge = document.getElementById('badge-'+id);
+  if(badge) badge.textContent = valor.trim() ? '✓ Lista' : 'Pendiente';
+  actualizarProgreso();
+}
+
+function actualizarProgreso(){
+  const completas = SITUACIONES.filter(s => respuestas[s.id] && respuestas[s.id].trim().length > 0).length;
+  document.getElementById('progresoCount').textContent = completas;
+  document.getElementById('progresoFill').style.width = (completas/6*100)+'%';
+}
+
+function copiarRespuesta(id, btn){
+  const texto = respuestas[id] || '';
+  if(!texto){ alert('Todavía no has pegado una respuesta aquí.'); return; }
+  navigator.clipboard.writeText(texto).then(()=>{
+    btn.textContent='¡Copiado!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copiar esta respuesta';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copiarTodo(){
+  const completas = SITUACIONES.filter(s=>respuestas[s.id]&&respuestas[s.id].trim());
+  if(completas.length===0){ alert('Todavía no has llenado ninguna respuesta.'); return; }
+  const texto = SITUACIONES.map(s=>respuestas[s.id]?.trim() ? `${s.titulo}\n${respuestas[s.id]}` : null).filter(Boolean).join('\n\n');
+  navigator.clipboard.writeText(texto).then(()=>{
+    alert(`¡${completas.length} respuestas copiadas! Pégalas en una Nota de tu celular o en WhatsApp Business.`);
+  });
+}
+
+function limpiarTodo(){
+  if(Object.keys(respuestas).some(k=>respuestas[k]) && !confirm('¿Borrar todas las respuestas guardadas?')) return;
+  respuestas = {};
+  renderSituaciones();
+}
+
+renderSituaciones();
+</script>
+</body>
+</html>

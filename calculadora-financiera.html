@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora Financiera — ¿Cuánto ganas de verdad?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#191b1a;--card:#252826;--card2:#2c2f2c;--b1:#333531;--b2:#434742;
+  --lav:#9b8fe0;--lbg:rgba(155,143,224,.10);--lb:rgba(155,143,224,.32);
+  --teal:#3dbfa0;--tbg:rgba(61,191,160,.10);--tb:rgba(61,191,160,.32);
+  --coral:#e8614a;--cbg:rgba(232,97,74,.10);--cb:rgba(232,97,74,.32);
+  --sky:#5ba8d4;--skybg:rgba(91,168,212,.10);--skyb:rgba(91,168,212,.32);
+  --amber:#e0a847;--amberbg:rgba(224,168,71,.10);--amberb:rgba(224,168,71,.32);
+  --w:#f0ede6;--w2:#b0ac9f;--w3:#686460;--w4:#363833;
+  --f:'Plus Jakarta Sans',sans-serif;
+  --nicho-color:var(--lav);--nicho-bg:var(--lbg);--nicho-b:var(--lb);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:var(--bg);color:var(--w);font-family:var(--f)}
+body{padding-bottom:60px}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(25,27,26,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--b1);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tb-title{font-size:14px;font-weight:700;color:var(--w)}
+.tb-title span{display:block;font-size:11px;color:var(--w3);font-weight:400;margin-top:1px}
+.nicho-select{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nicho-select select{
+  background:var(--card);border:1px solid var(--b1);color:var(--w);
+  border-radius:8px;padding:8px 14px;font-size:13px;font-family:var(--f);
+  cursor:pointer;outline:none;
+}
+
+.main{max-width:780px;margin:0 auto;padding:28px 24px 0}
+
+.hero{text-align:center;margin-bottom:28px}
+.hero h1{font-size:30px;font-weight:800;letter-spacing:-.8px;line-height:1.15}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--teal)}
+.hero p{font-size:14px;color:var(--w3);margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+.panel{background:var(--card);border:1.5px solid var(--b1);border-radius:16px;padding:24px 26px;margin-bottom:18px}
+.panel-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w3);font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{margin-bottom:0}
+.field label{display:block;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--w2);font-weight:600;margin-bottom:6px}
+.field .hint{font-size:10.5px;color:var(--w4);margin-top:4px;font-weight:300}
+.input-wrap{position:relative}
+.input-wrap .prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--w3);font-size:14px;pointer-events:none}
+.input-wrap input{
+  width:100%;background:var(--bg);border:1.5px solid var(--b1);border-radius:10px;
+  padding:11px 14px 11px 30px;font-size:15px;color:var(--w);font-family:var(--f);
+  outline:none;transition:border-color .2s;
+}
+.input-wrap.nopre input{padding-left:14px}
+.input-wrap input:focus{border-color:var(--nicho-color)}
+.input-wrap input::placeholder{color:var(--w4)}
+
+.tabs-row{display:flex;gap:6px;margin-bottom:18px}
+.tab-btn{
+  flex:1;background:var(--card2);border:1px solid var(--b1);color:var(--w3);
+  border-radius:9px;padding:10px 12px;font-size:12.5px;cursor:pointer;
+  font-family:var(--f);font-weight:500;transition:all .15s;text-align:center;
+}
+.tab-btn.act{background:var(--nicho-bg);border-color:var(--nicho-b);color:var(--nicho-color)}
+
+/* RESULTADOS */
+.resultados{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px}
+.res-card{
+  border-radius:14px;padding:18px 16px;text-align:center;border:1.5px solid;
+  transition:all .2s;
+}
+.res-card .rv{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1;margin-bottom:6px;font-family:monospace}
+.res-card .rl{font-size:11px;color:var(--w3);font-weight:500;line-height:1.4}
+
+.veredicto{
+  margin-top:16px;border-radius:14px;padding:16px 20px;
+  display:flex;gap:14px;align-items:center;border:1.5px solid;
+}
+.veredicto .vico{font-size:32px;flex-shrink:0}
+.veredicto .vt{font-size:15px;font-weight:700;margin-bottom:3px}
+.veredicto .vd{font-size:12.5px;line-height:1.5;font-weight:300}
+
+.detalle{margin-top:18px}
+.detalle-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 16px;background:var(--card2);border-radius:9px;margin-bottom:6px;
+  font-size:13px;
+}
+.detalle-row .dl{color:var(--w2)}
+.detalle-row .dv{font-family:monospace;font-weight:700;color:var(--w)}
+.detalle-row.total{background:var(--nicho-bg);border:1px solid var(--nicho-b)}
+.detalle-row.total .dl{color:var(--nicho-color);font-weight:600}
+.detalle-row.total .dv{color:var(--nicho-color)}
+
+.proyeccion-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.proy-card{background:var(--card2);border:1px solid var(--b1);border-radius:12px;padding:16px 18px}
+.proy-card .pl{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--w3);font-weight:600;margin-bottom:8px}
+.proy-card .pv{font-size:22px;font-weight:800;font-family:monospace;letter-spacing:-.3px}
+.proy-card .pd{font-size:11px;color:var(--w3);margin-top:4px;font-weight:300}
+
+.slider-wrap{margin-top:18px}
+.slider-wrap label{display:flex;justify-content:space-between;font-size:12px;color:var(--w2);margin-bottom:8px;font-weight:500}
+.slider-wrap .sv{color:var(--teal);font-family:monospace;font-weight:700}
+input[type=range]{
+  width:100%;height:6px;border-radius:3px;background:var(--b1);
+  outline:none;-webkit-appearance:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:var(--teal);cursor:pointer;border:3px solid var(--bg);box-shadow:0 0 0 1px var(--teal);
+}
+
+.btn-row{display:flex;gap:10px;margin-top:18px}
+.btn{
+  flex:1;border-radius:10px;padding:12px 18px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:var(--f);transition:all .2s;border:1.5px solid;
+}
+.btn-primary{background:var(--teal);color:var(--bg);border-color:var(--teal)}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;color:var(--w2);border-color:var(--b1)}
+.btn-ghost:hover{border-color:var(--b2);color:var(--w)}
+
+.tip-box{
+  display:flex;gap:10px;background:var(--amberbg);border:1px solid var(--amberb);
+  border-radius:10px;padding:12px 16px;margin-top:16px;font-size:12px;color:#d4b56a;line-height:1.55;
+}
+
+.footer-note{text-align:center;font-size:11px;color:var(--w4);margin-top:24px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-title">Calculadora Financiera<span>¿Cuánto ganas de verdad?</span></div>
+  <div class="nicho-select">
+    <select id="nichoSelect" onchange="aplicarNicho()">
+      <option value="">Sin ejemplo — empezar en blanco</option>
+      <option value="barberia">✂️ Barbería</option>
+      <option value="peluqueria">💇‍♀️ Peluquería</option>
+      <option value="gastronomia">🍽️ Gastronomía</option>
+      <option value="confeccion">🧵 Confección</option>
+      <option value="bisuteria">💎 Bisutería</option>
+      <option value="reposteria">🎂 Repostería</option>
+      <option value="tienda">🏪 Tienda de barrio</option>
+      <option value="textil">👗 Textil / Moda</option>
+    </select>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="hero">
+    <h1>¿Cuánto ganas<br><em>de verdad</em>?</h1>
+    <p>Mete tus números reales. Esta calculadora te dice tu costo real, el precio que deberías cobrar, y cuánto necesitas vender al mes para que el negocio te deje algo.</p>
+  </div>
+
+  <!-- PANEL 1: DATOS DEL PRODUCTO -->
+  <div class="panel">
+    <div class="panel-label">📦 Mi producto o servicio</div>
+    <div class="field-grid">
+      <div class="field">
+        <label>¿Qué vendes?</label>
+        <div class="input-wrap nopre"><input type="text" id="producto" placeholder="Ej: Corte de cabello"></div>
+      </div>
+      <div class="field">
+        <label>Precio actual que cobras</label>
+        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="precioActual" placeholder="15000" oninput="calcular()"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: COSTOS -->
+  <div class="panel">
+    <div class="panel-label">💸 Tus costos por unidad / servicio</div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Materiales e insumos</label>
+        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="materiales" placeholder="4500" oninput="calcular()"></div>
+        <div class="hint">Lo que gastas en productos para hacer ESTE servicio</div>
+      </div>
+      <div class="field">
+        <label>Tu tiempo (horas)</label>
+        <div class="input-wrap nopre"><input type="number" id="horas" placeholder="0.5" step="0.1" oninput="calcular()"></div>
+        <div class="hint">Cuántas horas te toma este servicio</div>
+      </div>
+      <div class="field">
+        <label>Valor de tu hora de trabajo</label>
+        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="valorHora" placeholder="12000" oninput="calcular()"></div>
+        <div class="hint">¿Cuánto vale tu tiempo? (mínimo: salario mínimo / hora)</div>
+      </div>
+      <div class="field">
+        <label>Gastos fijos del mes</label>
+        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="gastosFijos" placeholder="400000" oninput="calcular()"></div>
+        <div class="hint">Arriendo, servicios, internet — todo lo que pagas sí o sí cada mes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADOS PRINCIPALES -->
+  <div class="panel" style="border-color:var(--nicho-b);background:var(--nicho-bg)">
+    <div class="panel-label" style="color:var(--nicho-color)">📊 Tu resultado real</div>
+    <div class="resultados">
+      <div class="res-card" id="cardCosto" style="border-color:var(--cb);background:rgba(232,97,74,.06)">
+        <div class="rv" style="color:var(--coral)" id="valCosto">$0</div>
+        <div class="rl">Costo real por unidad</div>
+      </div>
+      <div class="res-card" id="cardGanancia" style="border-color:var(--b1);background:var(--card2)">
+        <div class="rv" id="valGanancia">$0</div>
+        <div class="rl">Ganancia real actual</div>
+      </div>
+      <div class="res-card" id="cardSugerido" style="border-color:var(--tb);background:rgba(61,191,160,.06)">
+        <div class="rv" style="color:var(--teal)" id="valSugerido">$0</div>
+        <div class="rl">Precio sugerido (40% margen)</div>
+      </div>
+    </div>
+
+    <div class="veredicto" id="veredicto" style="border-color:var(--b1);background:var(--card2)">
+      <div class="vico" id="veredictoIco">🤔</div>
+      <div>
+        <div class="vt" id="veredictoTitulo">Completa los datos arriba</div>
+        <div class="vd" id="veredictoDesc">Tu diagnóstico aparecerá aquí en cuanto llenes los campos.</div>
+      </div>
+    </div>
+
+    <div class="detalle" id="detalleCalculo" style="display:none">
+      <div class="detalle-row">
+        <span class="dl">Materiales e insumos</span>
+        <span class="dv" id="detMateriales">$0</span>
+      </div>
+      <div class="detalle-row">
+        <span class="dl">Tu tiempo (horas × valor/hora)</span>
+        <span class="dv" id="detTiempo">$0</span>
+      </div>
+      <div class="detalle-row">
+        <span class="dl">Proporción de gastos fijos</span>
+        <span class="dv" id="detFijos">$0</span>
+      </div>
+      <div class="detalle-row total">
+        <span class="dl">= Costo real total</span>
+        <span class="dv" id="detTotal">$0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PUNTO DE EQUILIBRIO -->
+  <div class="panel">
+    <div class="panel-label">⚖️ Punto de equilibrio — ¿cuánto debes vender al mes?</div>
+    <div class="proyeccion-grid">
+      <div class="proy-card">
+        <div class="pl">Unidades al mes (precio actual)</div>
+        <div class="pv" style="color:var(--coral)" id="unidadesActual">—</div>
+        <div class="pd">Para cubrir tus gastos fijos con tu precio de hoy</div>
+      </div>
+      <div class="proy-card">
+        <div class="pl">Unidades al mes (precio sugerido)</div>
+        <div class="pv" style="color:var(--teal)" id="unidadesSugerido">—</div>
+        <div class="pd">Para cubrir gastos con el precio recomendado</div>
+      </div>
+    </div>
+
+    <div class="slider-wrap">
+      <label>Si vendes <span class="sv" id="sliderLabel">20</span> unidades al mes, tu ganancia sería:</label>
+      <input type="range" id="unidadesSlider" min="1" max="100" value="20" oninput="actualizarSlider()">
+    </div>
+    <div class="proyeccion-grid" style="margin-top:10px">
+      <div class="proy-card">
+        <div class="pl">Con tu precio actual</div>
+        <div class="pv" id="proyActual">—</div>
+      </div>
+      <div class="proy-card">
+        <div class="pl">Con el precio sugerido</div>
+        <div class="pv" style="color:var(--teal)" id="proySugerido">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>Recuerda:</strong> esta calculadora es tu punto de partida. Generaste un número — ahora pídele a la IA que te ayude a comunicar ese precio a tus clientes con el prompt de la Sesión 3.
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="copiarResumen()">📋 Copiar resumen para pegar en la IA</button>
+    <button class="btn btn-ghost" onclick="limpiarTodo()">↺ Empezar de nuevo</button>
+  </div>
+
+  <div class="footer-note">MENTALIDAD JR · Curso IA para Multiplicadores · Sesión 3 — Negocio + Multiplicador</div>
+
+</div>
+
+<script>
+const NICHOS = {
+  barberia: { producto: "Corte de cabello clásico", precioActual: 15000, materiales: 1500, horas: 0.4, valorHora: 12000, gastosFijos: 500000 },
+  peluqueria: { producto: "Tinte de cabello", precioActual: 80000, materiales: 25000, horas: 2, valorHora: 15000, gastosFijos: 600000 },
+  gastronomia: { producto: "Menú del día (1 porción)", precioActual: 12000, materiales: 4500, horas: 0.3, valorHora: 10000, gastosFijos: 450000 },
+  confeccion: { producto: "Arreglo de ropa básico", precioActual: 12000, materiales: 2000, horas: 0.5, valorHora: 12000, gastosFijos: 300000 },
+  bisuteria: { producto: "Collar hecho a mano", precioActual: 25000, materiales: 6000, horas: 1.5, valorHora: 12000, gastosFijos: 200000 },
+  reposteria: { producto: "Torta de 20 porciones", precioActual: 80000, materiales: 25000, horas: 4, valorHora: 15000, gastosFijos: 350000 },
+  tienda: { producto: "Canasta básica promedio", precioActual: 50000, materiales: 38000, horas: 0.1, valorHora: 10000, gastosFijos: 800000 },
+  textil: { producto: "Prenda de ropa", precioActual: 45000, materiales: 20000, horas: 1, valorHora: 12000, gastosFijos: 400000 },
+};
+
+function aplicarNicho(){
+  const key = document.getElementById('nichoSelect').value;
+  if(!key) return;
+  const n = NICHOS[key];
+  document.getElementById('producto').value = n.producto;
+  document.getElementById('precioActual').value = n.precioActual;
+  document.getElementById('materiales').value = n.materiales;
+  document.getElementById('horas').value = n.horas;
+  document.getElementById('valorHora').value = n.valorHora;
+  document.getElementById('gastosFijos').value = n.gastosFijos;
+  calcular();
+}
+
+function fmt(n){
+  if(isNaN(n) || n===null) return '$0';
+  return '$' + Math.round(n).toLocaleString('es-CO');
+}
+
+let ultimoCalculo = null;
+
+function calcular(){
+  const precioActual = parseFloat(document.getElementById('precioActual').value) || 0;
+  const materiales = parseFloat(document.getElementById('materiales').value) || 0;
+  const horas = parseFloat(document.getElementById('horas').value) || 0;
+  const valorHora = parseFloat(document.getElementById('valorHora').value) || 0;
+  const gastosFijos = parseFloat(document.getElementById('gastosFijos').value) || 0;
+
+  const costoTiempo = horas * valorHora;
+  // Estimamos proporción de gastos fijos por unidad asumiendo ~30 servicios/mes como base si no hay otro dato
+  const baseUnidadesMes = 30;
+  const proporcionFijos = gastosFijos > 0 ? gastosFijos / baseUnidadesMes : 0;
+
+  const costoReal = materiales + costoTiempo + proporcionFijos;
+  const gananciaActual = precioActual - costoReal;
+  const precioSugerido = costoReal > 0 ? costoReal / 0.6 : 0; // margen del 40%: costo = 60% del precio
+
+  document.getElementById('valCosto').textContent = fmt(costoReal);
+  document.getElementById('valGanancia').textContent = fmt(gananciaActual);
+  document.getElementById('valSugerido').textContent = fmt(precioSugerido);
+
+  // colorear ganancia según signo
+  const gananciaCard = document.getElementById('cardGanancia');
+  const gananciaVal = document.getElementById('valGanancia');
+  if(gananciaActual < 0){
+    gananciaCard.style.borderColor = 'var(--cb)';
+    gananciaCard.style.background = 'rgba(232,97,74,.06)';
+    gananciaVal.style.color = 'var(--coral)';
+  } else if(gananciaActual < costoReal*0.2){
+    gananciaCard.style.borderColor = 'var(--amberb)';
+    gananciaCard.style.background = 'rgba(224,168,71,.06)';
+    gananciaVal.style.color = 'var(--amber)';
+  } else {
+    gananciaCard.style.borderColor = 'var(--tb)';
+    gananciaCard.style.background = 'rgba(61,191,160,.06)';
+    gananciaVal.style.color = 'var(--teal)';
+  }
+
+  // veredicto
+  const ved = document.getElementById('veredicto');
+  const vedIco = document.getElementById('veredictoIco');
+  const vedT = document.getElementById('veredictoTitulo');
+  const vedD = document.getElementById('veredictoDesc');
+
+  if(precioActual === 0 && materiales === 0){
+    ved.style.borderColor = 'var(--b1)'; ved.style.background = 'var(--card2)';
+    vedIco.textContent = '🤔';
+    vedT.textContent = 'Completa los datos arriba';
+    vedD.textContent = 'Tu diagnóstico aparecerá aquí en cuanto llenes los campos.';
+  } else if(gananciaActual < 0){
+    ved.style.borderColor = 'var(--cb)'; ved.style.background = 'var(--cbg)';
+    vedIco.textContent = '🚨';
+    vedT.textContent = '¡Estás perdiendo plata en cada venta!';
+    vedD.textContent = `Tu precio actual no cubre ni tus costos. Necesitas subir el precio a por lo menos ${fmt(precioSugerido)} para empezar a ganar de verdad.`;
+  } else if(gananciaActual < costoReal*0.2){
+    ved.style.borderColor = 'var(--amberb)'; ved.style.background = 'var(--amberbg)';
+    vedIco.textContent = '⚠️';
+    vedT.textContent = 'Estás ganando, pero muy poco';
+    vedD.textContent = `Tu margen actual es bajo. Con ${fmt(precioSugerido)} tendrías un margen saludable del 40%, mucho más sostenible a largo plazo.`;
+  } else {
+    ved.style.borderColor = 'var(--tb)'; ved.style.background = 'var(--tbg)';
+    vedIco.textContent = '✅';
+    vedT.textContent = '¡Tu precio está dejando ganancia real!';
+    vedD.textContent = `Vas bien. Tu margen actual es saludable — sigue revisando esta tabla cada mes para mantenerlo así.`;
+  }
+
+  // detalle
+  document.getElementById('detalleCalculo').style.display = (precioActual||materiales) ? 'block' : 'none';
+  document.getElementById('detMateriales').textContent = fmt(materiales);
+  document.getElementById('detTiempo').textContent = fmt(costoTiempo) + ` (${horas}h × ${fmt(valorHora)})`;
+  document.getElementById('detFijos').textContent = fmt(proporcionFijos) + ` (de ${fmt(gastosFijos)}/mes ÷ 30 unid.)`;
+  document.getElementById('detTotal').textContent = fmt(costoReal);
+
+  // punto de equilibrio
+  const unidadesActual = (gananciaActual > 0) ? Math.ceil(gastosFijos / gananciaActual) : null;
+  const gananciaSugerida = precioSugerido - costoReal;
+  const unidadesSugerido = (gananciaSugerida > 0) ? Math.ceil(gastosFijos / gananciaSugerida) : null;
+
+  document.getElementById('unidadesActual').textContent = unidadesActual ? unidadesActual + ' / mes' : '—';
+  document.getElementById('unidadesSugerido').textContent = unidadesSugerido ? unidadesSugerido + ' / mes' : '—';
+
+  ultimoCalculo = { producto: document.getElementById('producto').value, precioActual, costoReal, gananciaActual, precioSugerido, unidadesActual, unidadesSugerido, gastosFijos };
+
+  actualizarSlider();
+}
+
+function actualizarSlider(){
+  const unidades = parseInt(document.getElementById('unidadesSlider').value);
+  document.getElementById('sliderLabel').textContent = unidades;
+  if(!ultimoCalculo) return;
+  const { gananciaActual, precioSugerido, costoReal, gastosFijos } = ultimoCalculo;
+  const gananciaSugerida = precioSugerido - costoReal;
+
+  const totalActual = (gananciaActual * unidades) - 0; // gastos fijos ya prorrateados en costoReal
+  const totalSugerido = (gananciaSugerida * unidades);
+
+  document.getElementById('proyActual').textContent = fmt(totalActual);
+  document.getElementById('proyActual').style.color = totalActual < 0 ? 'var(--coral)' : 'var(--w)';
+  document.getElementById('proySugerido').textContent = fmt(totalSugerido);
+}
+
+function copiarResumen(){
+  if(!ultimoCalculo){ alert('Completa primero los datos de tu negocio.'); return; }
+  const c = ultimoCalculo;
+  const texto = `Mi producto/servicio: ${c.producto || '(sin nombre)'}
+Precio actual: ${fmt(c.precioActual)}
+Costo real calculado: ${fmt(c.costoReal)}
+Ganancia actual: ${fmt(c.gananciaActual)}
+Precio sugerido (margen 40%): ${fmt(c.precioSugerido)}
+Gastos fijos mensuales: ${fmt(c.gastosFijos)}
+
+Ayúdame a escribir un mensaje para subir mi precio a ${fmt(c.precioSugerido)} sin perder clientes, explicando el valor de mi trabajo de forma natural y colombiana.`;
+  navigator.clipboard.writeText(texto).then(()=>{
+    alert('¡Copiado! Pégalo en ChatGPT o Claude para que te ayude a comunicar tu nuevo precio.');
+  });
+}
+
+function limpiarTodo(){
+  ['producto','precioActual','materiales','horas','valorHora','gastosFijos'].forEach(id=>{
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('nichoSelect').value = '';
+  calcular();
+}
+
+calcular();
+</script>
+</body>
+</html>

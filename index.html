@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso IA para Multiplicadores — MENTALIDAD JR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdfcfa;--card:#ffffff;--card2:#f7f4ef;--b1:#e4ddd2;
+  --coral:#d14d36;--cbg:#fbe9e4;--cb:#f0bdac;
+  --teal:#1f8a6e;--tbg:#e3f3ee;--tb:#aedfcd;
+  --lav:#6e5fc4;--lbg:#ece9fa;--lb:#cac1f0;
+  --sky:#2f7fb0;--skybg:#e3f0f8;--skyb:#b8d8ec;
+  --amber:#b5791e;--amberbg:#faf0dc;--amberb:#ecce96;
+  --ink:#211f1a;--ink2:#4a443d;--ink3:#8a8378;--ink4:#c4bcae;
+  --f:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:var(--bg);color:var(--ink);font-family:var(--f)}
+body{padding-bottom:60px}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#fdfcfa 0%,#f7f5f0 60%,#ede8f3 100%);
+  border-bottom:2px solid var(--b1);
+  padding:40px 24px 32px;text-align:center;position:relative;overflow:hidden;
+}
+.header::before{content:'🤖';position:absolute;font-size:160px;opacity:.04;right:-20px;top:-20px;line-height:1}
+.header-brand{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:14px}
+.header h1{font-size:28px;font-weight:800;letter-spacing:-.8px;line-height:1.2;margin-bottom:12px;color:var(--ink)}
+.header h1 em{font-style:italic;font-weight:300;color:var(--lav)}
+.header p{font-size:15px;color:var(--ink3);line-height:1.6;max-width:420px;margin:0 auto 20px}
+.header-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill{background:var(--card);border:1.5px solid var(--b1);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--ink2);font-weight:500}
+
+/* MAIN */
+.main{max-width:680px;margin:0 auto;padding:28px 20px 0}
+
+/* SECCIÓN */
+.seccion{margin-bottom:32px}
+.sec-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec-ico{font-size:22px;line-height:1}
+.sec-titulo{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)}
+.sec-linea{flex:1;height:1.5px;background:var(--b1);border-radius:1px}
+
+/* TARJETAS */
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{
+  display:flex;align-items:center;gap:16px;
+  background:var(--card);border:2px solid var(--b1);border-radius:16px;
+  padding:18px 20px;text-decoration:none;color:inherit;
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.card:hover{border-color:var(--b2);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.card:active{transform:translateY(0)}
+.card-color{width:4px;position:absolute;left:0;top:0;bottom:0;border-radius:16px 0 0 16px}
+.card-ico{font-size:28px;line-height:1;flex-shrink:0;width:40px;text-align:center}
+.card-body{flex:1;min-width:0}
+.card-titulo{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1.3}
+.card-desc{font-size:12.5px;color:var(--ink3);line-height:1.45;font-weight:400}
+.card-badge{
+  font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:7px;flex-shrink:0;border:1.5px solid;
+}
+.card-arrow{font-size:16px;color:var(--ink4);flex-shrink:0;margin-left:4px;transition:transform .2s}
+.card:hover .card-arrow{transform:translateX(3px);color:var(--ink2)}
+
+/* AVISO */
+.aviso{
+  background:var(--amberbg);border:1.5px solid var(--amberb);border-radius:14px;
+  padding:16px 18px;margin-bottom:28px;display:flex;gap:12px;align-items:flex-start;
+}
+.aviso-ico{font-size:20px;flex-shrink:0;line-height:1.3}
+.aviso-txt{font-size:13.5px;color:var(--amber);line-height:1.55;font-weight:500}
+.aviso-txt strong{color:#8a5e15;font-weight:700}
+
+/* FOOTER */
+.footer{text-align:center;margin-top:36px;padding:20px;font-size:12px;color:var(--ink4);line-height:1.8}
+.footer strong{color:var(--ink3)}
+
+/* MOBILE */
+@media(max-width:480px){
+  .header h1{font-size:24px}
+  .card{padding:14px 16px}
+  .card-ico{font-size:24px;width:34px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">MENTALIDAD JR</div>
+  <h1>Curso IA para<br><em>Multiplicadores</em></h1>
+  <p>Todos tus materiales del curso en un solo lugar. Tócalos para abrirlos directamente en tu celular.</p>
+  <div class="header-pills">
+    <span class="pill">Alcaldía Local de San Cristóbal</span>
+    <span class="pill">Bogotá 2026</span>
+    <span class="pill">3 sesiones</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="aviso">
+    <span class="aviso-ico">💡</span>
+    <div class="aviso-txt"><strong>Consejo:</strong> guarda esta página en favoritos de tu celular — así tienes todos los materiales siempre a mano, sin necesidad de buscar el link cada vez.</div>
+  </div>
+
+  <!-- SESIÓN 1 -->
+  <div class="seccion">
+    <div class="sec-header">
+      <span class="sec-ico">🔴</span>
+      <span class="sec-titulo">Sesión 1 — IA Sin Miedo</span>
+      <div class="sec-linea"></div>
+    </div>
+    <div class="cards">
+      <a href="sesion1-virtual.html" class="card">
+        <div class="card-color" style="background:var(--coral)"></div>
+        <span class="card-ico">📊</span>
+        <div class="card-body">
+          <div class="card-titulo">Presentación Sesión 1</div>
+          <div class="card-desc">Las slides completas de la sesión — la Fórmula de Oro y los primeros prompts</div>
+        </div>
+        <span class="card-badge" style="color:var(--coral);border-color:var(--cb);background:var(--cbg)">Sesión 1</span>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- SESIÓN 2 -->
+  <div class="seccion">
+    <div class="sec-header">
+      <span class="sec-ico">🟢</span>
+      <span class="sec-titulo">Sesión 2 — Ventas + Contenido</span>
+      <div class="sec-linea"></div>
+    </div>
+    <div class="cards">
+      <a href="sesion2-virtual.html" class="card">
+        <div class="card-color" style="background:var(--teal)"></div>
+        <span class="card-ico">📊</span>
+        <div class="card-body">
+          <div class="card-titulo">Presentación Sesión 2</div>
+          <div class="card-desc">WhatsApp, BIO, contenido y generación de imagen con ChatGPT</div>
+        </div>
+        <span class="card-badge" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Sesión 2</span>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="kit-whatsapp-v2.html" class="card">
+        <div class="card-color" style="background:var(--teal)"></div>
+        <span class="card-ico">💬</span>
+        <div class="card-body">
+          <div class="card-titulo">Kit de Respuestas de WhatsApp</div>
+          <div class="card-desc">Las 6 respuestas para tu negocio — genera, pega y guarda</div>
+        </div>
+        <span class="card-badge" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Herramienta</span>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="planificador-contenido.html" class="card">
+        <div class="card-color" style="background:var(--teal)"></div>
+        <span class="card-ico">📅</span>
+        <div class="card-body">
+          <div class="card-titulo">Planificador de Contenido 7 Días</div>
+          <div class="card-desc">Toda la semana de publicaciones organizada en un solo lugar</div>
+        </div>
+        <span class="card-badge" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Herramienta</span>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- SESIÓN 3 -->
+  <div class="seccion">
+    <div class="sec-header">
+      <span class="sec-ico">🟣</span>
+      <span class="sec-titulo">Sesión 3 — Negocio + Multiplicador</span>
+      <div class="sec-linea"></div>
+    </div>
+    <div class="cards">
+      <a href="sesion3-virtual.html" class="card">
+        <div class="card-color" style="background:var(--lav)"></div>
+        <span class="card-ico">📊</span>
+        <div class="card-body">
+          <div class="card-titulo">Presentación Sesión 3</div>
+          <div class="card-desc">Finanzas reales, el caso de Doña Martha y el Pitch del Multiplicador</div>
+        </div>
+        <span class="card-badge" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Sesión 3</span>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="tabla-control-financiero.html" class="card">
+        <div class="card-color" style="background:var(--lav)"></div>
+        <span class="card-ico">💰</span>
+        <div class="card-body">
+          <div class="card-titulo">Tabla de Control Financiero</div>
+          <div class="card-desc">Anota cada semana — ingresos, gastos y ganancia real de tu negocio</div>
+        </div>
+        <span class="card-badge" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Herramienta</span>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="calculadora-financiera.html" class="card">
+        <div class="card-color" style="background:var(--lav)"></div>
+        <span class="card-ico">🧮</span>
+        <div class="card-body">
+          <div class="card-titulo">Calculadora Financiera</div>
+          <div class="card-desc">¿Cuánto ganas de verdad? Calcula tu costo real y precio con margen</div>
+        </div>
+        <span class="card-badge" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Herramienta</span>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- HERRAMIENTAS GENERALES -->
+  <div class="seccion">
+    <div class="sec-header">
+      <span class="sec-ico">🧰</span>
+      <span class="sec-titulo">Tu kit completo</span>
+      <div class="sec-linea"></div>
+    </div>
+    <div class="cards">
+      <a href="participante-curso-ia.html" class="card">
+        <div class="card-color" style="background:var(--sky)"></div>
+        <span class="card-ico">📖</span>
+        <div class="card-body">
+          <div class="card-titulo">Mi Guía IA</div>
+          <div class="card-desc">Todos los prompts del curso adaptados a tu oficio — elige tu negocio y empieza</div>
+        </div>
+        <span class="card-badge" style="color:var(--sky);border-color:var(--skyb);background:var(--skybg)">Guía personal</span>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="kit-multiplicador.html" class="card">
+        <div class="card-color" style="background:var(--sky)"></div>
+        <span class="card-ico">🏅</span>
+        <div class="card-body">
+          <div class="card-titulo">Kit del Multiplicador</div>
+          <div class="card-desc">Todo lo que necesitas para enseñarle IA a tus 10 personas</div>
+        </div>
+        <span class="card-badge" style="color:var(--sky);border-color:var(--skyb);background:var(--skybg)">Multiplicador</span>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="fichas-trabajo.html" class="card">
+        <div class="card-color" style="background:var(--sky)"></div>
+        <span class="card-ico">📝</span>
+        <div class="card-body">
+          <div class="card-titulo">Fichas de Trabajo</div>
+          <div class="card-desc">El cuaderno de ejercicios del curso — una ficha por actividad</div>
+        </div>
+        <span class="card-badge" style="color:var(--sky);border-color:var(--skyb);background:var(--skybg)">Ejercicios</span>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <strong>MENTALIDAD JR</strong> · Jhon Esteban Rodríguez<br>
+    Curso IA para Multiplicadores · Alcaldía Local de San Cristóbal · Bogotá 2026
+  </div>
+
+</div>
+</body>
+</html>

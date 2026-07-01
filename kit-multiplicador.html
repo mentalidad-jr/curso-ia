@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit del Multiplicador — IA para Multiplicadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f6f2;--s1:#ffffff;--card:#ffffff;--card2:#f2f0ec;
+  --b1:#e4e2dc;--b2:#ccc9c0;
+  --ink:#1a1c18;--ink2:#4a4c46;--ink3:#8a8c86;--ink4:#c4c6be;
+  --teal:#0f6e56;--teall:#e1f5ee;--tealm:#1d9e75;
+  --coral:#993c1d;--corall:#faece7;--coralm:#d85a30;
+  --lav:#534ab7;--lavl:#eeedfe;--lavm:#7f77dd;
+  --amber:#854f0b;--amberl:#faeeda;--amberm:#ba7517;
+  --f:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:var(--bg);color:var(--ink);font-family:var(--f)}
+body{padding:0 0 80px}
+
+/* ── HERO ── */
+.hero{
+  background:var(--ink);color:#f0ede6;
+  padding:56px 40px 48px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 1px,transparent 1px,transparent 8px
+  );
+}
+.hero .eye{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--tealm);margin-bottom:14px}
+.hero h1{font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:12px}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--tealm)}
+.hero .sub{font-size:17px;color:#b0ac9f;font-weight:300;line-height:1.75;max-width:600px;margin-bottom:28px}
+.hero-pills{display:flex;gap:8px;flex-wrap:wrap}
+.hpill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:5px 14px;font-size:12px;color:#b0ac9f}
+
+/* ── NAV ── */
+.nav{
+  background:var(--s1);border-bottom:1px solid var(--b1);
+  padding:12px 40px;display:flex;gap:4px;
+  position:sticky;top:0;z-index:100;overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none}
+.ntab{
+  white-space:nowrap;font-size:12px;font-weight:500;
+  padding:6px 14px;border-radius:8px;
+  background:transparent;border:1px solid transparent;
+  color:var(--ink3);cursor:pointer;transition:all .15s;
+  text-decoration:none;display:inline-block;
+}
+.ntab:hover{background:var(--card2);color:var(--ink2)}
+.ntab.act{background:var(--ink);color:#f0ede6;border-color:var(--ink)}
+
+/* ── MAIN ── */
+.main{max-width:860px;margin:0 auto;padding:40px 40px 0}
+
+/* ── SECCIÓN ── */
+.seccion{padding:40px 0;border-bottom:1px solid var(--b1)}
+.seccion:last-child{border-bottom:none}
+.sec-eye{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-eye::before{content:'';width:16px;height:1px;background:var(--teal)}
+.sec-h{font-size:clamp(22px,3.5vw,34px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:12px}
+.sec-h em{font-style:italic;font-weight:300}
+.sec-p{font-size:16px;color:var(--ink2);line-height:1.75;font-weight:300;max-width:680px;margin-bottom:0}
+.sec-p strong{color:var(--ink);font-weight:500}
+
+/* ── TIMELINE CLASE ── */
+.timeline{display:flex;flex-direction:column;gap:0;margin-top:24px;position:relative}
+.timeline::before{content:'';position:absolute;left:24px;top:20px;bottom:20px;width:1px;background:var(--b1)}
+.tl-item{display:flex;gap:20px;align-items:flex-start;padding:16px 0}
+.tl-dot{
+  width:48px;height:48px;border-radius:50%;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:13px;z-index:1;
+  border:2px solid var(--b1);background:var(--bg);
+}
+.tl-content{flex:1;padding-top:8px}
+.tl-tiempo{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.tl-titulo{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.3}
+.tl-desc{font-size:14px;color:var(--ink3);line-height:1.6;font-weight:300}
+.tl-tip{
+  display:inline-flex;align-items:flex-start;gap:8px;
+  background:var(--card2);border:1px solid var(--b1);
+  border-radius:8px;padding:8px 12px;margin-top:8px;
+  font-size:13px;color:var(--ink2);font-weight:300;line-height:1.5;
+}
+
+/* ── PROMPTS IMPRIMIBLES ── */
+.prompts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.prompt-imp{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:12px;overflow:hidden;
+}
+.pi-head{
+  padding:12px 16px;border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;gap:10px;
+}
+.pi-num{font-size:22px;font-weight:800;color:var(--b2);line-height:1;flex-shrink:0}
+.pi-titulo{font-size:14px;font-weight:600;color:var(--ink);line-height:1.3}
+.pi-body{padding:14px 16px}
+.pi-text{
+  font-size:12.5px;color:var(--ink2);line-height:1.75;font-weight:300;
+  white-space:pre-wrap;margin-bottom:10px;
+}
+.pi-placeholder{color:var(--teal);font-weight:500}
+.pi-ejemplo{
+  background:var(--teall);border:1px solid #9fe1cb;
+  border-radius:6px;padding:8px 10px;
+  font-size:12px;color:#085041;line-height:1.6;font-weight:300;
+}
+.pi-ejemplo .ej-l{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--teal);font-weight:500;margin-bottom:4px}
+
+/* ── REGLAS ── */
+.reglas{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.regla{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:12px;padding:14px 18px;
+}
+.regla .rn{font-size:28px;font-weight:800;min-width:28px;line-height:1;flex-shrink:0}
+.regla .rt{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.regla .rd{font-size:13px;color:var(--ink3);font-weight:300;line-height:1.5}
+
+/* ── DOS COLUMNAS ── */
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.dos-col{border-radius:12px;padding:20px 18px;border:1px solid}
+.dos-col h4{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.ci{display:flex;gap:9px;font-size:14px;color:var(--ink2);margin-bottom:9px;line-height:1.5;font-weight:300;align-items:flex-start}
+.ci .ic{flex-shrink:0;margin-top:2px}
+
+/* ── CHECKLIST INTERACTIVO ── */
+.checklist{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.cl-item{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:12px;padding:14px 18px;cursor:pointer;
+  transition:all .15s;
+}
+.cl-item:hover{border-color:var(--b2)}
+.cl-item.done{background:var(--teall);border-color:#9fe1cb}
+.cl-check{
+  width:22px;height:22px;border-radius:6px;
+  border:1.5px solid var(--b2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:1px;transition:all .15s;
+  font-size:13px;font-weight:700;
+}
+.cl-item.done .cl-check{background:var(--teal);border-color:var(--teal);color:white}
+.cl-txt{font-size:15px;color:var(--ink);font-weight:400;line-height:1.5}
+.cl-item.done .cl-txt{color:var(--teal)}
+.cl-sub{font-size:12.5px;color:var(--ink3);font-weight:300;margin-top:3px;line-height:1.4}
+
+/* ── PLAN FORM ── */
+.plan-form{margin-top:20px}
+.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pf-field{margin-bottom:0}
+.pf-field.full{grid-column:1/-1}
+.pf-field label{
+  display:block;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;font-weight:600;
+  color:var(--lav);margin-bottom:6px;
+}
+.pf-field input,.pf-field textarea{
+  width:100%;background:var(--bg);border:1px solid var(--b2);
+  border-radius:8px;padding:11px 14px;
+  font-size:14px;color:var(--ink);font-family:var(--f);
+  outline:none;resize:vertical;
+  transition:border-color .2s;
+}
+.pf-field input:focus,.pf-field textarea:focus{border-color:var(--lav)}
+.pf-field input::placeholder,.pf-field textarea::placeholder{color:var(--ink4);font-weight:300}
+.btn-print{
+  background:var(--ink);color:#f0ede6;
+  border:none;border-radius:10px;padding:12px 28px;
+  font-size:15px;font-weight:700;font-family:var(--f);
+  cursor:pointer;transition:all .2s;margin-top:16px;margin-right:8px;
+}
+.btn-print:hover{background:#2e3028}
+.btn-save{
+  background:transparent;color:var(--teal);
+  border:1.5px solid var(--teal);border-radius:10px;padding:12px 28px;
+  font-size:15px;font-weight:700;font-family:var(--f);
+  cursor:pointer;transition:all .2s;margin-top:16px;
+}
+.btn-save:hover{background:var(--teall)}
+
+/* ── TARJETAS PROBLEMA IMPRIMIBLES ── */
+.tarjetas-imp{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:20px;
+}
+.tc-imp{
+  background:var(--card);border:2px solid var(--b1);
+  border-radius:12px;padding:18px 16px;
+  min-height:160px;position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.tc-imp .tc-n{
+  font-size:48px;font-weight:800;color:var(--b1);
+  position:absolute;top:10px;right:14px;line-height:1;
+}
+.tc-imp .tc-ico{font-size:26px;margin-bottom:8px}
+.tc-imp .tc-t{font-size:14px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:6px;padding-right:40px}
+.tc-imp .tc-d{font-size:12px;color:var(--ink3);line-height:1.5;font-weight:300}
+.tc-imp .tc-bot{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--b2);font-weight:500;margin-top:12px}
+
+/* ── TABLA FINANCIERA ── */
+.tabla-imp{
+  width:100%;border-collapse:collapse;margin-top:20px;
+  background:var(--card);border-radius:12px;overflow:hidden;
+  border:1px solid var(--b1);
+}
+.tabla-imp th{
+  background:var(--ink);color:#f0ede6;
+  padding:11px 14px;font-size:12px;font-weight:600;
+  letter-spacing:.3px;text-align:left;
+}
+.tabla-imp td{
+  padding:11px 14px;font-size:13px;color:var(--ink2);
+  border-bottom:1px solid var(--b1);font-weight:300;
+}
+.tabla-imp tr:last-child td{border-bottom:none}
+.tabla-imp tr:hover td{background:var(--card2)}
+.tabla-imp .pos{color:var(--teal);font-weight:500}
+.tabla-imp .neg{color:var(--coral);font-weight:500}
+.tabla-imp .tot{font-weight:600;color:var(--ink)}
+
+/* ── PASOS 5 REGLAS ── */
+.cinco-reglas{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.cr{display:flex;gap:14px;align-items:flex-start;padding:13px 16px;background:var(--card);border:1px solid var(--b1);border-radius:10px}
+.cr .crn{font-size:20px;font-weight:800;color:var(--b2);min-width:24px;flex-shrink:0;line-height:1.1}
+.cr .crt{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.cr .crd{font-size:12.5px;color:var(--ink3);font-weight:300;line-height:1.5}
+
+/* ── NOTA PARA JOHN ── */
+.nota-j{
+  background:var(--amberl);border:1px solid #fac775;
+  border-radius:10px;padding:14px 18px;margin-top:16px;
+  font-size:13px;color:var(--amber);line-height:1.6;
+  display:flex;gap:10px;align-items:flex-start;
+}
+
+/* ── PRINT ── */
+@media print{
+  .nav,.hero,.btn-print,.btn-save,.nota-j,.ntab{display:none!important}
+  body{background:white;padding:0}
+  .main{padding:20px}
+  .seccion{break-inside:avoid;page-break-inside:avoid}
+  .tarjetas-imp{break-inside:avoid}
+  .tc-imp{border:2px solid #333}
+  .tabla-imp th{background:#333}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eye">Alcaldía Local de San Cristóbal · Bogotá · 2026</div>
+  <h1>Kit del<br><em>Multiplicador</em></h1>
+  <p class="sub">Todo lo que necesitas para enseñarle IA a 10 personas de tu comunidad. Sin haber dado clase antes. Sin necesitar internet. En 45 minutos.</p>
+  <div class="hero-pills">
+    <div class="hpill">Mini-clase de 45 min</div>
+    <div class="hpill">3 prompts para enseñar</div>
+    <div class="hpill">Checklist pre-clase</div>
+    <div class="hpill">Plan del Multiplicador</div>
+    <div class="hpill">Materiales imprimibles</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="ntab act" href="#como-ensenar">Cómo enseñar</a>
+  <a class="ntab" href="#los-45">Los 45 minutos</a>
+  <a class="ntab" href="#prompts">Prompts para enseñar</a>
+  <a class="ntab" href="#checklist">Checklist</a>
+  <a class="ntab" href="#errores">Errores comunes</a>
+  <a class="ntab" href="#tarjetas">Tarjetas</a>
+  <a class="ntab" href="#tabla">Tabla financiera</a>
+  <a class="ntab" href="#plan">Mi plan</a>
+</nav>
+
+<div class="main">
+
+<!-- ══ CÓMO ENSEÑAR ══ -->
+<div class="seccion" id="como-ensenar">
+  <div class="sec-eye">Lo más importante primero</div>
+  <div class="sec-h">No eres el experto.<br><em>Eres el guía.</em></div>
+  <p class="sec-p">La diferencia entre un facilitador que funciona y uno que no es simple: <strong>el facilitador que funciona deja que la gente practique</strong>. El que no funciona habla demasiado y la gente mira sin hacer nada.</p>
+
+  <div class="dos" style="margin-top:20px">
+    <div class="dos-col" style="border-color:#f5c4b3;background:var(--corall)">
+      <h4 style="color:var(--coral)">Lo que NO debes hacer</h4>
+      <div class="ci"><span class="ic">✕</span><span>Explicar todo antes de que practiquen — pierde la atención</span></div>
+      <div class="ci"><span class="ic">✕</span><span>Usar palabras como "algoritmo", "modelo" o "inteligencia artificial" para explicar la IA</span></div>
+      <div class="ci"><span class="ic">✕</span><span>Hacer el prompt por ellos mientras ellos miran</span></div>
+      <div class="ci"><span class="ic">✕</span><span>Cerrar la clase sin un compromiso concreto escrito</span></div>
+      <div class="ci"><span class="ic">✕</span><span>Ponerte nervioso si alguien hace una pregunta que no sabes responder</span></div>
+    </div>
+    <div class="dos-col" style="border-color:#9fe1cb;background:var(--teall)">
+      <h4 style="color:var(--teal)">Lo que SÍ debes hacer</h4>
+      <div class="ci"><span class="ic">✓</span><span>Que produzcan algo en los primeros 10 minutos — eso engancha al grupo</span></div>
+      <div class="ci"><span class="ic">✓</span><span>Decir: "Es como un vecino que sabe de todo y está gratis en tu celular"</span></div>
+      <div class="ci"><span class="ic">✓</span><span>Circular entre la gente mientras practica y hacer preguntas que los guíen</span></div>
+      <div class="ci"><span class="ic">✓</span><span>Cerrar con un compromiso concreto: "¿Cuándo vas a usar esto esta semana?"</span></div>
+      <div class="ci"><span class="ic">✓</span><span>Si no sabes algo, decir: "No sé, vamos a preguntarle a la IA juntos"</span></div>
+    </div>
+  </div>
+
+  <div style="background:var(--ink);color:#f0ede6;border-radius:14px;padding:24px 26px;margin-top:20px;text-align:center">
+    <div style="font-size:clamp(18px,3vw,26px);font-weight:800;line-height:1.3;letter-spacing:-.5px;margin-bottom:10px">
+      "Primero acción,<br>después explicación."
+    </div>
+    <div style="font-size:14px;color:#b0ac9f;font-weight:300">La regla más importante del multiplicador</div>
+  </div>
+</div>
+
+<!-- ══ LOS 45 MINUTOS ══ -->
+<div class="seccion" id="los-45">
+  <div class="sec-eye">La estructura de tu clase</div>
+  <div class="sec-h">Los 45 minutos,<br><em>minuto a minuto</em></div>
+  <p class="sec-p">Esta estructura funciona con cualquier grupo, cualquier oficio y cualquier nivel de tecnología. No la cambies hasta que la hayas usado al menos 3 veces.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--tealm);color:var(--teal)">0–5</div>
+      <div class="tl-content">
+        <div class="tl-tiempo" style="color:var(--teal)">Minutos 0 a 5</div>
+        <div class="tl-titulo">Rompehielo — conecta con tu audiencia</div>
+        <div class="tl-desc">Pregunta: <em>"¿Qué vendes y qué actividad te roba más tiempo o plata al día?"</em> Anota las respuestas en el tablero o en papel. Esas respuestas serán los ejemplos de toda la clase.</div>
+        <div class="tl-tip">💡 No arranques explicando — arranca escuchando. La gente atiende más cuando siente que el tema es sobre ellos.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--coralm);color:var(--coral)">5–10</div>
+      <div class="tl-content">
+        <div class="tl-tiempo" style="color:var(--coral)">Minutos 5 a 10</div>
+        <div class="tl-titulo">La Regla de Oro — enseña la fórmula</div>
+        <div class="tl-desc">Explica la fórmula en máximo 2 minutos: <strong>ROL + CONTEXTO + OBJETIVO + TONO + FORMATO</strong>. Da un ejemplo tuyo. Da un ejemplo del oficio de alguien del grupo. Muéstrales la diferencia entre un prompt sin fórmula y uno con fórmula.</div>
+        <div class="tl-tip">💡 Escribe la fórmula en el tablero o muéstrala en papel. Que la vean mientras practican.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--lavm);color:var(--lav)">10–25</div>
+      <div class="tl-content">
+        <div class="tl-tiempo" style="color:var(--lav)">Minutos 10 a 25</div>
+        <div class="tl-titulo">Práctica 1 — La oferta irresistible</div>
+        <div class="tl-desc">Cada persona crea su oferta irresistible con la IA. Tú circulas, ayudas a quien tiene problemas con el celular y haces preguntas que mejoren el prompt. <strong>No hagas el trabajo por ellos.</strong></div>
+        <div class="tl-tip">💡 Si alguien dice "no sé qué escribir", pregúntale: "¿Cuál es tu oficio y cuánto cobras?" — con eso ya tiene el contexto.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--amberm);color:var(--amber)">25–35</div>
+      <div class="tl-content">
+        <div class="tl-tiempo" style="color:var(--amber)">Minutos 25 a 35</div>
+        <div class="tl-titulo">Práctica 2 — 2 respuestas de WhatsApp</div>
+        <div class="tl-desc">Cada uno genera 2 respuestas de WhatsApp: una para cuando preguntan el precio y otra para cuando preguntan dónde están. Al terminar, que las guarden en el celular para usarlas hoy mismo.</div>
+        <div class="tl-tip">💡 Muéstrales cómo guardarlas en WhatsApp Business → Respuestas Rápidas. Eso les da el primer resultado tangible.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--tealm);color:var(--teal)">35–43</div>
+      <div class="tl-content">
+        <div class="tl-tiempo" style="color:var(--teal)">Minutos 35 a 43</div>
+        <div class="tl-titulo">Práctica 3 — 1 publicación completa</div>
+        <div class="tl-desc">Cada uno genera 1 post con gancho, texto corto y llamado a la acción. Si tienen tiempo, lo diseñan rápido en Canva. El objetivo es que salgan con algo listo para publicar hoy.</div>
+        <div class="tl-tip">💡 Si el tiempo es corto, que generen solo el texto. El diseño lo pueden hacer en casa.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--coralm);color:var(--coral)">43–45</div>
+      <div class="tl-content">
+        <div class="tl-tiempo" style="color:var(--coral)">Minutos 43 a 45</div>
+        <div class="tl-titulo">Cierre — compromiso concreto</div>
+        <div class="tl-desc">Pantallazo grupal de resultados. Cada uno dice en voz alta: <em>"Esta semana voy a publicar [qué] el [día]"</em>. No dejes que salgan sin ese compromiso dicho en voz alta.</div>
+        <div class="tl-tip">💡 El compromiso público funciona. La persona que lo dice frente a todos tiene 3 veces más probabilidad de cumplirlo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROMPTS PARA ENSEÑAR ══ -->
+<div class="seccion" id="prompts">
+  <div class="sec-eye">Los 3 prompts que siempre enseñas</div>
+  <div class="sec-h">Tres prompts.<br><em>Siempre estos tres.</em></div>
+  <p class="sec-p">No intentes enseñar 10 cosas diferentes. Con estos tres, cualquier persona puede arrancar a usar la IA para su negocio hoy mismo. Máster estos antes de agregar más.</p>
+
+  <div class="prompts-grid">
+
+    <div class="prompt-imp">
+      <div class="pi-head" style="background:var(--corall)">
+        <div class="pi-num" style="color:var(--coralm)">1</div>
+        <div>
+          <div class="pi-titulo" style="color:var(--coral)">La oferta irresistible</div>
+          <div style="font-size:11px;color:var(--coralm);font-weight:300;margin-top:2px">Para conseguir clientes esta semana</div>
+        </div>
+      </div>
+      <div class="pi-body">
+        <div class="pi-text">Actúa como experto en ventas para negocios pequeños.
+Mi negocio es <span class="pi-placeholder">[OFICIO]</span> en <span class="pi-placeholder">[BARRIO]</span>.
+Mi cliente típico es <span class="pi-placeholder">[DESCRIPCIÓN]</span>.
+Precio promedio: <span class="pi-placeholder">[VALOR]</span>.
+Crea 3 ofertas para esta semana. Cada una con: beneficio claro, urgencia y llamado a la acción. Tono: cercano y colombiano.</div>
+        <div class="pi-ejemplo">
+          <div class="ej-l">Ejemplo — Barbería</div>
+          "Actúa como experto en ventas. Mi negocio es barbería en San Cristóbal. Mi cliente es hombre 15–35 años. Precio: $18.000. Crea 3 ofertas para llenar mi agenda este fin de semana."
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-imp">
+      <div class="pi-head" style="background:var(--teall)">
+        <div class="pi-num" style="color:var(--tealm)">2</div>
+        <div>
+          <div class="pi-titulo" style="color:var(--teal)">Respuestas de WhatsApp</div>
+          <div style="font-size:11px;color:var(--tealm);font-weight:300;margin-top:2px">Para atender sin responder lo mismo siempre</div>
+        </div>
+      </div>
+      <div class="pi-body">
+        <div class="pi-text">Soy dueño(a) de <span class="pi-placeholder">[OFICIO]</span> en <span class="pi-placeholder">[BARRIO]</span>.
+Crea 6 respuestas cortas para WhatsApp:
+1) precio, 2) dónde estoy, 3) horarios, 4) "lo pienso", 5) cliente molesto, 6) seguimiento.
+Tono: cercano, colombiano. Máximo 3 líneas cada una.</div>
+        <div class="pi-ejemplo">
+          <div class="ej-l">Ejemplo — Peluquería</div>
+          "Soy dueña de peluquería en Juan Rey. Crea 6 respuestas para WhatsApp: precio del tinte, dónde estoy, horarios, cuando dice lo pienso, cliente molesta, seguimiento. Tono colombiano, máximo 3 líneas."
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-imp" style="grid-column:1/-1">
+      <div class="pi-head" style="background:var(--lavl)">
+        <div class="pi-num" style="color:var(--lavm)">3</div>
+        <div>
+          <div class="pi-titulo" style="color:var(--lav)">Plan de contenido 7 días</div>
+          <div style="font-size:11px;color:var(--lavm);font-weight:300;margin-top:2px">Para saber qué publicar toda la semana</div>
+        </div>
+      </div>
+      <div class="pi-body">
+        <div class="pi-text">Hazme un plan de contenido para 7 días para mi negocio de <span class="pi-placeholder">[OFICIO]</span> en Colombia.
+Formato tabla: Día / Tipo (post, reel, historia) / Tema / Primera línea del texto / Llamado a la acción.
+3 días educativos, 2 de venta, 1 de testimonio o transformación, 1 personal.
+Tono: cercano y colombiano.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="pi-ejemplo">
+            <div class="ej-l">Ejemplo — Gastronomía</div>
+            "Plan de contenido 7 días para venta de almuerzos caseros en Bogotá. Tabla: día, tipo, tema, primera línea, CTA. 3 educativos, 2 venta, 1 testimonio, 1 personal."
+          </div>
+          <div class="pi-ejemplo">
+            <div class="ej-l">Ejemplo — Confección</div>
+            "Plan de contenido 7 días para negocio de arreglos de ropa en San Cristóbal. Tabla: día, tipo, tema, primera línea, CTA. Mezcla educativo, venta y personal."
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nota-j">
+    <span style="font-size:16px;flex-shrink:0">💡</span>
+    <span><strong>Para el multiplicador:</strong> Antes de enseñar estos 3 prompts, practica generando tus propios resultados con cada uno para tu oficio específico. La gente nota cuando el facilitador nunca los ha usado.</span>
+  </div>
+</div>
+
+<!-- ══ CHECKLIST ══ -->
+<div class="seccion" id="checklist">
+  <div class="sec-eye">Antes de dictar tu clase</div>
+  <div class="sec-h">Checklist<br><em>pre-clase</em></div>
+  <p class="sec-p">Revisa esta lista el día antes y el día de la clase. Si falta algo, no canceles — improvisa. Pero entre más preparado estés, mejor sale.</p>
+
+  <div class="checklist" id="ck-list">
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Todos con celular cargado e internet activo</div>
+        <div class="cl-sub">Si alguien no tiene datos, que se conecte al WiFi del lugar. Si no hay WiFi, que abra ChatGPT antes de salir de casa.</div>
+      </div>
+    </div>
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Tienes cuenta en ChatGPT o Claude para mostrar</div>
+        <div class="cl-sub">chatgpt.com o claude.ai — ambas son gratis. Si el grupo no tiene, que se creen durante la clase.</div>
+      </div>
+    </div>
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Preparaste al menos 2 ejemplos del oficio del grupo</div>
+        <div class="cl-sub">No genéricos — específicos para el oficio de las personas que van a asistir. Si son costureras, tienes ejemplos de costura.</div>
+      </div>
+    </div>
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Practicaste los 3 prompts con tus propios datos</div>
+        <div class="cl-sub">Genera tu propia oferta, tus 6 respuestas de WhatsApp y tu plan de contenido. Eso te da confianza y te muestra qué ajustar.</div>
+      </div>
+    </div>
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Definiste 1 objetivo claro de la sesión</div>
+        <div class="cl-sub">¿Qué van a lograr hoy? Elige uno: oferta lista, respuestas de WhatsApp, o plan de contenido. No intentes cubrir todo.</div>
+      </div>
+    </div>
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Sabes la regla de seguridad de memoria</div>
+        <div class="cl-sub">Recuérdale al grupo: nunca pongan claves, contraseñas, datos bancarios ni información sensible en la IA.</div>
+      </div>
+    </div>
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Tienes claro cómo cerrar con compromiso</div>
+        <div class="cl-sub">Al final, cada persona dice en voz alta cuándo va a usar lo aprendido. Prepara esa pregunta de cierre.</div>
+      </div>
+    </div>
+    <div class="cl-item" onclick="toggleCk(this)">
+      <div class="cl-check"></div>
+      <div>
+        <div class="cl-txt">Tienes el Kit del Multiplicador impreso o en el celular</div>
+        <div class="cl-sub">Para consultar durante la clase si lo necesitas. O para compartirlo con el grupo al final.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ck-progress" style="margin-top:16px;display:flex;align-items:center;gap:12px">
+    <div style="flex:1;height:6px;background:var(--b1);border-radius:3px;overflow:hidden">
+      <div id="ck-bar" style="height:100%;background:var(--tealm);border-radius:3px;width:0%;transition:width .3s"></div>
+    </div>
+    <div id="ck-count" style="font-size:13px;color:var(--ink3);min-width:50px;text-align:right">0 / 8</div>
+  </div>
+</div>
+
+<!-- ══ ERRORES COMUNES ══ -->
+<div class="seccion" id="errores">
+  <div class="sec-eye">Aprende de los errores antes de cometerlos</div>
+  <div class="sec-h">Los 5 errores<br><em>más comunes</em></div>
+  <p class="sec-p">Estas son las situaciones que más aparecen cuando alguien facilita por primera vez. Léelas antes de tu clase.</p>
+
+  <div class="reglas">
+    <div class="regla">
+      <div class="rn" style="color:var(--b2)">1</div>
+      <div>
+        <div class="rt">Hablar demasiado antes de que practiquen</div>
+        <div class="rd">Si llevas más de 10 minutos hablando sin que el grupo haya tocado el celular, para. Dales el primer prompt. La acción antes que la explicación.</div>
+      </div>
+    </div>
+    <div class="regla">
+      <div class="rn" style="color:var(--b2)">2</div>
+      <div>
+        <div class="rt">No tener ejemplos del oficio del grupo</div>
+        <div class="rd">Si vas a enseñarles a panaderas y tus ejemplos son de barbería, perderás la atención. Prepara al menos 1 ejemplo específico para el oficio de tu grupo.</div>
+      </div>
+    </div>
+    <div class="regla">
+      <div class="rn" style="color:var(--b2)">3</div>
+      <div>
+        <div class="rt">Hacer el prompt por ellos</div>
+        <div class="rd">Cuando alguien no sabe qué escribir, la tentación es hacerlo tú. No lo hagas. En cambio pregunta: "¿Cuál es tu oficio?" "¿Cuánto cobras?" "¿Cuál es tu problema?" — deja que ellos escriban.</div>
+      </div>
+    </div>
+    <div class="regla">
+      <div class="rn" style="color:var(--b2)">4</div>
+      <div>
+        <div class="rt">No saber responder una pregunta y bloquearse</div>
+        <div class="rd">Si alguien pregunta algo que no sabes, di: <em>"No sé, vamos a preguntarle a la IA juntos."</em> Eso muestra honestidad y refuerza el mensaje de que la IA es la herramienta.</div>
+      </div>
+    </div>
+    <div class="regla">
+      <div class="rn" style="color:var(--b2)">5</div>
+      <div>
+        <div class="rt">Cerrar la clase sin compromiso concreto</div>
+        <div class="rd">Terminar con "muy bien, hasta luego" no funciona. Cierra siempre con: "¿Qué van a publicar esta semana? ¿Cuándo?" Que lo digan en voz alta frente al grupo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TARJETAS PROBLEMA ══ -->
+<div class="seccion" id="tarjetas">
+  <div class="sec-eye">Material imprimible — Recortar y entregar</div>
+  <div class="sec-h">Tarjetas de<br><em>problema</em></div>
+  <p class="sec-p">Imprime esta sección y recorta las tarjetas. Una por equipo durante el Reto del Prompt. Si no puedes imprimir, léelas en voz alta o muéstralas en el celular.</p>
+  <button class="btn-print" onclick="window.print()">Imprimir tarjetas</button>
+
+  <div class="tarjetas-imp">
+    <div class="tc-imp">
+      <div class="tc-n">1</div>
+      <div class="tc-ico">✂️</div>
+      <div class="tc-t">El barbero que no consigue clientes nuevos</div>
+      <div class="tc-d">Tiene buena técnica pero lleva 3 meses con la misma cantidad de clientes. ¿Cómo usa la IA para crecer?</div>
+      <div class="tc-bot">Reto del Prompt · Equipo 1</div>
+    </div>
+    <div class="tc-imp">
+      <div class="tc-n">2</div>
+      <div class="tc-ico">🍞</div>
+      <div class="tc-t">La panadera que nadie conoce en el barrio</div>
+      <div class="tc-d">Hace el mejor pan del sector pero solo le compran los vecinos más cercanos. ¿Cómo llega a más gente sin pagar publicidad?</div>
+      <div class="tc-bot">Reto del Prompt · Equipo 2</div>
+    </div>
+    <div class="tc-imp">
+      <div class="tc-n">3</div>
+      <div class="tc-ico">🧵</div>
+      <div class="tc-t">La modista que no sabe qué cobrar</div>
+      <div class="tc-d">Hace arreglos desde hace 5 años pero siente que regala su trabajo. ¿Cómo calcula un precio justo con IA?</div>
+      <div class="tc-bot">Reto del Prompt · Equipo 3</div>
+    </div>
+    <div class="tc-imp">
+      <div class="tc-n">4</div>
+      <div class="tc-ico">💇‍♀️</div>
+      <div class="tc-t">La peluquera sin clientas nuevas en Instagram</div>
+      <div class="tc-d">Tiene perfil en Instagram pero solo la siguen los mismos. ¿Qué tipo de contenido debe publicar para atraer clientas nuevas?</div>
+      <div class="tc-bot">Reto del Prompt · Equipo 4</div>
+    </div>
+    <div class="tc-imp">
+      <div class="tc-n">5</div>
+      <div class="tc-ico">🍽️</div>
+      <div class="tc-t">La cocinera con pedidos caóticos</div>
+      <div class="tc-d">Vende almuerzos caseros y los pedidos llegan por WhatsApp sin orden. A veces se le olvidan. ¿Cómo organiza eso con IA?</div>
+      <div class="tc-bot">Reto del Prompt · Equipo 5</div>
+    </div>
+    <div class="tc-imp">
+      <div class="tc-n">6</div>
+      <div class="tc-ico">💎</div>
+      <div class="tc-t">La artesana que solo vende a conocidos</div>
+      <div class="tc-d">Hace bisutería hermosa pero solo la compran sus amigos y familia. Quiere llegar a clientes nuevas sin pagar publicidad.</div>
+      <div class="tc-bot">Reto del Prompt · Equipo 6</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TABLA FINANCIERA ══ -->
+<div class="seccion" id="tabla">
+  <div class="sec-eye">Material imprimible — Control financiero</div>
+  <div class="sec-h">Tabla de ingresos<br><em>y gastos</em></div>
+  <p class="sec-p">La tabla más simple que existe para controlar el dinero del negocio. Una vez a la semana, 10 minutos, y ya sabes si vas bien o mal.</p>
+  <button class="btn-print" onclick="window.print()">Imprimir tabla</button>
+
+  <table class="tabla-imp">
+    <thead>
+      <tr>
+        <th style="width:80px">Fecha</th>
+        <th>Concepto</th>
+        <th style="width:90px">Ingreso</th>
+        <th style="width:90px">Gasto</th>
+        <th style="width:90px">Ganancia</th>
+        <th style="width:80px">Método</th>
+        <th>Nota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="color:var(--ink3)">Lunes</td><td style="color:var(--ink3);font-style:italic">Ej: 3 cortes</td><td class="pos">$54.000</td><td class="neg">$12.000</td><td class="pos">$42.000</td><td style="color:var(--ink3)">Nequi</td><td style="color:var(--ink3)"></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr style="background:var(--card2)">
+        <td colspan="2" class="tot">TOTAL SEMANA</td>
+        <td class="tot pos">$</td>
+        <td class="tot neg">$</td>
+        <td class="tot">$</td>
+        <td colspan="2"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cinco-reglas">
+    <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-top:16px;margin-bottom:4px">Las 5 reglas para no perder la plata</div>
+    <div class="cr"><div class="crn" style="color:var(--teal)">1</div><div><div class="crt">Anota TODO ingreso y TODO gasto</div><div class="crd">Aunque sea $1.000. Los pequeños gastos son los que más dañan al final del mes.</div></div></div>
+    <div class="cr"><div class="crn" style="color:var(--teal)">2</div><div><div class="crt">Separa gastos del negocio vs gastos personales</div><div class="crd">Si mezclas los dos, nunca sabes si el negocio va bien o si es tu sueldo el que sobrevive.</div></div></div>
+    <div class="cr"><div class="crn" style="color:var(--teal)">3</div><div><div class="crt">Revisa cada domingo: ingresos, gastos, ganancia</div><div class="crd">Pon una alarma los domingos a las 9pm: "anotar la semana". Eso es todo el sistema.</div></div></div>
+    <div class="cr"><div class="crn" style="color:var(--teal)">4</div><div><div class="crt">Ajusta 1 cosa cada semana</div><div class="crd">Un precio que puedes subir. Un gasto que puedes reducir. Una venta más que puedes intentar.</div></div></div>
+    <div class="cr"><div class="crn" style="color:var(--teal)">5</div><div><div class="crt">Guarda la tabla semana a semana</div><div class="crd">En 3 meses puedes ver si el negocio está creciendo o no. Eso vale más que cualquier sensación.</div></div></div>
+  </div>
+</div>
+
+<!-- ══ PLAN DEL MULTIPLICADOR ══ -->
+<div class="seccion" id="plan">
+  <div class="sec-eye">Tu compromiso con el programa</div>
+  <div class="sec-h">Plan del<br><em>Multiplicador</em></div>
+  <p class="sec-p">Completa este plan antes de salir del curso. Es tu hoja de ruta para enseñarle a tus 10 personas. Entre más específico, más probable que lo cumplas.</p>
+
+  <div class="plan-form">
+    <div class="pf-grid">
+      <div class="pf-field">
+        <label>Mi nombre</label>
+        <input type="text" id="pf-nombre" placeholder="Tu nombre completo">
+      </div>
+      <div class="pf-field">
+        <label>Mi oficio / negocio</label>
+        <input type="text" id="pf-oficio" placeholder="Ej: Peluquería, Barbería, Confección...">
+      </div>
+      <div class="pf-field full">
+        <label>¿A quiénes voy a enseñar? (mis 10 personas)</label>
+        <textarea id="pf-quien" rows="2" placeholder="Ej: Las mamás del comedor comunitario del barrio Juan Rey, mis compañeras de la asociación de costureras..."></textarea>
+      </div>
+      <div class="pf-field">
+        <label>¿Cuándo? (fecha y hora)</label>
+        <input type="text" id="pf-fecha" placeholder="Ej: Sábado 14 de junio, 3:00 PM">
+      </div>
+      <div class="pf-field">
+        <label>¿Dónde?</label>
+        <input type="text" id="pf-donde" placeholder="Ej: Salón comunal de Altamira, mi casa, el local del negocio...">
+      </div>
+      <div class="pf-field full">
+        <label>Los 3 primeros prompts que voy a enseñar</label>
+        <textarea id="pf-prompts" rows="3" placeholder="1) La oferta irresistible&#10;2) Las 6 respuestas de WhatsApp&#10;3) El plan de contenido 7 días"></textarea>
+      </div>
+      <div class="pf-field full">
+        <label>¿Qué necesito preparar antes?</label>
+        <textarea id="pf-prep" rows="2" placeholder="Ej: Imprimir el kit, preparar 2 ejemplos de mi oficio, confirmar que todos tengan celular con internet..."></textarea>
+      </div>
+      <div class="pf-field full">
+        <label>Mi compromiso (en mis propias palabras)</label>
+        <textarea id="pf-comp" rows="2" placeholder="Yo, [nombre], me comprometo a enseñar IA a mis 10 personas antes del [fecha]. Lo haré porque..."></textarea>
+      </div>
+    </div>
+    <button class="btn-print" onclick="imprimirPlan()">Imprimir mi plan</button>
+    <button class="btn-save" onclick="guardarPlan()">Guardar en pantalla</button>
+  </div>
+
+  <div id="plan-ok" style="display:none;margin-top:20px;background:var(--teall);border:1px solid #9fe1cb;border-radius:14px;padding:24px;text-align:center">
+    <div style="font-size:36px;margin-bottom:10px">🏅</div>
+    <div style="font-size:20px;font-weight:800;color:var(--teal);margin-bottom:8px">Plan guardado</div>
+    <div style="font-size:14px;color:#085041;font-weight:300;line-height:1.7" id="plan-txt"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// NAV activo al scroll
+const secs = document.querySelectorAll('.seccion');
+const tabs = document.querySelectorAll('.ntab');
+window.addEventListener('scroll',()=>{
+  let cur=0;
+  secs.forEach((s,i)=>{ if(window.scrollY>=s.offsetTop-100) cur=i; });
+  tabs.forEach((t,i)=>t.classList.toggle('act',i===cur));
+},{passive:true});
+
+// Checklist
+function toggleCk(el){
+  el.classList.toggle('done');
+  const done = document.querySelectorAll('.cl-item.done').length;
+  const total = document.querySelectorAll('.cl-item').length;
+  document.getElementById('ck-bar').style.width=(done/total*100)+'%';
+  document.getElementById('ck-count').textContent=done+' / '+total;
+}
+
+// Guardar plan
+function guardarPlan(){
+  const nombre = document.getElementById('pf-nombre').value.trim();
+  const cuando = document.getElementById('pf-fecha').value.trim();
+  const quien  = document.getElementById('pf-quien').value.trim();
+  if(!nombre||!cuando||!quien){ alert('Por favor completa: tu nombre, a quiénes enseñarás y cuándo.'); return; }
+  document.getElementById('plan-ok').style.display='block';
+  document.getElementById('plan-ok').scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.getElementById('plan-txt').innerHTML =
+    `<strong style="color:var(--teal)">${nombre}</strong> va a enseñar IA a:<br>
+    <em>${quien}</em><br><br>
+    Fecha: <strong>${cuando}</strong>${document.getElementById('pf-donde').value?' · '+document.getElementById('pf-donde').value:''}<br><br>
+    ${document.getElementById('pf-comp').value?'<em style="color:#085041">'+document.getElementById('pf-comp').value+'</em>':''}`;
+}
+
+function imprimirPlan(){ window.print(); }
+</script>
+</body>
+</html>

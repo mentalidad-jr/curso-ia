@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 3 — Negocio + Multiplicador (Virtual)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#191b1a;--card:#252826;--card2:#2c2f2c;--b1:#333531;--b2:#434742;
+  --lav:#9b8fe0;--lbg:rgba(155,143,224,.09);--lb:rgba(155,143,224,.3);
+  --teal:#3dbfa0;--tbg:rgba(61,191,160,.09);--tb:rgba(61,191,160,.3);
+  --coral:#e8614a;--cbg:rgba(232,97,74,.09);--cb:rgba(232,97,74,.3);
+  --sky:#5ba8d4;--skybg:rgba(91,168,212,.09);--skyb:rgba(91,168,212,.3);
+  --amber:#e0a847;--amberbg:rgba(224,168,71,.10);--amberb:rgba(224,168,71,.32);
+  --w:#f0ede6;--w2:#b0ac9f;--w3:#686460;--w4:#363833;
+  --f:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:var(--f);color:var(--w)}
+#deck{width:100vw;height:100vh;position:relative;overflow:hidden;aspect-ratio:16/9}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:5vh 6vw;opacity:0;pointer-events:none;transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1);transform:translateX(40px)}
+.slide.center{align-items:center;text-align:center}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--lav);z-index:200;transition:width .4s}
+#cnt{position:fixed;top:18px;right:24px;font-size:12px;color:var(--w3);z-index:100;letter-spacing:.5px}
+#sbadge{position:fixed;top:14px;left:24px;background:var(--lbg);border:1px solid var(--lb);border-radius:20px;padding:4px 14px;font-size:11px;color:var(--lav);letter-spacing:1.5px;text-transform:uppercase;z-index:100}
+#pv,#nx{position:fixed;top:50%;transform:translateY(-50%);background:var(--card);border:1px solid var(--b1);color:var(--w2);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:100;transition:all .2s}
+#pv{left:14px}#nx{right:14px}
+#pv:hover,#nx:hover{background:var(--b1);color:var(--w)}
+#dots{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:100}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--w4);cursor:pointer;transition:all .25s}
+.dot.act{width:18px;border-radius:3px;background:var(--lav)}
+
+.eye{font-size:1vw;letter-spacing:.18vw;text-transform:uppercase;color:var(--lav);margin-bottom:1.4vh;display:flex;align-items:center;gap:.5vw}
+.eye::before{content:'';width:1.4vw;height:1px;background:var(--lav)}
+.slide.center .eye{justify-content:center}.slide.center .eye::before{display:none}
+
+.h1{font-size:5.2vw;font-weight:800;line-height:1.0;letter-spacing:-.15vw}
+.h1 em{font-style:italic;font-weight:300}
+.h1 .c{color:var(--coral)}.h1 .t{color:var(--teal)}.h1 .l{color:var(--lav)}
+
+.h2{font-size:3vw;font-weight:800;line-height:1.12;letter-spacing:-.08vw}
+.h2 em{font-style:italic;font-weight:300}
+.h2 .c{color:var(--coral)}.h2 .t{color:var(--teal)}.h2 .l{color:var(--lav)}
+
+.body{font-size:1.55vw;color:var(--w2);line-height:1.65;max-width:55vw;font-weight:300;margin-top:1.4vh}
+.body.center{text-align:center}
+.body strong{color:var(--w);font-weight:500}
+
+.tbadge{display:inline-flex;align-items:center;gap:.4vw;background:var(--card);border:1px solid var(--b1);border-radius:.6vw;padding:.4vh 1vw;font-size:1.1vw;color:var(--w3);margin-top:1.8vh}
+.tbadge .ti{color:var(--lav);font-size:1.2vw}
+
+.capas{display:grid;grid-template-columns:1fr 1fr;gap:1vw;width:100%;max-width:88vw;margin-top:2vh}
+.capa{border-radius:1vw;padding:1.6vh 1.8vw;border:1.5px solid}
+.capa-label{font-size:.95vw;letter-spacing:.12vw;text-transform:uppercase;font-weight:700;margin-bottom:.9vh;display:flex;align-items:center;gap:.5vw}
+.capa-ico{font-size:1.3vw}
+.capa-txt{font-size:1.25vw;color:var(--w2);line-height:1.55;font-weight:300}
+.capa-txt strong{color:var(--w);font-weight:500}
+
+.promptbox{background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--lav);border-radius:0 .9vw .9vw 0;padding:1.6vh 1.8vw;margin-top:1.2vh;max-width:84vw;font-size:1.15vw;color:var(--w2);line-height:1.7;font-weight:300}
+.promptbox .ph{color:var(--lav);font-weight:500}
+
+.caso-box{background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--coral);border-radius:0 1vw 1vw 0;padding:1.6vh 1.8vw;max-width:84vw;margin-top:1.2vh}
+.caso-box .ctag{font-size:.85vw;letter-spacing:.1vw;text-transform:uppercase;color:var(--coral);font-weight:700;margin-bottom:.6vh}
+.caso-box .ct{font-size:1.15vw;color:var(--w);line-height:1.65;font-weight:300}
+.caso-box .cm{font-size:1.05vw;color:var(--teal);font-weight:500;margin-top:.8vh;padding-top:.6vh;border-top:1px solid var(--b1)}
+
+.calc{display:grid;grid-template-columns:repeat(3,1fr);gap:.8vw;max-width:78vw;width:100%;margin-top:1.6vh}
+.calc-c{background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:1.2vh 1.2vw;text-align:center}
+.calc-c .cv{font-size:1.8vw;font-weight:800;line-height:1;letter-spacing:-.05vw;margin-bottom:.4vh}
+.calc-c .cd{font-size:.85vw;color:var(--w3);font-weight:300;line-height:1.4}
+
+.mini-pasos{display:flex;flex-direction:column;gap:.7vh;margin-top:1.6vh;max-width:78vw;width:100%}
+.mps{display:flex;gap:1.2vw;align-items:flex-start;background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:.9vh 1.3vw}
+.mps .mpt{font-size:.95vw;font-weight:700;color:var(--lav);min-width:5vw;flex-shrink:0;padding-top:.2vh}
+.mps .mpc{font-size:1.1vw;color:var(--w);font-weight:500;margin-bottom:.1vh}
+.mps .mpd{font-size:.85vw;color:var(--w3);font-weight:300}
+
+.pasos{display:flex;flex-direction:column;gap:.7vh;margin-top:1.6vh;max-width:62vw;width:100%}
+.paso{display:flex;gap:1.2vw;align-items:flex-start;background:var(--card);border:1px solid var(--b1);border-radius:.8vw;padding:.9vh 1.3vw}
+.paso .pn{font-size:1.5vw;font-weight:800;color:var(--b2);min-width:1.8vw;flex-shrink:0;line-height:1.1}
+.paso .pt{font-size:1.1vw;color:var(--w);font-weight:500;margin-bottom:.1vh}
+.paso .pd{font-size:.88vw;color:var(--w3);font-weight:300}
+
+.entf{display:grid;grid-template-columns:repeat(5,1fr);gap:.7vw;width:100%;max-width:88vw;margin-top:1.6vh}
+.ef{background:var(--card);border:1px solid var(--b1);border-top:2px solid;border-radius:0 0 .8vw .8vw;padding:1vh 1vw;text-align:center}
+.ef .eico{font-size:1.6vw;margin-bottom:.5vh}
+.ef .et{font-size:.85vw;font-weight:500;color:var(--w);line-height:1.3}
+
+.qblock{background:var(--lbg);border:1px solid var(--lb);border-radius:1.1vw;padding:2vh 2.2vw;max-width:54vw;margin-top:1.8vh}
+.qblock p{font-size:1.5vw;font-weight:700;line-height:1.35;margin-bottom:.6vh}
+.qblock cite{font-size:.95vw;color:var(--w3);font-weight:300}
+.sub{font-size:1vw;color:var(--w3);font-weight:300;margin-top:.6vh}
+.vico{display:inline-flex;align-items:center;gap:.4vw;font-size:.95vw;color:var(--teal);background:var(--tbg);border:1px solid var(--tb);border-radius:.5vw;padding:.3vh .8vw}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div id="cnt"></div>
+<div id="sbadge">Sesión 3 (virtual) · Negocio + Multiplicador · 2h</div>
+<button id="pv" onclick="go(-1)">‹</button>
+<button id="nx" onclick="go(1)">›</button>
+<div id="dots"></div>
+<div id="deck">
+
+<!-- ══ 0 · PORTADA ══ -->
+<div class="slide center" id="s0">
+  <div class="glow" style="width:30vw;height:30vw;background:var(--lav);opacity:.07;top:-8vh;right:-8vw"></div>
+  <div class="glow" style="width:22vw;height:22vw;background:var(--teal);opacity:.06;bottom:-6vh;left:-6vw"></div>
+  <div class="eye" style="justify-content:center">Curso IA para Multiplicadores · Sesión Virtual</div>
+  <div class="h1" style="text-align:center">
+    Sesión 3<br>
+    <em>Negocio</em> <span class="l">+</span> <em>Multiplicador</em>
+  </div>
+  <div class="body center" style="max-width:48vw">2 horas · Modalidad virtual · La sesión que cierra el ciclo</div>
+  <div class="vico" style="margin-top:2vh">💻 Sesión por Zoom / Meet — pantalla compartida</div>
+  <div class="tbadge" style="margin-top:1.6vh"><span class="ti">🏅</span> Hoy te conviertes oficialmente en multiplicador</div>
+</div>
+
+<!-- ══ 1 · APERTURA ══ -->
+<div class="slide" id="s1">
+  <div class="eye">0:00 — Apertura · 15 min</div>
+  <div class="h2">¿Publicaste<br>algo esta semana?<br><em class="t">¿A quién le</em><br><em class="t">enseñaste?</em></div>
+  <div class="body">Compartan en el chat: ¿qué pasó con el post? ¿alguien les escribió? ¿cómo fue enseñarle a alguien el proceso de Canva?</div>
+  <div class="capas">
+    <div class="capa" style="background:var(--tbg);border-color:var(--tb)">
+      <div class="capa-label" style="color:var(--teal)"><span class="capa-ico">💻</span>Cómo lo usas tú</div>
+      <div class="capa-txt">Celebra fuerte cualquier resultado, aunque sea pequeño. Hoy cerramos el ciclo completo.</div>
+    </div>
+    <div class="capa" style="background:var(--lbg);border-color:var(--lb)">
+      <div class="capa-label" style="color:var(--lav)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Si alguien cuenta una dificultad al enseñar, validalo: es información valiosa para su propia mini-clase de hoy.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 2 · VENTAS ≠ GANANCIA ══ -->
+<div class="slide center" id="s2">
+  <div class="glow" style="width:30vw;height:24vw;background:var(--coral);opacity:.06;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="eye" style="justify-content:center">0:15 — El concepto más importante del día</div>
+  <div class="h1" style="text-align:center;font-size:3.4vw">Vender mucho<br><span class="c">≠</span><br>Ganar mucho</div>
+  <div class="body center" style="max-width:50vw">¿Cuántos saben exactamente cuánto ganan al mes? No cuánto venden — cuánto les <strong>queda</strong>.</div>
+</div>
+
+<!-- ══ 3 · HISTORIA MARTHA ══ -->
+<div class="slide" id="s3">
+  <div class="eye">0:15 — Historia real</div>
+  <div class="h2">El caso de<br><em class="c">Doña Martha</em></div>
+  <div class="caso-box">
+    <div class="ctag">📖 Historia real · San Cristóbal</div>
+    <div class="ct">Doña Martha hace 8 tintes al mes a $80.000 c/u. Cree que gana $640.000.<br>Pero al calcular bien: tintura $25K + energía $8K + arriendo del tiempo $15K + su tiempo (2h × $15K/h) $30K = <strong>$78.000 de costo real</strong>.<br>Ganancia por tinte: <strong style="color:var(--coral)">$2.000</strong>. Al mes: <strong style="color:var(--coral)">$16.000</strong> por 8 tintes.</div>
+    <div class="cm">✅ La IA le ayudó a recalcular y subir a $110.000 justificando el valor. No era que le faltaran clientes — era el precio.</div>
+  </div>
+  <div class="capas" style="margin-top:1vh">
+    <div class="capa" style="background:var(--lbg);border-color:var(--lb)">
+      <div class="capa-label" style="color:var(--lav)"><span class="capa-ico">🧑‍🏫</span>Cómo lo enseñas</div>
+      <div class="capa-txt">Esta historia es tu mejor herramienta de enseñanza. Cuéntala completa, con números, antes de pedirle a nadie que calcule lo suyo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4 · CÁLCULO GUIADO ══ -->
+<div class="slide" id="s4">
+  <div class="eye">0:40 — Práctica guiada · 30 min</div>
+  <div class="h2">Calculamos<br><em class="c">juntos</em>,<br>cada uno lo suyo</div>
+  <div class="promptbox">
+    "Actúa como asesor financiero de micro-negocios. Mi negocio es <span class="ph">[OFICIO]</span>. Vendo <span class="ph">[PRODUCTO]</span> a <span class="ph">[PRECIO]</span>. Costos: materiales <span class="ph">[VALOR]</span>, tiempo <span class="ph">[HORAS]</span>, gastos fijos <span class="ph">[VALOR]</span>. Calcula: 1) costo real, 2) precio con 40% de margen, 3) cuánto debo vender al mes. Simple, con números."
+  </div>
+  <div class="calc" style="margin-top:1.2vh">
+    <div class="calc-c"><div class="cv" style="color:var(--coral)">$15K</div><div class="cd">Precio que cobra Carlos el barbero (demasiado bajo)</div></div>
+    <div class="calc-c"><div class="cv" style="color:var(--teal)">$5.9K</div><div class="cd">Lo que gana por hora real trabajada</div></div>
+    <div class="calc-c"><div class="cv" style="color:var(--lav)">$20K+</div><div class="cd">Lo que debería cobrar para negocio sostenible</div></div>
+  </div>
+  <div class="vico" style="margin-top:1vh">💻 Yo armo el cálculo de Carlos en pantalla, tú lo replicas con tus números reales</div>
+</div>
+
+<!-- ══ 5 · TABLA FINANCIERA ══ -->
+<div class="slide" id="s5">
+  <div class="eye">1:10 — Práctica guiada · 20 min</div>
+  <div class="h2">La tabla de control:<br><em class="t">anotar todo</em><br>una vez a la semana</div>
+  <div class="promptbox" style="border-left-color:var(--teal)">
+    "Crea una tabla simple para controlar finanzas de <span class="ph" style="color:var(--teal)">[OFICIO]</span>. Columnas: Fecha, Concepto, Ingreso, Gasto, Ganancia, Método de pago, Nota. Dame 5 reglas simples para usarla y no olvidarla."
+  </div>
+  <div class="tbadge" style="border-color:var(--tb);color:var(--teal)">⏰ El truco: alarma los domingos 9pm — "Anotar la semana". Eso es todo el sistema.</div>
+</div>
+
+<!-- ══ 6 · DE APRENDIZ A MULTIPLICADOR ══ -->
+<div class="slide center" id="s6">
+  <div class="glow" style="width:30vw;height:24vw;background:var(--lav);opacity:.06;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="eye" style="justify-content:center">1:30 — El bloque más importante</div>
+  <div class="h1" style="text-align:center;font-size:3.2vw">135 × 10<br>= <span class="t">1.350</span><br><em>negocios</em></div>
+  <div class="body center" style="max-width:50vw">Eso es el impacto real de este programa en San Cristóbal. <strong>Tú eres el puente.</strong></div>
+</div>
+
+<!-- ══ 7 · ESTRUCTURA MINI-CLASE ══ -->
+<div class="slide" id="s7">
+  <div class="eye">1:35 — La mini-clase de 45 min</div>
+  <div class="h2">La estructura<br><em class="l">exacta</em><br>para enseñar</div>
+  <div class="mini-pasos">
+    <div class="mps"><div class="mpt">0–5 min</div><div><div class="mpc">Rompehielo</div><div class="mpd">"¿Qué vendes y qué te cuesta más tiempo o plata?" — anota en el tablero.</div></div></div>
+    <div class="mps"><div class="mpt">5–10 min</div><div><div class="mpc">Regla de Oro</div><div class="mpd">Fórmula ROL + CONTEXTO + OBJETIVO + TONO + FORMATO. Un ejemplo tuyo.</div></div></div>
+    <div class="mps"><div class="mpt">10–25 min</div><div><div class="mpc">Práctica 1 — Oferta irresistible</div><div class="mpd">Cada uno la crea. Tú circulas — no haces el trabajo por ellos.</div></div></div>
+    <div class="mps"><div class="mpt">25–35 min</div><div><div class="mpc">Práctica 2 — 2 respuestas WhatsApp</div><div class="mpd">Precio y ubicación. Listas para usar hoy.</div></div></div>
+    <div class="mps"><div class="mpt">35–43 min</div><div><div class="mpc">Práctica 3 — 1 publicación</div><div class="mpd">Gancho + copy + llamado a la acción.</div></div></div>
+    <div class="mps"><div class="mpt">43–45 min</div><div><div class="mpc">Cierre y compromiso</div><div class="mpd">Pantallazo grupal. "¿Qué publican esta semana?"</div></div></div>
+  </div>
+</div>
+
+<!-- ══ 8 · PRACTICA GUIADA: MICRO-ENSEÑANZA ══ -->
+<div class="slide" id="s8">
+  <div class="eye">2:00 — Práctica guiada · 25 min</div>
+  <div class="h2">🧑‍🏫 Cada uno<br><em class="c">enseña 2 minutos</em><br>— yo modero</div>
+  <div class="pasos">
+    <div class="paso"><div class="pn" style="color:var(--teal)">1</div><div><div class="pt">Elige el prompt que mejor dominas de las 3 sesiones</div><div class="pd">WhatsApp, oferta irresistible, plan de contenido — el que sientas más tuyo</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--coral)">2</div><div><div class="pt">Activa tu cámara y enséñalo en 2 minutos, como si yo fuera tu aprendiz</div><div class="pd">Voy llamando uno por uno — practica mientras los demás escuchan en silencio</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--lav)">3</div><div><div class="pt">Doy una retroalimentación de 30 segundos a cada uno</div><div class="pd">Algo que hiciste bien + algo para ajustar — siempre los dos</div></div></div>
+  </div>
+  <div class="vico" style="margin-top:1vh">💻 Práctica individual, uno a la vez, con el grupo completo de testigo — sin salas</div>
+</div>
+
+<!-- ══ 9 · PITCH FINAL ══ -->
+<div class="slide" id="s9">
+  <div class="eye">2:25 — Cierre · 15 min</div>
+  <div class="h2">🏅 El Pitch<br>del <em class="l">Multiplicador</em></div>
+  <div class="body" style="margin-top:1vh">Cada uno tiene <strong>1 minuto</strong> en cámara para decir tres cosas:</div>
+  <div class="pasos" style="max-width:78vw">
+    <div class="paso"><div class="pn" style="color:var(--teal)">1</div><div><div class="pt">¿A quién le vas a enseñar esto?</div><div class="pd">Nombre o descripción del grupo de tus 10 personas</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--lav)">2</div><div><div class="pt">¿Cuándo y dónde?</div><div class="pd">Fecha y lugar específicos — no "pronto"</div></div></div>
+    <div class="paso"><div class="pn" style="color:var(--coral)">3</div><div><div class="pt">¿Cuáles 3 prompts usarás primero?</div><div class="pd">De lo aprendido en las 3 sesiones</div></div></div>
+  </div>
+</div>
+
+<!-- ══ 10 · ENTREGABLES FINALES ══ -->
+<div class="slide" id="s10">
+  <div class="eye">Cierre del programa</div>
+  <div class="h2">Construiste en<br><em class="t">7 horas</em></div>
+  <div class="entf">
+    <div class="ef" style="border-top-color:var(--coral)"><div class="eico">🧠</div><div class="et">Fórmula de Oro del Prompt</div></div>
+    <div class="ef" style="border-top-color:var(--teal)"><div class="eico">💬</div><div class="et">6 respuestas WhatsApp listas</div></div>
+    <div class="ef" style="border-top-color:var(--lav)"><div class="eico">🎨</div><div class="et">Post diseñado en Canva</div></div>
+    <div class="ef" style="border-top-color:var(--sky)"><div class="eico">💰</div><div class="et">Precio con margen calculado</div></div>
+    <div class="ef" style="border-top-color:var(--lav)"><div class="eico">🏅</div><div class="et">Plan del Multiplicador firmado</div></div>
+  </div>
+  <div class="tbadge" style="margin-top:1.4vh"><span class="ti">📸</span> Foto grupal — todos con cámara activa antes de cerrar la llamada</div>
+</div>
+
+<!-- ══ 11 · FRASE FINAL ══ -->
+<div class="slide center" id="s11">
+  <div class="glow" style="width:36vw;height:24vw;background:var(--lav);opacity:.07;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="h1" style="text-align:center;font-size:2.4vw">
+    "Hoy construyeron algo que 6 meses atrás<br>
+    hubiera costado millones.<br>
+    <em class="l">Y adquirieron algo que ningún curso<br>
+    normal da: la capacidad de<br>
+    multiplicar el conocimiento."</em>
+  </div>
+  <div class="sub" style="margin-top:2vh;text-align:center">John Esteban Rodríguez · Facilitador · Curso IA para Multiplicadores</div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const dotsEl=document.getElementById('dots');
+const prog=document.getElementById('prog');
+const cnt=document.getElementById('cnt');
+let cur=0;
+const total=slides.length;
+
+slides.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='dot';
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function goTo(n,dir=1){
+  if(n<0||n>=total)return;
+  const prev=slides[cur];
+  prev.classList.remove('active');
+  prev.style.transform=dir>0?'translateX(-40px)':'translateX(40px)';
+  prev.style.opacity='0';
+  setTimeout(()=>{prev.style.transform='';prev.style.opacity='';},400);
+  cur=n;
+  const next=slides[cur];
+  next.style.transform=dir>0?'translateX(40px)':'translateX(-40px)';
+  next.style.opacity='0';
+  next.style.pointerEvents='all';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    next.style.transition='opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1)';
+    next.style.transform='translateX(0)';
+    next.style.opacity='1';
+    next.classList.add('active');
+    slides.forEach((s,i)=>{if(i!==cur){s.classList.remove('active');s.style.pointerEvents='none';s.style.opacity='';s.style.transform='';s.style.transition=''}});
+  }));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('act',i===cur));
+  prog.style.width=((cur/(total-1))*100)+'%';
+  cnt.textContent=(cur+1)+' / '+total;
+}
+
+function go(dir){goTo(cur+dir,dir)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);
+  e.preventDefault();
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50)go(dx<0?1:-1);
+},{passive:true});
+goTo(0);
+</script>
+</body>
+</html>

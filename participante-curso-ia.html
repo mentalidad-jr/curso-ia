@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Guía IA — Curso para Multiplicadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#191b18;--s1:#1e201d;--card:#252724;--card2:#2c2e2a;
+  --b1:#333530;--b2:#424440;
+  --coral:#e8614a;--coral2:#f5876e;--cbg:rgba(232,97,74,.09);--cb:rgba(232,97,74,.3);
+  --teal:#3dbfa0;--teal2:#62d4b8;--tbg:rgba(61,191,160,.09);--tb:rgba(61,191,160,.3);
+  --lav:#9b8fe0;--lav2:#b8aff0;--lbg:rgba(155,143,224,.09);--lb:rgba(155,143,224,.3);
+  --sky:#5ba8d4;--skybg:rgba(91,168,212,.09);--skyb:rgba(91,168,212,.3);
+  --lime:#7abf5a;--limebg:rgba(122,191,90,.09);--limeb:rgba(122,191,90,.3);
+  --w:#f0ede6;--w2:#b0ac9f;--w3:#686460;--w4:#363833;
+  --f:'Plus Jakarta Sans',sans-serif;
+  --nicho-color:var(--coral);
+  --nicho-bg:var(--cbg);
+  --nicho-b:var(--cb);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:var(--bg);color:var(--w);font-family:var(--f)}
+body{overflow-x:hidden}
+
+/* ══ PANTALLA BIENVENIDA ══ */
+#welcome{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 32px;text-align:center;
+  background:var(--bg);position:relative;overflow:hidden;
+}
+.glow{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
+#welcome h1{
+  font-size:clamp(36px,5vw,64px);font-weight:800;
+  line-height:1.05;letter-spacing:-2px;margin-bottom:14px;
+}
+#welcome h1 em{font-style:italic;font-weight:300;color:var(--coral)}
+#welcome .sub{font-size:18px;color:var(--w2);font-weight:300;max-width:580px;line-height:1.7;margin-bottom:40px}
+
+/* NOMBRE INPUT */
+.nombre-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:32px;width:100%;max-width:440px}
+.nombre-wrap label{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal)}
+.nombre-wrap input{
+  width:100%;background:var(--card);border:1px solid var(--b2);
+  border-radius:12px;padding:14px 20px;
+  font-size:18px;font-weight:500;color:var(--w);
+  font-family:var(--f);outline:none;text-align:center;
+  transition:border-color .2s;
+}
+.nombre-wrap input:focus{border-color:var(--teal)}
+.nombre-wrap input::placeholder{color:var(--w4)}
+
+/* NICHOS GRID */
+.nichos-label{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w3);margin-bottom:16px}
+.nichos{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:10px;width:100%;max-width:760px;margin-bottom:36px;
+}
+.nicho-btn{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:14px;padding:18px 12px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:all .2s;
+}
+.nicho-btn:hover{border-color:var(--b2);background:var(--card2)}
+.nicho-btn.sel{border-color:var(--nicho-color,var(--coral));background:var(--nicho-bg,var(--cbg))}
+.nicho-btn .ico{font-size:32px;line-height:1}
+.nicho-btn .nm{font-size:13px;font-weight:500;color:var(--w2);line-height:1.3;text-align:center}
+.nicho-btn.sel .nm{color:var(--nicho-color,var(--coral))}
+
+/* BTN ENTRAR */
+#btn-entrar{
+  background:var(--teal);color:var(--bg);
+  border:none;border-radius:12px;padding:16px 48px;
+  font-size:17px;font-weight:700;font-family:var(--f);
+  cursor:pointer;transition:all .2s;opacity:.4;pointer-events:none;
+  letter-spacing:-.3px;
+}
+#btn-entrar.ready{opacity:1;pointer-events:all}
+#btn-entrar.ready:hover{background:var(--teal2);transform:translateY(-1px)}
+
+/* ══ APP PRINCIPAL ══ */
+#app{display:none}
+
+/* TOP BAR */
+.topbar{
+  background:rgba(25,27,24,.96);backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--b1);
+  padding:10px 28px;
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;gap:0;
+}
+.tb-brand{flex-shrink:0;margin-right:20px}
+.tb-brand .tbn{font-size:13px;font-weight:700;color:var(--w)}
+.tb-brand .tbs{font-size:11px;color:var(--w3)}
+.tb-nichotag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:500;padding:4px 12px;
+  border-radius:20px;border:1px solid;
+  letter-spacing:.3px;margin-right:12px;
+  color:var(--nicho-color,var(--coral));
+  background:var(--nicho-bg,var(--cbg));
+  border-color:var(--nicho-b,var(--cb));
+  flex-shrink:0;
+}
+.tb-sesiones{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none}
+.tb-sesiones::-webkit-scrollbar{display:none}
+.ses-tab{
+  white-space:nowrap;font-size:12px;font-weight:500;
+  padding:6px 14px;border-radius:8px;
+  background:var(--card);border:1px solid var(--b1);
+  color:var(--w3);cursor:pointer;transition:all .18s;flex-shrink:0;
+}
+.ses-tab:hover{color:var(--w2);border-color:var(--b2)}
+.ses-tab.act{color:var(--w);background:var(--card2);border-color:var(--b2)}
+.ses-tab.done{color:var(--teal);border-color:var(--teal)}
+
+/* ══ CONTENIDO ══ */
+.main-wrap{max-width:900px;margin:0 auto;padding:32px 28px 80px}
+
+/* BLOQUE */
+.bloque{
+  border-bottom:1px solid var(--b1);
+  padding:36px 0;
+}
+.bloque:last-child{border-bottom:none}
+.bloque-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.bloque-num{
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;border:1px solid;font-weight:500;
+  flex-shrink:0;
+}
+.bloque-titulo{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.bloque-tiempo{font-size:12px;color:var(--w3);background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:3px 10px;flex-shrink:0}
+
+/* INSTRUCCION */
+.instruccion{
+  font-size:16px;color:var(--w2);line-height:1.75;
+  font-weight:300;margin-bottom:20px;max-width:760px;
+}
+.instruccion strong{color:var(--w);font-weight:500}
+
+/* PROMPT CARD */
+.prompt-card{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:16px;margin-bottom:12px;overflow:hidden;
+}
+.pc-header{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;cursor:pointer;
+  border-bottom:1px solid transparent;
+  transition:background .15s;
+}
+.pc-header:hover{background:var(--card2)}
+.pc-open .pc-header{border-bottom-color:var(--b1);background:var(--card2)}
+.pc-icon{font-size:22px;flex-shrink:0}
+.pc-label{font-size:14px;font-weight:600;color:var(--w);flex:1}
+.pc-tag{font-size:10px;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;border-radius:4px;border:1px solid;font-weight:500}
+.pc-chev{font-size:13px;color:var(--w3);transition:transform .2s;flex-shrink:0}
+.pc-open .pc-chev{transform:rotate(180deg)}
+.pc-body{display:none;padding:16px 18px}
+.pc-open .pc-body{display:block}
+
+/* PROMPT TEXT */
+.prompt-txt{
+  background:var(--bg);border:1px solid var(--b1);
+  border-radius:10px;padding:16px 18px;
+  font-size:14px;color:var(--w2);line-height:1.85;
+  font-weight:300;white-space:pre-wrap;
+  margin-bottom:10px;position:relative;
+}
+.prompt-txt .ph{
+  color:var(--nicho-color,var(--coral));
+  font-weight:500;
+}
+.copy-btn{
+  position:absolute;top:10px;right:10px;
+  background:var(--card2);border:1px solid var(--b1);
+  border-radius:6px;padding:4px 10px;
+  font-size:11px;color:var(--w3);cursor:pointer;
+  font-family:var(--f);transition:all .15s;
+}
+.copy-btn:hover{color:var(--w);border-color:var(--b2)}
+.copy-btn.copied{color:var(--teal);border-color:var(--teal)}
+
+/* RESULTADO AREA */
+.resultado-area{
+  width:100%;background:var(--bg);border:1px solid var(--b1);
+  border-radius:10px;padding:14px 16px;
+  font-size:14px;color:var(--w);font-family:var(--f);
+  resize:vertical;min-height:80px;outline:none;
+  line-height:1.7;margin-top:10px;
+  transition:border-color .2s;
+}
+.resultado-area:focus{border-color:var(--b2)}
+.resultado-area::placeholder{color:var(--w4)}
+
+/* NOTA FACI */
+.nota-faci{
+  display:none;
+  flex-direction:column;gap:6px;
+  background:rgba(255,195,50,.05);border:1px solid rgba(255,195,50,.18);
+  border-radius:10px;padding:12px 16px;margin-top:10px;
+  font-size:13px;color:rgba(255,200,80,.75);font-weight:300;line-height:1.55;
+}
+.nota-faci.vis{display:flex}
+.nota-toggle{font-size:11px;color:var(--w3);cursor:pointer;background:none;border:none;font-family:var(--f);padding:0;margin-top:8px;text-decoration:underline;text-underline-offset:2px}
+.nota-toggle:hover{color:var(--w2)}
+
+/* EJEMPLO POR NICHO */
+.ej-nicho{
+  background:var(--nicho-bg,var(--cbg));
+  border:1px solid var(--nicho-b,var(--cb));
+  border-radius:10px;padding:12px 14px;
+  font-size:13px;color:var(--w2);line-height:1.7;
+  font-weight:300;white-space:pre-wrap;margin-top:6px;
+}
+.ej-nicho .ej-label{
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--nicho-color,var(--coral));font-weight:500;
+  margin-bottom:6px;display:block;
+}
+
+/* TIPS */
+.tip{
+  display:flex;gap:10px;align-items:flex-start;
+  background:var(--card2);border:1px solid var(--b1);
+  border-left:2px solid var(--nicho-color,var(--coral));
+  border-radius:0 10px 10px 0;
+  padding:12px 14px;margin-top:8px;
+  font-size:13px;color:var(--w3);font-weight:300;line-height:1.55;
+}
+.tip .ti{font-size:15px;flex-shrink:0;margin-top:1px}
+
+/* ENTREGABLE */
+.entregable{
+  display:flex;align-items:center;gap:12px;
+  background:var(--tbg);border:1px solid var(--tb);
+  border-radius:12px;padding:14px 18px;margin-top:20px;
+}
+.entregable .ei{font-size:22px;flex-shrink:0}
+.entregable .et{font-size:14px;font-weight:600;color:var(--teal)}
+.entregable .ed{font-size:12px;color:var(--w3);font-weight:300;line-height:1.5;margin-top:2px}
+
+/* PASOS NUMERADOS */
+.pasos{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.paso{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:11px;padding:13px 16px;
+}
+.paso .pn{
+  font-size:20px;font-weight:800;color:var(--b2);
+  min-width:26px;flex-shrink:0;line-height:1.1;
+}
+.paso .pt{font-size:15px;color:var(--w);font-weight:500;margin-bottom:2px}
+.paso .pd{font-size:12px;color:var(--w3);font-weight:300}
+
+/* SECCIÓN CIERRE */
+.cierre-hero{
+  text-align:center;padding:48px 20px 32px;
+  border-bottom:1px solid var(--b1);
+}
+.cierre-hero .big{
+  font-size:clamp(32px,5vw,56px);font-weight:800;
+  line-height:1.1;letter-spacing:-1.5px;margin-bottom:14px;
+}
+.cierre-hero .big em{font-style:italic;font-weight:300;color:var(--lav)}
+
+/* PLAN MULTIPLICADOR FORM */
+.plan-form{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.plan-field label{
+  display:block;font-size:11px;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--lav);font-weight:500;margin-bottom:6px;
+}
+.plan-field input,.plan-field textarea{
+  width:100%;background:var(--card);border:1px solid var(--b1);
+  border-radius:10px;padding:12px 16px;
+  font-size:15px;color:var(--w);font-family:var(--f);
+  outline:none;resize:vertical;transition:border-color .2s;
+}
+.plan-field input:focus,.plan-field textarea:focus{border-color:var(--lav)}
+.plan-field input::placeholder,.plan-field textarea::placeholder{color:var(--w4);font-weight:300}
+.btn-guardar{
+  background:var(--lav);color:var(--bg);
+  border:none;border-radius:10px;padding:13px 32px;
+  font-size:15px;font-weight:700;font-family:var(--f);
+  cursor:pointer;transition:all .2s;margin-top:4px;
+  letter-spacing:-.2px;
+}
+.btn-guardar:hover{background:var(--lav2);transform:translateY(-1px)}
+
+/* SESION HEADER */
+.ses-header{
+  text-align:center;padding:48px 20px 24px;
+  border-bottom:1px solid var(--b1);
+  margin-bottom:8px;position:relative;overflow:hidden;
+}
+.ses-header .sh-eye{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px}
+.ses-header .sh-title{font-size:clamp(36px,5vw,60px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:12px}
+.ses-header .sh-title em{font-style:italic;font-weight:300}
+.ses-header .sh-desc{font-size:16px;color:var(--w2);font-weight:300;line-height:1.7;max-width:600px;margin:0 auto 16px}
+.ses-header .sh-obj{
+  display:inline-block;background:var(--card);border:1px solid var(--b1);
+  border-radius:10px;padding:10px 18px;font-size:14px;color:var(--w2);
+  line-height:1.6;max-width:640px;
+}
+.ses-header .sh-obj strong{font-weight:500}
+
+/* TABLA WA */
+.wa-tabla{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.wa-item{background:var(--card);border:1px solid var(--b1);border-radius:11px;padding:14px 16px}
+.wa-item .win{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--teal);font-weight:500;margin-bottom:6px}
+.wa-item .wim{font-size:14px;color:var(--w2);line-height:1.65;font-weight:300;font-style:italic}
+
+/* MINI CLASE PASOS */
+.mini-pasos{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.mps{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--b1);border-radius:11px;padding:12px 15px}
+.mps .mpt{font-size:11px;font-weight:700;color:var(--lav);min-width:60px;flex-shrink:0;padding-top:2px}
+.mps .mpc{font-size:14px;font-weight:500;color:var(--w);margin-bottom:2px}
+.mps .mpd{font-size:12px;color:var(--w3);font-weight:300;line-height:1.5}
+
+/* PROGRESS BAR */
+.progress-bar{height:2px;background:var(--b1);position:fixed;top:0;left:0;right:0;z-index:300}
+.progress-fill{height:100%;background:var(--nicho-color,var(--coral));transition:width .3s;width:0%}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MÓVIL Y TABLET
+══════════════════════════════════════ */
+@media (max-width: 760px){
+  html{font-size:15px}
+
+  /* Bienvenida */
+  #welcome{padding:40px 18px;min-height:100vh}
+  #welcome h1{font-size:clamp(30px,9vw,44px);letter-spacing:-1.5px}
+  #welcome .sub{font-size:15px;margin-bottom:28px;padding:0 4px}
+  .nombre-wrap{max-width:100%;margin-bottom:26px}
+  .nombre-wrap input{font-size:16px;padding:13px 16px}
+
+  /* Nichos: 4 → 2 columnas, tarjetas más compactas */
+  .nichos-label{font-size:11px;margin-bottom:12px}
+  .nichos{
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;max-width:100%;margin-bottom:28px;
+  }
+  .nicho-btn{padding:14px 8px;gap:6px;border-radius:12px}
+  .nicho-btn .ico{font-size:26px}
+  .nicho-btn .nm{font-size:12px;line-height:1.25}
+
+  #btn-entrar{width:100%;padding:15px 24px;font-size:16px}
+
+  /* Topbar: apila marca arriba, tabs scrollable abajo */
+  .topbar{
+    flex-wrap:wrap;padding:8px 14px;gap:6px;
+    row-gap:8px;
+  }
+  .tb-brand{margin-right:8px}
+  .tb-brand .tbn{font-size:12px}
+  .tb-brand .tbs{font-size:10px}
+  .tb-nichotag{font-size:10px;padding:3px 9px;margin-right:0}
+  .tb-sesiones{
+    flex:1 1 100%;order:3;width:100%;
+    -webkit-overflow-scrolling:touch;
+  }
+  .ses-tab{font-size:11px;padding:6px 12px}
+
+  /* Contenido principal */
+  .main-wrap{padding:20px 16px 60px}
+
+  .bloque{padding:26px 0}
+  .bloque-header{gap:8px;margin-bottom:14px}
+  .bloque-titulo{font-size:18px;letter-spacing:-.3px}
+  .bloque-num{font-size:10px;padding:3px 10px}
+  .bloque-tiempo{font-size:11px}
+
+  .instruccion{font-size:14.5px;line-height:1.65}
+
+  .sh-title{font-size:clamp(28px,9vw,44px)!important}
+  .sh-desc{font-size:14px!important;padding:0 8px}
+  .sh-obj{font-size:13px!important;padding:10px 14px!important}
+
+  /* Prompt cards */
+  .pc-label{font-size:13px}
+  .pc-tag{font-size:9px;padding:2px 6px}
+  .pc-body{padding:14px}
+  .prompt-txt{font-size:13px;padding:14px;line-height:1.75}
+  .copy-btn{position:static;display:block;width:100%;margin-bottom:10px;text-align:center;padding:8px}
+  .resultado-area{font-size:13px}
+
+  /* Calc grid en S3 -> 1 columna */
+  .calc{grid-template-columns:1fr!important}
+
+  /* Tabla financiera -> scroll horizontal en vez de romperse */
+  .tabla-viz{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tabla-head,.tabla-row{
+    grid-template-columns:90px 130px 80px 80px 90px 100px!important;
+    min-width:580px;
+  }
+
+  /* Plan del multiplicador: más espacioso en columna */
+  .plan-form{gap:12px}
+
+  /* Resumen final del día: fuerza 2 columnas estrechas */
+  #s4 div[style*="grid-template-columns:repeat(auto-fill"]{
+    grid-template-columns:repeat(2,1fr)!important;
+  }
+
+  h2,.t2{font-size:22px!important}
+}
+
+@media (max-width: 420px){
+  .nichos{grid-template-columns:repeat(2,1fr)}
+  .nicho-btn .nm{font-size:11px}
+  #s4 div[style*="grid-template-columns:repeat(auto-fill"]{
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ══════════════════════════════
+     PANTALLA DE BIENVENIDA
+══════════════════════════════ -->
+<div id="welcome">
+  <div class="glow" style="width:500px;height:500px;background:var(--coral);opacity:.06;top:-100px;right:-100px"></div>
+  <div class="glow" style="width:400px;height:400px;background:var(--teal);opacity:.05;bottom:-80px;left:-80px"></div>
+
+  <div style="font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:20px">
+    Alcaldía Local de San Cristóbal · Bogotá · 2026
+  </div>
+
+  <h1>Mi Guía<br><em>IA Práctica</em></h1>
+  <p class="sub">Tu acompañante personalizado durante todo el curso. Escoge tu oficio y todos los ejemplos y prompts del día serán para <em style="color:var(--teal)">tu negocio específico</em>.</p>
+
+  <div class="nombre-wrap">
+    <label>Tu nombre</label>
+    <input type="text" id="input-nombre" placeholder="Ej: María López" autocomplete="off" spellcheck="false">
+  </div>
+
+  <div class="nichos-label">¿Cuál es tu oficio o negocio?</div>
+  <div class="nichos" id="nichos-grid"></div>
+
+  <button id="btn-entrar" onclick="entrar()">Entrar al curso →</button>
+</div>
+
+<!-- ══════════════════════════════
+     APP PRINCIPAL
+══════════════════════════════ -->
+<div id="app">
+  <div class="topbar">
+    <div class="tb-brand">
+      <div class="tbn">IA para Multiplicadores</div>
+      <div class="tbs" id="tb-nombre-display">—</div>
+    </div>
+    <div class="tb-nichotag" id="tb-nicho-tag">—</div>
+    <div class="tb-sesiones">
+      <div class="ses-tab act" data-ses="s1" onclick="cambiarSesion('s1')">🚀 Bloque 1</div>
+      <div class="ses-tab" data-ses="s2" onclick="cambiarSesion('s2')">📱 Bloque 2</div>
+      <div class="ses-tab" data-ses="s3" onclick="cambiarSesion('s3')">💰 Bloque 3</div>
+      <div class="ses-tab" data-ses="s4" onclick="cambiarSesion('s4')">🏅 Cierre</div>
+    </div>
+  </div>
+
+  <div class="main-wrap" id="main-content"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATOS DE NICHOS
+// ══════════════════════════════════════════
+const NICHOS = [
+  { id:'barberia',   nom:'Barbería',         ico:'✂️',  color:'#e8614a', cbg:'rgba(232,97,74,.09)',  cb:'rgba(232,97,74,.3)',
+    oficio:'barbero/a',  producto:'corte de cabello', precio:'$18.000', cliente:'hombre de 15 a 40 años del barrio',
+    problema:'los clientes vienen una vez y no vuelven',
+    bio:'✂️ Barbería en San Cristóbal | Cortes desde $15K | Agenda tu cita → wa.me/57XXX',
+    wa_precio:'"Hola! Los cortes desde $15K. El clásico $18K, degradado $22K. ¿Te agendo? 💈"',
+    wa_lopienso:'"Tranquilo, sin presión 😊 Si te decides, aquí estoy. La agenda se llena rápido los fines 🙌"',
+    reel_gancho:'¿Cansado de pagar caro por un corte que no te gusta? 😤',
+    costo_real:'insumos $4.500, tiempo 30 min, gastos fijos proporcionales $2.000', precio_sugerido:'$20.000–22.000',
+    caso_nombre:'Carlos el barbero',
+    caso_datos:'Trabaja 10h/día, 6 días. Cobra $15K por corte. Hace 8 cortes/día. Vende $2.16M/mes. Gastos fijos: $750K.',
+    prompts_extras:['Crea 10 ideas de Reels para una barbería en San Cristóbal. 5 de transformaciones y 5 educativos. Incluye gancho y CTA a agenda.',
+                    'Diseña un paquete de fidelización: 4 cortes al mes + beneficio. Ponle nombre y reglas claras.',
+                    'Escribe 8 mensajes de WhatsApp para confirmar, recordar y hacer seguimiento de citas.']
+  },
+  { id:'peluqueria', nom:'Peluquería',        ico:'💇‍♀️', color:'#d4609e', cbg:'rgba(212,96,158,.09)', cb:'rgba(212,96,158,.3)',
+    oficio:'peluquera/o', producto:'tinte y corte', precio:'$70.000', cliente:'mujer de 20 a 50 años',
+    problema:'las clientas no saben que existo y no tengo agenda llena',
+    bio:'💇‍♀️ Transformaciones reales en tu barrio | Tintes y cortes | Escríbeme 👇',
+    wa_precio:'"¡Hola linda! El tinte desde $60K según largo. Te hago valoración gratis 💇‍♀️ ¿Cuándo vienes?"',
+    wa_lopienso:'"Claro, no hay afán 💜 Cuando te decidas avísame. ¡Vas a quedar divina! ✨"',
+    reel_gancho:'Lo que ninguna peluquería te dice antes del tinte... 👀',
+    costo_real:'tintura $25.000, energía $8.000, arriendo del tiempo $15.000, su tiempo 2h × $15K/h = $30.000',
+    precio_sugerido:'$110.000–$120.000',
+    caso_nombre:'Doña Martha la peluquera',
+    caso_datos:'Hace 8 tintes/mes a $80K. Cree que gana $640K. Costo real por tinte: $78K. Ganancia real: $2K por tinte = $16K/mes.',
+    prompts_extras:['Crea 12 copys para historias vendiendo tinte con enfoque en confianza y resultados. Emoji moderado.',
+                    'Escribe una política clara de citas: retrasos, cancelaciones, abono y garantía. Tono amable y firme.',
+                    'Crea guion Reel 25s: mito vs realidad sobre el tinte en casa.']
+  },
+  { id:'gastronomia',nom:'Gastronomía',       ico:'🍽️', color:'#e07a3d', cbg:'rgba(224,122,61,.09)', cb:'rgba(224,122,61,.3)',
+    oficio:'cocinera/o o chef',  producto:'almuerzo casero / menú del día', precio:'$12.000', cliente:'trabajador del sector que necesita almorzar bien',
+    problema:'los clientes no me conocen y los pedidos llegan de último momento',
+    bio:'🍽️ Almuerzos caseros en Altamira | Menú $12K | Pedidos antes 9am por WA',
+    wa_precio:'"El menú del día $12K: sopa, seco, jugo y postre 🍽️ ¿Para cuántos? Te aparto el pedido."',
+    wa_lopienso:'"Perfecto, me avisas 😊 Recuerda que los pedidos se cierran a las 9am. ¡Hoy hay bandeja! 🍛"',
+    reel_gancho:'¿Sabías que este almuerzo se hace en 20 min y vale $12.000? 🍽️',
+    costo_real:'ingredientes por menú $4.500, gas $800, tiempo de preparación $2.000',
+    precio_sugerido:'$14.000–$16.000',
+    caso_nombre:'Patricia la cocinera',
+    caso_datos:'Hace 20 menús/día a $12K. Vende $240K/día. Costos: ingredientes $90K, gas $16K, tiempo $40K. Ganancia: $94K/día.',
+    prompts_extras:['Crea 10 ganchos para videos cortos de comida (2–3 segundos) con texto para el post. Tono apetitoso.',
+                    'Arma un menú semanal con 2 combos económicos y 2 premium. Con nombres atractivos y precio sugerido.',
+                    'Escribe mensajes WhatsApp para: pedido, confirmación de pago, retraso y pedir reseña.']
+  },
+  { id:'confeccion', nom:'Confección',        ico:'🧵', color:'#7abf5a', cbg:'rgba(122,191,90,.09)',  cb:'rgba(122,191,90,.3)',
+    oficio:'modista/sastre', producto:'arreglos de ropa y ropa a medida', precio:'$35.000 promedio', cliente:'mujer adulta que quiere ropa que le quede bien',
+    problema:'no sé cómo mostrar mi trabajo en redes y no sé qué precio cobrar',
+    bio:'🧵 Arreglos y ropa a medida | San Cristóbal | Que te quede perfecto → WA aquí',
+    wa_precio:'"Los arreglos desde $8K (dobladillo) hasta $25K (ajuste completo) 🧵 ¿Me mandas foto para el precio exacto?"',
+    wa_lopienso:'"Sin problema 🙂 Los turnos son por orden de llegada. Esta semana hay espacio disponible."',
+    reel_gancho:'¿Compraste ropa que no te quedó bien? Yo te la arreglo en 24h 🧵',
+    costo_real:'hilo y materiales $2.000, tiempo por arreglo básico 30 min × $12K/h = $6.000',
+    precio_sugerido:'$12.000–$15.000 arreglo básico',
+    caso_nombre:'Rosa la modista',
+    caso_datos:'Hace 15 arreglos/semana a $10K promedio. Vende $600K/mes. No calcula su tiempo. Gana mucho menos de lo que cree.',
+    prompts_extras:['Crea 8 publicaciones que muestren: antes/después, proceso, calidad de costura y tiempos de entrega.',
+                    'Ayúdame a hacer una lista de precios para arreglos comunes con rangos y recomendaciones.',
+                    'Crea un mensaje de WhatsApp para tomar medidas y definir talla/entrega sin confusiones.']
+  },
+  { id:'bisuteria',  nom:'Bisutería',         ico:'💎', color:'#9b8fe0', cbg:'rgba(155,143,224,.09)', cb:'rgba(155,143,224,.3)',
+    oficio:'artesana/o y diseñadora/or', producto:'aretes, collares y pulseras hechos a mano', precio:'$25.000 promedio', cliente:'mujer que busca accesorios únicos y regalos especiales',
+    problema:'solo vendo a conocidos y no sé cómo llegar a clientes nuevas',
+    bio:'💎 Accesorios hechos a mano | San Cristóbal | Únicos, irrepetibles → WA aquí',
+    wa_precio:'"¡Hola! Los aretes desde $15K, collares desde $25K. Cada pieza es única y hecha a mano 💎 ¿Te muestro el catálogo?"',
+    wa_lopienso:'"Claro, sin afán ✨ Si te decides avísame. Algunas piezas son edición limitada y se agotan rápido 😊"',
+    reel_gancho:'Este collar lo hice en 2 horas y nadie más en el mundo tiene uno igual 💎',
+    costo_real:'materiales por pieza $4.000–$8.000, tiempo de creación 1.5h × $12K/h = $18.000',
+    precio_sugerido:'$30.000–$45.000 según complejidad',
+    caso_nombre:'Liliana la artesana',
+    caso_datos:'Hace 20 piezas/mes a $25K promedio. Vende $500K. No calcula el tiempo creativo. Su precio real debería ser 40% más alto.',
+    prompts_extras:['Crea 10 nombres de colecciones y 10 descripciones cortas para productos hechos a mano.',
+                    'Crea un plan de "regalos": 5 ideas de combos y el copy para venderlos por WhatsApp.',
+                    'Diseña un sistema de catálogo por WhatsApp: cómo mostrar piezas, precios y proceso de pedido.']
+  },
+  { id:'tienda',     nom:'Tienda / Miscelánea',ico:'🏪', color:'#5ba8d4', cbg:'rgba(91,168,212,.09)', cb:'rgba(91,168,212,.3)',
+    oficio:'tendero/a', producto:'productos de primera necesidad y miscelánea', precio:'ventas promedio $50.000/cliente', cliente:'vecinos del barrio que compran diario',
+    problema:'los clientes me compran siempre lo mismo y no sé cómo vender más',
+    bio:'🏪 Tienda del barrio San Cristóbal | Todo lo que necesitas | Domicilios → WA',
+    wa_precio:'"¡Hola vecino! Sí tenemos [producto]. El precio es $[X]. ¿Se lo mandamos a domicilio? 🏪"',
+    wa_lopienso:'"Listo, sin problema 😊 Cuando necesites avísanos. También manejamos domicilios sin costo en el barrio."',
+    reel_gancho:'¿Sabías que en tu tienda del barrio consigues esto sin salir de San Cristóbal? 🏪',
+    costo_real:'productos con margen del 20–30%, gastos fijos local $800K/mes',
+    precio_sugerido:'revisar márgenes y aumentar productos con mayor ganancia',
+    caso_nombre:'Don Álvaro el tendero',
+    caso_datos:'Vende $4M/mes. Costo de productos $3M. Gastos fijos $600K. Ganancia neta: $400K. No ha subido precios en 2 años.',
+    prompts_extras:['Crea 5 promociones para aumentar el ticket promedio de mis clientes de la tienda.',
+                    'Escribe un mensaje para anunciar delivery en el barrio sin costo. Tono vecinal y cercano.',
+                    'Dame ideas para productos adicionales que puedo vender en una tienda de barrio con alto margen.']
+  },
+  { id:'reposteria', nom:'Repostería',        ico:'🎂', color:'#e07a9e', cbg:'rgba(224,122,158,.09)', cb:'rgba(224,122,158,.3)',
+    oficio:'repostera/o y pastelera/o', producto:'tortas, postres y dulces por encargo', precio:'$80.000 torta básica', cliente:'personas que celebran fechas especiales',
+    problema:'los pedidos llegan de último momento y no puedo organizarme bien',
+    bio:'🎂 Tortas y postres por encargo | San Cristóbal | Pedidos con 3 días de anticipación → WA',
+    wa_precio:'"¡Hola! Las tortas desde $80K según tamaño y diseño. ¿Para cuántas personas y qué fecha? 🎂"',
+    wa_lopienso:'"Claro, sin afán 😊 Cuando te decidas recuerda que necesito mínimo 3 días de anticipación para garantizar calidad ✨"',
+    reel_gancho:'Esto es lo que pasa cuando alguien pide una torta con 1 día de anticipación... 🎂',
+    costo_real:'ingredientes $25.000, tiempo de preparación 4h × $15K/h = $60.000, empaque $5.000',
+    precio_sugerido:'$100.000–$120.000 para torta básica de 20 porciones',
+    caso_nombre:'Carmen la repostera',
+    caso_datos:'Hace 8 tortas/mes a $80K. Vende $640K. No calcula el tiempo. Costo real por torta: $90K. Está perdiendo plata.',
+    prompts_extras:['Crea un menú de repostería con 5 opciones y precios, con descripción apetitosa de cada una.',
+                    'Escribe las políticas de pedido: anticipación mínima, abono, cambios y cancelaciones.',
+                    'Diseña 5 combos de torta + cupcakes + decoración para fechas especiales con precio sugerido.']
+  },
+  { id:'textil',     nom:'Textil / Moda',     ico:'👗', color:'#3dbfa0', cbg:'rgba(61,191,160,.09)',  cb:'rgba(61,191,160,.3)',
+    oficio:'emprendedor/a textil', producto:'ropa y accesorios de moda', precio:'$45.000 prenda promedio', cliente:'mujer joven 18–35 años que busca moda asequible',
+    problema:'hay mucha competencia y no sé cómo diferenciar mi marca',
+    bio:'👗 Moda colombiana | San Cristóbal | Envíos y pagos por WA → Escríbeme',
+    wa_precio:'"¡Hola! La [prenda] está a $[precio]. Tenemos tallas S, M y L disponibles. ¿Te muestro más opciones? 👗"',
+    wa_lopienso:'"Sin problema 😊 Si te decides avísame. Las tallas se agotan rápido, especialmente la M ✨"',
+    reel_gancho:'3 outfits completos por menos de $150.000 — desde San Cristóbal 👗',
+    costo_real:'costo de producción/compra $20.000, tiempo de venta y atención $3.000, gastos fijos $5.000',
+    precio_sugerido:'$42.000–$50.000 con margen del 40%',
+    caso_nombre:'Valentina la emprendedora textil',
+    caso_datos:'Vende 40 prendas/mes a $40K. Ingresos: $1.6M. Costo por prenda $25K. Gastos fijos $200K. Ganancia: $400K.',
+    prompts_extras:['Crea una estrategia de contenido para mostrar looks completos con mi ropa en Instagram.',
+                    'Escribe 5 descripciones de productos para una tienda online que generen urgencia y deseo.',
+                    'Diseña un programa de puntos y fidelización para clientes recurrentes de mi negocio textil.']
+  }
+];
+
+// ══════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════
+let estado = { nombre:'', nicho:null, sesion:'s1', notasVis:{} };
+
+// ══════════════════════════════════════════
+// RENDER NICHOS EN BIENVENIDA
+// ══════════════════════════════════════════
+function renderNichos(){
+  const g = document.getElementById('nichos-grid');
+  g.innerHTML = NICHOS.map(n=>`
+    <div class="nicho-btn" id="nb-${n.id}" onclick="selNicho('${n.id}')">
+      <span class="ico">${n.ico}</span>
+      <span class="nm">${n.nom}</span>
+    </div>`).join('');
+}
+
+function selNicho(id){
+  const n = NICHOS.find(x=>x.id===id);
+  if(!n) return;
+  estado.nicho = n;
+  document.querySelectorAll('.nicho-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('nb-'+id).classList.add('sel');
+  document.documentElement.style.setProperty('--nicho-color', n.color);
+  document.documentElement.style.setProperty('--nicho-bg', n.cbg);
+  document.documentElement.style.setProperty('--nicho-b', n.cb);
+  checkReady();
+}
+
+function checkReady(){
+  const nombre = document.getElementById('input-nombre').value.trim();
+  const btn = document.getElementById('btn-entrar');
+  if(nombre && estado.nicho){ btn.classList.add('ready'); }
+  else { btn.classList.remove('ready'); }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderNichos();
+  document.getElementById('input-nombre').addEventListener('input', checkReady);
+});
+
+// ══════════════════════════════════════════
+// ENTRAR
+// ══════════════════════════════════════════
+function entrar(){
+  estado.nombre = document.getElementById('input-nombre').value.trim();
+  if(!estado.nombre || !estado.nicho) return;
+  document.getElementById('welcome').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('tb-nombre-display').textContent = estado.nombre;
+  document.getElementById('tb-nicho-tag').textContent = estado.nicho.ico+' '+estado.nicho.nom;
+  renderSesion('s1');
+  updateProgress();
+}
+
+// ══════════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════════
+function cambiarSesion(id){
+  estado.sesion = id;
+  document.querySelectorAll('.ses-tab').forEach(t=>{
+    t.classList.remove('act');
+    if(t.dataset.ses===id) t.classList.add('act');
+  });
+  renderSesion(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateProgress();
+}
+
+function updateProgress(){
+  const map = {s1:25,s2:50,s3:75,s4:100};
+  document.getElementById('prog-fill').style.width = (map[estado.sesion]||25)+'%';
+  document.getElementById('prog-fill').style.background = estado.nicho?.color || 'var(--coral)';
+}
+
+// ══════════════════════════════════════════
+// HELPERS DE RENDER
+// ══════════════════════════════════════════
+const N = ()=> estado.nicho;
+
+function promptCard(id, ico, label, prompt, ejemplo, nota, ia='ChatGPT / Claude'){
+  return `
+  <div class="prompt-card" id="pc-${id}">
+    <div class="pc-header" onclick="togglePC('${id}')">
+      <span class="pc-icon">${ico}</span>
+      <span class="pc-label">${label}</span>
+      <span class="pc-tag" style="color:${N().color};border-color:${N().cb}">${ia}</span>
+      <span class="pc-chev">▼</span>
+    </div>
+    <div class="pc-body">
+      <div style="position:relative">
+        <div class="prompt-txt" id="pt-${id}">${prompt}</div>
+        <button class="copy-btn" onclick="copiar('pt-${id}',this)">Copiar</button>
+      </div>
+      <div class="ej-nicho">
+        <span class="ej-label">${N().ico} Ejemplo para ${N().nom}</span>
+        ${ejemplo}
+      </div>
+      <textarea class="resultado-area" placeholder="Pega aquí el resultado que generó la IA..." rows="3"></textarea>
+      <button class="nota-toggle" onclick="toggleNota('nt-${id}')">📝 Nota del facilitador</button>
+      <div class="nota-faci" id="nt-${id}">${nota}</div>
+    </div>
+  </div>`;
+}
+
+function togglePC(id){
+  document.getElementById('pc-'+id).classList.toggle('pc-open');
+}
+function toggleNota(id){
+  document.getElementById(id).classList.toggle('vis');
+}
+
+function copiar(id, btn){
+  const txt = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(txt).then(()=>{
+    btn.textContent='¡Copiado!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},2000);
+  });
+}
+
+// ══════════════════════════════════════════
+// SESIÓN 1 — IA SIN MIEDO
+// ══════════════════════════════════════════
+function renderS1(){
+  const n = N();
+  return `
+  <div class="ses-header">
+    <div class="sh-eye" style="color:${n.color}">Bloque 1 · IA Sin Miedo · 2 horas</div>
+    <div class="sh-title"><em>IA</em> <span style="color:${n.color}">Sin</span> Miedo</div>
+    <div class="sh-desc">Hoy produces algo real para tu negocio antes de los 40 minutos. Sin importar si nunca usaste una IA.</div>
+    <div class="sh-obj">🎯 <strong>Tu objetivo hoy:</strong> Generar tu primera oferta irresistible y entender la Fórmula de Oro del Prompt.</div>
+  </div>
+
+  <!-- MI NEGOCIO EN 5 LINEAS -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:${n.color};border-color:${n.cb};background:${n.cbg}">Ejercicio 1</div>
+      <div class="bloque-titulo">Mi negocio en 5 líneas</div>
+      <div class="bloque-tiempo">⏱ 15 min</div>
+    </div>
+    <div class="instruccion">Este es tu punto de partida. Copia este prompt en ChatGPT o Claude, <strong>exactamente como está</strong> — ya está personalizado para ti.</div>
+    ${promptCard('neg5',
+      n.ico,
+      'Diagnóstico de mi negocio',
+      `Soy ${n.nombre||estado.nombre}. Tengo un negocio de ${n.oficio} en San Cristóbal, Bogotá.
+Mi cliente típico es ${n.cliente}.
+Lo que más vendo es ${n.producto} a ${n.precio}.
+Mi mayor problema hoy es que ${n.problema}.
+Dame 3 ideas concretas para conseguir más clientes esta semana usando solo el celular.`,
+      `El facilitador mostrará el resultado en el proyector. Tu prompt ya tiene tu oficio y situación real.`,
+      `Circula y ayuda a quien no logra abrir la IA. Si alguien no tiene cuenta, que use la versión web en chatgpt.com o claude.ai — no necesita instalar nada.`,
+      'ChatGPT / Claude'
+    )}
+  </div>
+
+  <!-- FORMULA DE ORO -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:${n.color};border-color:${n.cb};background:${n.cbg}">Concepto clave</div>
+      <div class="bloque-titulo">La Fórmula de Oro</div>
+    </div>
+    <div class="instruccion">Toda la IA funciona igual. La diferencia entre un resultado inútil y uno que usas mañana es <strong>cómo le pides</strong>.</div>
+    <div class="pasos">
+      <div class="paso"><div class="pn" style="color:${n.color}">ROL</div><div><div class="pt">Quién debe ser la IA</div><div class="pd">Ejemplo: "Actúa como experto en ventas para pequeños negocios..."</div></div></div>
+      <div class="paso"><div class="pn" style="color:${n.color}">CTX</div><div><div class="pt">Tu contexto específico</div><div class="pd">Oficio, barrio, cliente, precio, problema. <strong>Sin contexto = respuesta genérica.</strong></div></div></div>
+      <div class="paso"><div class="pn" style="color:${n.color}">OBJ</div><div><div class="pt">Exactamente qué quieres</div><div class="pd">No "ayúdame" — "dame 3 mensajes para cuando..."</div></div></div>
+      <div class="paso"><div class="pn" style="color:${n.color}">TONO</div><div><div class="pt">Cómo debe sonar</div><div class="pd">Cercano, colombiano, formal, urgente, cálido...</div></div></div>
+      <div class="paso"><div class="pn" style="color:${n.color}">FORM</div><div><div class="pt">Cómo quieres la respuesta</div><div class="pd">Lista, tabla, 3 opciones, máximo 3 líneas...</div></div></div>
+    </div>
+  </div>
+
+  <!-- OFERTA IRRESISTIBLE -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:${n.color};border-color:${n.cb};background:${n.cbg}">Ejercicio 2</div>
+      <div class="bloque-titulo">Mi oferta irresistible</div>
+      <div class="bloque-tiempo">⏱ 20 min</div>
+    </div>
+    <div class="instruccion">Usando la Fórmula de Oro, crea 3 ofertas para llenar tu agenda o conseguir pedidos <strong>esta semana</strong>.</div>
+    ${promptCard('oferta',
+      '💥',
+      'Oferta irresistible para esta semana',
+      `Actúa como experto en ventas para negocios pequeños.
+Mi negocio es ${n.oficio} en San Cristóbal, Bogotá.
+Mi cliente típico es ${n.cliente}.
+Precio promedio: ${n.precio}.
+Crea 3 ofertas para conseguir más clientes esta semana.
+Cada oferta debe tener: beneficio claro, urgencia, condición simple y llamado a la acción.
+Tono: cercano, colombiano, sin sonar desesperado.`,
+      `Recuerda que tus clientes son ${n.cliente}. La oferta debe hablarles directamente a ellos.`,
+      `El objetivo no es que la oferta sea perfecta — es que sea real y la puedan publicar hoy. Si queda muy formal, pídeles que le digan a la IA: "Hazla más natural, como si le estuvieras hablando a un amigo".`
+    )}
+    <div class="entregable">
+      <div class="ei">📸</div>
+      <div><div class="et">Entregable del Bloque 1</div><div class="ed">Captura de pantalla de tu oferta irresistible generada. La vas a necesitar en el Bloque 3.</div></div>
+    </div>
+  </div>
+
+  <!-- DINÁMICA RETO DEL PROMPT -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:${n.color};border-color:${n.cb};background:${n.cbg}">Dinámica grupal</div>
+      <div class="bloque-titulo">🏆 Reto del Prompt</div>
+      <div class="bloque-tiempo">⏱ 30 min</div>
+    </div>
+    <div class="instruccion">El facilitador forma equipos de 4–5 personas. Cada equipo recibe una tarjeta con un problema de negocio. Tienen <strong>10 minutos</strong> para crear el mejor prompt con la Fórmula de Oro.</div>
+    <div class="pasos">
+      <div class="paso"><div class="pn" style="color:${n.color}">1</div><div><div class="pt">Forman equipos mixtos (distintos oficios)</div><div class="pd">La mezcla de oficios enriquece las ideas</div></div></div>
+      <div class="paso"><div class="pn" style="color:${n.color}">2</div><div><div class="pt">10 min: crear el mejor prompt para la tarjeta recibida</div><div class="pd">Aplican la Fórmula de Oro. El que da la respuesta más útil gana.</div></div></div>
+      <div class="paso"><div class="pn" style="color:${n.color}">3</div><div><div class="pt">2 min por equipo: presentan su resultado</div><div class="pd">El grupo vota: ¿cuál respuesta usarías mañana en tu negocio?</div></div></div>
+    </div>
+    <div class="tip"><span class="ti">💡</span><span>El criterio de ganador no es el prompt más largo o complicado — es el que genera la respuesta más útil y aplicable hoy mismo.</span></div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+// SESIÓN 2 — VENTAS + CONTENIDO
+// ══════════════════════════════════════════
+function renderS2(){
+  const n = N();
+  return `
+  <div class="ses-header">
+    <div class="sh-eye" style="color:${n.teal||'#3dbfa0'}">Bloque 2 · Ventas + Contenido · 2 horas</div>
+    <div class="sh-title"><em>Ventas</em> + <span style="color:var(--teal)">Contenido</span></div>
+    <div class="sh-desc">Tu arsenal digital completo: WhatsApp, redes sociales y diseño. Todo personalizado para ${n.nom}.</div>
+    <div class="sh-obj">🎯 <strong>Tu objetivo hoy:</strong> 6 respuestas de WhatsApp listas + BIO + plan de contenido + 1 post diseñado.</div>
+  </div>
+
+  <!-- REVISION TAREA -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Apertura</div>
+      <div class="bloque-titulo">¿Usaste la IA esta semana?</div>
+      <div class="bloque-tiempo">⏱ 10 min</div>
+    </div>
+    <div class="instruccion">Comparte con el grupo qué intentaste, si funcionó y qué aprendiste. <strong>No importa si no fue perfecto</strong> — lo que importa es que lo intentaste.</div>
+    <div class="tip"><span class="ti">💡</span><span>Hoy construyes tu arsenal digital completo. Al final de este bloque tienes todo lo que necesitas para empezar a vender con IA esta misma semana.</span></div>
+  </div>
+
+  <!-- 6 RESPUESTAS WHATSAPP -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Ejercicio 3</div>
+      <div class="bloque-titulo">Las 6 Respuestas de WhatsApp</div>
+      <div class="bloque-tiempo">⏱ 25 min</div>
+    </div>
+    <div class="instruccion">Dejas de responder los mismos mensajes todo el día. La IA los escribe una vez. Los guardas en WhatsApp Business y los envías con un clic.</div>
+    ${promptCard('wa6',
+      '📱',
+      '6 respuestas de WhatsApp listas',
+      `Actúa como experto en servicio al cliente para negocios pequeños.
+Soy dueño(a) de ${n.oficio} en San Cristóbal, Bogotá.
+Mi cliente típico es ${n.cliente}.
+Crea 6 respuestas cortas para WhatsApp, tono cercano y colombiano (no robótico), para:
+1) cuando preguntan el precio de ${n.producto}
+2) cuando preguntan dónde estoy
+3) cuando preguntan los horarios
+4) cuando dicen "lo pienso"
+5) cuando un cliente llega molesto
+6) seguimiento a quien preguntó pero no compró.
+Máximo 3 líneas cada una.`,
+      `📱 Precio: ${n.wa_precio}\n📱 "Lo pienso": ${n.wa_lopienso}`,
+      `Si quedan muy formales o largas, pídeles que le digan a la IA: "Hazlas más cortas y naturales, como si le escribieras a un amigo del barrio."`
+    )}
+    <div class="tip"><span class="ti">💡</span><span><strong>WhatsApp Business → Respuestas Rápidas:</strong> Configuración → Herramientas para negocios → Respuestas rápidas. Crea un atajo /precio y con ese comando se envía la respuesta completa.</span></div>
+    <div class="entregable">
+      <div class="ei">📱</div>
+      <div><div class="et">Entregable</div><div class="ed">6 respuestas guardadas en el celular — bonus si las configuras en WhatsApp Business</div></div>
+    </div>
+  </div>
+
+  <!-- BIO -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Ejercicio 4</div>
+      <div class="bloque-titulo">Tu BIO para redes</div>
+      <div class="bloque-tiempo">⏱ 15 min</div>
+    </div>
+    <div class="instruccion">Lo primero que ve un cliente cuando llega a tu perfil. En 150 caracteres: qué haces, para quién y cómo contactarte.</div>
+    ${promptCard('bio',
+      '👤',
+      'BIO de Instagram/Facebook',
+      `Escribe 3 opciones de BIO para Instagram para mi negocio de ${n.oficio} en San Cristóbal, Bogotá.
+Mi cliente es ${n.cliente}.
+Mi diferencial es que ${n.producto} a ${n.precio}.
+Máximo 150 caracteres cada una.
+Cierra con llamado a WhatsApp.
+Incluye 1–2 emojis relevantes.
+Nada genérico — que suene como yo.`,
+      `${n.ico} ${n.bio}`,
+      `Muchos van a querer copiar la BIO del ejemplo exacta. Está bien como punto de partida, pero pídeles que cambien al menos el número de WhatsApp y que la lean en voz alta — si suena raro, que le pidan a la IA que la ajuste.`
+    )}
+  </div>
+
+  <!-- PLAN CONTENIDO -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Ejercicio 5</div>
+      <div class="bloque-titulo">Plan de contenido 7 días</div>
+      <div class="bloque-tiempo">⏱ 10 min</div>
+    </div>
+    <div class="instruccion">Una semana completa de publicaciones en <strong>menos de 2 minutos</strong>. Lo que antes tomaba horas de pensar, la IA lo genera al instante.</div>
+    ${promptCard('plan7',
+      '📅',
+      'Plan de contenido 7 días',
+      `Hazme un plan de contenido para 7 días para mi negocio de ${n.oficio} en Colombia.
+Formato tabla: Día / Tipo (post, reel, historia) / Tema / Primera línea del texto / Llamado a la acción.
+Distribución: 3 días educativos sobre ${n.producto}, 2 días de venta directa, 1 día de testimonio o transformación, 1 día personal del emprendedor.
+Tono: cercano y colombiano.`,
+      `El plan debe ser específico para ${n.nom}. Si la IA lo hace muy genérico, agrega en el prompt: "Incluye temas específicos sobre ${n.producto} y mi cliente ${n.cliente}."`,
+      `Si el grupo tiene dificultades generando el plan, muéstrales cómo agregar más contexto. La calidad del plan depende directamente de cuánto contexto dan.`
+    )}
+    <div class="entregable">
+      <div class="ei">📅</div>
+      <div><div class="et">Entregable</div><div class="ed">BIO elegida + tabla de contenido 7 días guardada</div></div>
+    </div>
+  </div>
+
+  <!-- CANVA -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Ejercicio 6</div>
+      <div class="bloque-titulo">🎨 Post listo en 15 minutos — Canva</div>
+      <div class="bloque-tiempo">⏱ 25 min</div>
+    </div>
+    <div class="instruccion">Diseño profesional sin ser diseñador. La IA genera el texto, Canva lo hace visual.</div>
+    <div class="pasos">
+      <div class="paso"><div class="pn" style="color:var(--teal)">1</div><div><div class="pt">Abrir canva.com — crear cuenta gratis con Gmail</div><div class="pd">Si ya tienes cuenta, perfecto</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--teal)">2</div><div><div class="pt">Buscar "post Instagram" → elegir plantilla vertical</div><div class="pd">1080×1350px para mayor alcance</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--teal)">3</div><div><div class="pt">Cambiar texto por el gancho del plan de contenido</div><div class="pd">La primera línea que generó la IA en el ejercicio anterior</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--teal)">4</div><div><div class="pt">Cambiar colores al de tu negocio · Subir foto si tienes</div><div class="pd">1–2 colores máximo. Menos es más.</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--teal)">5</div><div><div class="pt">Descargar → ¡listo para publicar hoy!</div><div class="pd">Quien termine antes ayuda al de al lado</div></div></div>
+    </div>
+    <div class="entregable">
+      <div class="ei">🎨</div>
+      <div><div class="et">Entregable</div><div class="ed">1 post diseñado en Canva listo para publicar esta semana</div></div>
+    </div>
+  </div>
+
+  <!-- REEL -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Ejercicio 7</div>
+      <div class="bloque-titulo">Guion de Reel 30 segundos</div>
+      <div class="bloque-tiempo">⏱ 20 min</div>
+    </div>
+    <div class="instruccion">El video tiene más alcance que cualquier foto. Un Reel bien hecho puede traer más clientes que 10 publicaciones. La clave: <strong>el gancho de los primeros 2 segundos.</strong></div>
+    ${promptCard('reel',
+      '🎬',
+      'Guion Reel 30 segundos',
+      `Crea un guion de 30 segundos para un video vertical sobre ${n.oficio} en Bogotá.
+Estructura:
+- Gancho (2 segundos): algo que genere curiosidad o sorpresa relacionado con ${n.producto}
+- Desarrollo (3 puntos cortos, 20 segundos): mostrando el proceso o resultado de ${n.producto}
+- Cierre (8 segundos): llamado a reservar/pedir por WhatsApp con urgencia.
+Dime también qué mostrar en cámara en cada momento.
+Tono: dinámico, colombiano, confiable.`,
+      `${n.ico} Gancho sugerido para ${n.nom}: "${n.reel_gancho}"`,
+      `No necesitan grabar el video hoy. El objetivo es tener el guion listo. Si alguien quiere grabar durante la pausa, genial — pero no es obligatorio.`
+    )}
+    <div class="entregable">
+      <div class="ei">🎬</div>
+      <div><div class="et">Entregable</div><div class="ed">Guion de Reel 30 segundos personalizado para tu oficio</div></div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+// SESIÓN 3 — NEGOCIO + MULTIPLICADOR
+// ══════════════════════════════════════════
+function renderS3(){
+  const n = N();
+  return `
+  <div class="ses-header">
+    <div class="sh-eye" style="color:var(--lav)">Bloque 3 · Negocio + Multiplicador · 2 horas</div>
+    <div class="sh-title"><em>Negocio</em> + <span style="color:var(--lav)">Multiplicador</span></div>
+    <div class="sh-desc">Las finanzas reales de tu negocio y cómo convertirte en quien enseña todo esto a otros.</div>
+    <div class="sh-obj">🎯 <strong>Tu objetivo hoy:</strong> Saber cuánto ganas de verdad y tener tu Plan del Multiplicador listo para firmar.</div>
+  </div>
+
+  <!-- RESULTADOS SEMANA -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Apertura</div>
+      <div class="bloque-titulo">¿Publicaste esta semana?</div>
+      <div class="bloque-tiempo">⏱ 15 min</div>
+    </div>
+    <div class="instruccion">Comparte con el grupo el resultado de lo que publicaste. <strong>¿Cuántos likes? ¿Cuántos mensajes? ¿Alguien te compró?</strong></div>
+    <div class="tip"><span class="ti">🏆</span><span>Si publicaste y recibiste algún mensaje o cliente, cuéntalo ahora. Ese es el mejor aprendizaje para todos.</span></div>
+  </div>
+
+  <!-- VENTAS VS GANANCIA -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Concepto clave</div>
+      <div class="bloque-titulo">Ventas ≠ Ganancia</div>
+      <div class="bloque-tiempo">⏱ 25 min</div>
+    </div>
+    <div class="instruccion">El problema más común del emprendedor colombiano: venden mucho y no saben cuánto ganan. Hoy lo cambiamos.</div>
+    <div class="caso-box" style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--coral);border-radius:0 14px 14px 0;padding:18px 20px;margin-bottom:14px">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--coral);font-weight:500;margin-bottom:8px">📖 El caso de ${n.caso_nombre}</div>
+      <div style="font-size:15px;color:var(--w);line-height:1.75;font-weight:300">${n.caso_datos}<br><br>Costo real de ${n.producto}: <strong>${n.costo_real}</strong>.<br>Precio sugerido con margen del 40%: <strong style="color:var(--teal)">${n.precio_sugerido}</strong>.</div>
+    </div>
+    ${promptCard('finanzas',
+      '💰',
+      'Cálculo de costo real de mi negocio',
+      `Actúa como asesor financiero de micro-negocios.
+Mi negocio es ${n.oficio} en San Cristóbal, Bogotá.
+Mi producto/servicio principal es ${n.producto}.
+Precio actual que cobro: ${n.precio}.
+Costos aproximados: ${n.costo_real}.
+Calcula para mí:
+1) Cuánto me cuesta realmente producir/ofrecer este servicio
+2) A qué precio debería cobrar para tener un margen del 40%
+3) Cuántas unidades necesito vender al mes para cubrir mis gastos
+Explícamelo simple, con números claros, como si le hablaras a alguien que nunca estudió finanzas.`,
+      `Para ${n.nom}: precio actual ${n.precio} → precio sugerido ${n.precio_sugerido}.`,
+      `Si la IA da un resultado que parece incorrecto, úsalo como enseñanza: "La IA puede equivocarse — por eso siempre revisamos con nuestro propio criterio. ¿Qué creen que está mal aquí?"`,
+      'Claude / Gemini'
+    )}
+    <div class="entregable">
+      <div class="ei">💰</div>
+      <div><div class="et">Entregable</div><div class="ed">Costo real calculado + precio sugerido con margen para tu negocio</div></div>
+    </div>
+  </div>
+
+  <!-- TABLA CONTROL -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Ejercicio 8</div>
+      <div class="bloque-titulo">Tabla de control financiero</div>
+      <div class="bloque-tiempo">⏱ 20 min</div>
+    </div>
+    <div class="instruccion">El hábito que más impacto tiene en un negocio pequeño: <strong>anotar todo, una vez a la semana.</strong></div>
+    ${promptCard('tabla',
+      '📊',
+      'Tabla simple de ingresos y gastos',
+      `Crea una tabla simple para controlar las finanzas de mi negocio de ${n.oficio}.
+Columnas: Fecha / Concepto / Ingreso / Gasto / Ganancia / Método de pago / Nota.
+Dame también 5 reglas simples para usarla bien y no olvidarla.
+Que sea fácil de usar en una hoja de papel o en el celular.`,
+      `Recuerda ponerle una alarma los domingos a las 9pm: "Anotar la semana". Ese es todo el sistema de control financiero de tu negocio.`,
+      `Si alguien tiene Google Sheets en el computador, muéstrale cómo copiar la tabla ahí. Si no, con una libreta funciona para empezar.`
+    )}
+    <div class="entregable">
+      <div class="ei">📊</div>
+      <div><div class="et">Entregable</div><div class="ed">Tabla de control creada y guardada. Alarma del domingo configurada.</div></div>
+    </div>
+  </div>
+
+  <!-- PROMPTS EXTRAS DEL NICHO -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Bonus ${n.ico}</div>
+      <div class="bloque-titulo">Prompts especiales para ${n.nom}</div>
+    </div>
+    <div class="instruccion">Estos prompts son específicos para tu oficio. Úsalos después del curso para seguir creciendo.</div>
+    ${n.prompts_extras.map((pe, i)=>`
+    <div class="prompt-card" id="pc-extra${i}">
+      <div class="pc-header" onclick="togglePC('extra${i}')">
+        <span class="pc-icon">${n.ico}</span>
+        <span class="pc-label">Prompt especial ${i+1}</span>
+        <span class="pc-tag" style="color:${n.color};border-color:${n.cb}">Para llevar</span>
+        <span class="pc-chev">▼</span>
+      </div>
+      <div class="pc-body">
+        <div style="position:relative">
+          <div class="prompt-txt" id="pt-extra${i}">${pe}</div>
+          <button class="copy-btn" onclick="copiar('pt-extra${i}',this)">Copiar</button>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+
+  <!-- DE APRENDIZ A MULTIPLICADOR -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">El gran propósito</div>
+      <div class="bloque-titulo">De aprendiz a multiplicador</div>
+    </div>
+    <div class="instruccion">135 multiplicadores × 10 personas = <strong>1.350 negocios transformados</strong> en San Cristóbal. Tú eres el puente.</div>
+    <div class="mini-pasos">
+      <div class="mps"><div class="mpt">0–5 min</div><div><div class="mpc">Rompehielo</div><div class="mpd">"¿Qué vendes y qué te cuesta más tiempo o plata?" — anota en el tablero.</div></div></div>
+      <div class="mps"><div class="mpt">5–10 min</div><div><div class="mpc">Regla de Oro</div><div class="mpd">Fórmula ROL + CONTEXTO + OBJETIVO + TONO + FORMATO. Un ejemplo tuyo.</div></div></div>
+      <div class="mps"><div class="mpt">10–25 min</div><div><div class="mpc">Práctica 1 — Oferta irresistible</div><div class="mpd">Cada uno la crea. Tú circulas — no haces el trabajo.</div></div></div>
+      <div class="mps"><div class="mpt">25–35 min</div><div><div class="mpc">Práctica 2 — 2 respuestas WhatsApp</div><div class="mpd">Precio y ubicación. Listas para usar hoy.</div></div></div>
+      <div class="mps"><div class="mpt">35–43 min</div><div><div class="mpc">Práctica 3 — 1 publicación</div><div class="mpd">Gancho + copy + llamado a la acción.</div></div></div>
+      <div class="mps"><div class="mpt">43–45 min</div><div><div class="mpc">Cierre y compromiso</div><div class="mpd">Pantallazo grupal. "¿Qué publican esta semana?"</div></div></div>
+    </div>
+    <div class="tip"><span class="ti">⚡</span><span><strong>Regla de oro del multiplicador:</strong> Primero acción, después explicación. Que produzcan algo en los primeros 10 minutos. Eso engancha al grupo.</span></div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+// SESIÓN 4 — CIERRE
+// ══════════════════════════════════════════
+function renderS4(){
+  const n = N();
+  return `
+  <div class="cierre-hero">
+    <div class="sh-eye" style="color:var(--lav);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px">Hora final · Compartir resultados</div>
+    <div class="big">Tu Plan del<br><em>Multiplicador</em></div>
+    <div style="font-size:16px;color:var(--w2);font-weight:300;line-height:1.7;max-width:560px;margin:0 auto 20px">Este es el compromiso que te llevas hoy. No es opcional — es el propósito del programa.</div>
+  </div>
+
+  <!-- COMPARTIR RESULTADOS -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Actividad grupal</div>
+      <div class="bloque-titulo">Galería de resultados</div>
+      <div class="bloque-tiempo">⏱ 30 min</div>
+    </div>
+    <div class="instruccion">Cada participante comparte <strong>el resultado que más le gustó</strong> del día: un prompt, un post, una respuesta de WhatsApp, una oferta. El grupo comenta.</div>
+    <div class="pasos">
+      <div class="paso"><div class="pn" style="color:var(--lav)">1</div><div><div class="pt">Elige tu resultado favorito del día</div><div class="pd">El que más te sorprendió o el que más vas a usar</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--lav)">2</div><div><div class="pt">Compártelo con el grupo (1 minuto)</div><div class="pd">¿Qué es? ¿Por qué lo elegiste? ¿Cuándo lo vas a usar?</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--lav)">3</div><div><div class="pt">El grupo puede hacer 1 pregunta</div><div class="pd">Solo una — para mantener el ritmo</div></div></div>
+    </div>
+  </div>
+
+  <!-- MICRO ENSEÑANZA -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--coral);border-color:var(--cb);background:var(--cbg)">Dinámica</div>
+      <div class="bloque-titulo">🧑‍🏫 Micro-Enseñanza</div>
+      <div class="bloque-tiempo">⏱ 20 min</div>
+    </div>
+    <div class="instruccion">Grupos de 5. Cada uno tiene <strong>3 minutos para enseñarle al grupo UN prompt</strong>, como si fueran sus futuros aprendices.</div>
+    <div class="pasos">
+      <div class="paso"><div class="pn" style="color:var(--coral)">1</div><div><div class="pt">Elige el prompt que mejor entendiste hoy</div><div class="pd">El de WhatsApp, la oferta, el plan de contenido — el que más dominas</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--coral)">2</div><div><div class="pt">Enséñalo en 3 minutos — los demás actúan como aprendices</div><div class="pd">Hacen preguntas, piden que repitan, dicen que no entienden</div></div></div>
+      <div class="paso"><div class="pn" style="color:var(--coral)">3</div><div><div class="pt">Retroalimentación del grupo (30 segundos)</div><div class="pd">¿Qué fue claro? ¿Qué fue confuso?</div></div></div>
+    </div>
+    <div class="tip"><span class="ti">💡</span><span>No tiene que ser perfecto. El objetivo es que practiques, no que domines. La perfección llega cuando lo enseñes por segunda vez.</span></div>
+  </div>
+
+  <!-- PLAN MULTIPLICADOR -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--lav);border-color:var(--lb);background:var(--lbg)">Tu compromiso</div>
+      <div class="bloque-titulo">Plan del Multiplicador</div>
+    </div>
+    <div class="instruccion">Completa este plan antes de salir. Es tu compromiso escrito con el programa y con tu comunidad.</div>
+    <div class="plan-form" id="plan-form">
+      <div class="plan-field">
+        <label>Mi nombre y mi oficio</label>
+        <input type="text" id="pf-nombre" placeholder="Ej: María López — Peluquería en Juan Rey" value="${estado.nombre} — ${n.nom}">
+      </div>
+      <div class="plan-field">
+        <label>¿A quién le voy a enseñar esto? (mis 10 personas)</label>
+        <textarea id="pf-quien" rows="2" placeholder="Ej: Mis vecinas del barrio, las mamás del colegio de mi hijo, mis compañeras del mercado..."></textarea>
+      </div>
+      <div class="plan-field">
+        <label>¿Cuándo y dónde?</label>
+        <input type="text" id="pf-cuando" placeholder="Ej: Sábado 14 de junio, 3pm, en mi casa">
+      </div>
+      <div class="plan-field">
+        <label>Los 3 primeros prompts que voy a enseñar</label>
+        <textarea id="pf-prompts" rows="3" placeholder="1) La oferta irresistible&#10;2) Las 6 respuestas de WhatsApp&#10;3) El plan de contenido 7 días"></textarea>
+      </div>
+      <div class="plan-field">
+        <label>¿Qué necesito preparar antes?</label>
+        <textarea id="pf-prep" rows="2" placeholder="Ej: Imprimir el kit, preparar 2 ejemplos de mi oficio, asegurarme que todos tengan celular con internet..."></textarea>
+      </div>
+      <div class="plan-field">
+        <label>Mi compromiso</label>
+        <textarea id="pf-compromiso" rows="2" placeholder="Yo, [nombre], me comprometo a enseñar IA a mis 10 personas antes del [fecha]."></textarea>
+      </div>
+      <button class="btn-guardar" onclick="guardarPlan()">Guardar mi Plan del Multiplicador ↗</button>
+    </div>
+
+    <div id="plan-guardado" style="display:none;margin-top:20px">
+      <div style="background:var(--tbg);border:1px solid var(--tb);border-radius:16px;padding:28px 24px;text-align:center">
+        <div style="font-size:40px;margin-bottom:12px">🏅</div>
+        <div style="font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.5px;margin-bottom:10px">¡Plan guardado!</div>
+        <div style="font-size:15px;color:var(--w2);font-weight:300;line-height:1.7;max-width:480px;margin:0 auto" id="plan-resumen"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LO QUE CONSTRUISTE -->
+  <div class="bloque">
+    <div class="bloque-header">
+      <div class="bloque-num" style="color:var(--teal);border-color:var(--tb);background:var(--tbg)">Resumen del día</div>
+      <div class="bloque-titulo">Lo que construiste hoy</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:4px">
+      ${[
+        ['🧠','Fórmula de Oro del Prompt','La habilidad más valiosa de los próximos años'],
+        ['💥','Oferta irresistible','3 opciones para conseguir clientes esta semana'],
+        ['💬','6 respuestas de WhatsApp','Listas para configurar en WhatsApp Business'],
+        ['👤','BIO profesional','150 caracteres que convierten visitas en clientes'],
+        ['📅','Plan de contenido 7 días','Qué publicar cada día de la próxima semana'],
+        ['🎨','Post diseñado en Canva','Listo para publicar hoy mismo'],
+        ['🎬','Guion de Reel 30s','Para grabar esta semana'],
+        ['💰','Precio con margen real','Lo que deberías cobrar por tu trabajo'],
+        ['🏅','Plan del Multiplicador','Tu compromiso de enseñarle a 10 personas']
+      ].map(([ico,t,d])=>`
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:14px 14px">
+        <div style="font-size:22px;margin-bottom:7px">${ico}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--w);margin-bottom:3px">${t}</div>
+        <div style="font-size:11px;color:var(--w3);line-height:1.5">${d}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <!-- FRASE FINAL -->
+  <div style="text-align:center;padding:56px 20px 40px;border-top:1px solid var(--b1)">
+    <div style="font-size:clamp(20px,3.5vw,36px);font-weight:800;line-height:1.25;letter-spacing:-.5px;max-width:700px;margin:0 auto 16px">
+      "Hoy construyeron algo que 6 meses atrás hubiera costado millones.<br>
+      <em style="color:var(--lav);font-style:italic;font-weight:300">Y adquirieron algo que ningún curso normal da:<br>la capacidad de multiplicar el conocimiento."</em>
+    </div>
+    <div style="font-size:14px;color:var(--w3);font-weight:300">John Esteban Rodríguez · Facilitador · Módulo IA para Multiplicadores · San Cristóbal 2026</div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+// GUARDAR PLAN
+// ══════════════════════════════════════════
+function guardarPlan(){
+  const quien = document.getElementById('pf-quien').value.trim();
+  const cuando = document.getElementById('pf-cuando').value.trim();
+  const comp = document.getElementById('pf-compromiso').value.trim();
+  if(!quien || !cuando){ alert('Por favor completa al menos: a quién y cuándo.'); return; }
+  document.getElementById('plan-form').style.display='none';
+  document.getElementById('plan-guardado').style.display='block';
+  document.getElementById('plan-resumen').innerHTML =
+    `<strong style="color:var(--teal)">${estado.nombre}</strong> va a enseñar IA a sus 10 personas<br>
+    el <strong style="color:var(--w)">${cuando}</strong>.<br><br>
+    ${comp ? '<em style="color:var(--w3)">'+comp+'</em>' : ''}`;
+}
+
+// ══════════════════════════════════════════
+// RENDER PRINCIPAL
+// ══════════════════════════════════════════
+function renderSesion(id){
+  const mc = document.getElementById('main-content');
+  switch(id){
+    case 's1': mc.innerHTML = renderS1(); break;
+    case 's2': mc.innerHTML = renderS2(); break;
+    case 's3': mc.innerHTML = renderS3(); break;
+    case 's4': mc.innerHTML = renderS4(); break;
+  }
+}
+</script>
+</body>
+</html>

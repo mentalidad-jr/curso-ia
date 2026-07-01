@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planificador de Contenido 7 Días</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#181b19;--card:#252825;--card2:#2c2f2c;--b1:#323632;--b2:#434742;
+  --teal:#3dbfa0;--tbg:rgba(61,191,160,.10);--tb:rgba(61,191,160,.32);
+  --coral:#e8614a;--cbg:rgba(232,97,74,.10);--cb:rgba(232,97,74,.32);
+  --lav:#9b8fe0;--lbg:rgba(155,143,224,.10);--lb:rgba(155,143,224,.32);
+  --amber:#e0a847;--amberbg:rgba(224,168,71,.10);--amberb:rgba(224,168,71,.32);
+  --w:#f0ede6;--w2:#b0ac9f;--w3:#686460;--w4:#363833;
+  --f:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:var(--bg);color:var(--w);font-family:var(--f)}
+body{padding-bottom:60px}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(24,27,25,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--b1);padding:14px 24px}
+.tb-title{font-size:14px;font-weight:700;color:var(--w)}
+.tb-title span{display:block;font-size:11px;color:var(--w3);font-weight:400;margin-top:1px}
+
+.main{max-width:880px;margin:0 auto;padding:28px 24px 0}
+
+.hero{text-align:center;margin-bottom:24px}
+.hero h1{font-size:28px;font-weight:800;letter-spacing:-.8px;line-height:1.15}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--lav)}
+.hero p{font-size:14px;color:var(--w3);margin-top:8px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+.prompt-master{background:var(--lbg);border:1.5px solid var(--lb);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+.prompt-master .pm-label{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--lav);font-weight:700;margin-bottom:10px}
+.prompt-master .pm-text{font-size:13px;color:var(--w2);line-height:1.7;font-family:monospace}
+.prompt-master .pm-text .ph{color:var(--lav);font-weight:700}
+.copy-row{display:flex;justify-content:flex-end;margin-top:8px}
+.copy-btn{background:var(--card2);border:1px solid var(--b1);color:var(--w3);border-radius:7px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:var(--f);transition:all .15s}
+.copy-btn:hover{color:var(--w);border-color:var(--b2)}
+.copy-btn.copied{color:var(--teal);border-color:var(--tb)}
+
+.datos-panel{background:var(--card);border:1.5px solid var(--b1);border-radius:14px;padding:16px 20px;margin-bottom:18px}
+.datos-panel input{width:100%;background:var(--bg);border:1.5px solid var(--b1);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--w);font-family:var(--f);outline:none}
+.datos-panel input:focus{border-color:var(--lav)}
+.datos-panel label{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--w3);font-weight:600;margin-bottom:6px;display:block}
+
+.dias-grid{display:flex;flex-direction:column;gap:10px}
+.dia-card{background:var(--card);border:1.5px solid var(--b1);border-radius:14px;overflow:hidden}
+.dia-head{display:flex;align-items:center;gap:12px;padding:13px 18px;background:var(--card2)}
+.dia-nombre{font-size:14px;font-weight:700;color:var(--w);min-width:80px}
+.dia-tipo-select{
+  background:var(--bg);border:1px solid var(--b1);border-radius:7px;
+  padding:6px 10px;font-size:12px;color:var(--w);font-family:var(--f);outline:none;cursor:pointer;
+}
+.dia-tag{
+  font-size:10px;letter-spacing:.6px;text-transform:uppercase;font-weight:700;
+  padding:3px 9px;border-radius:6px;margin-left:auto;
+}
+.dia-body{padding:14px 18px}
+.dia-field{margin-bottom:10px}
+.dia-field label{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--w3);font-weight:600;margin-bottom:5px;display:block}
+.dia-field input, .dia-field textarea{
+  width:100%;background:var(--bg);border:1.5px solid var(--b1);border-radius:9px;
+  padding:9px 12px;font-size:12.5px;color:var(--w);font-family:var(--f);outline:none;resize:vertical;
+}
+.dia-field input:focus, .dia-field textarea:focus{border-color:var(--lav)}
+.dia-field textarea{min-height:50px;line-height:1.5}
+.dia-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.resumen-bar{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.resumen-pill{
+  background:var(--card);border:1px solid var(--b1);border-radius:20px;
+  padding:6px 14px;font-size:11.5px;color:var(--w3);
+}
+.resumen-pill b{color:var(--w)}
+
+.btn-row{display:flex;gap:10px;margin-top:18px}
+.btn{border-radius:10px;padding:12px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--f);transition:all .2s;border:1.5px solid;flex:1}
+.btn-primary{background:var(--lav);color:var(--bg);border-color:var(--lav)}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;color:var(--w2);border-color:var(--b1)}
+.btn-ghost:hover{border-color:var(--b2);color:var(--w)}
+
+.footer-note{text-align:center;font-size:11px;color:var(--w4);margin-top:24px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-title">Planificador de Contenido 7 Días<span>Toda la semana resuelta de una sola vez</span></div>
+</div>
+
+<div class="main">
+
+  <div class="hero">
+    <h1>Tu semana<br><em>completa</em>, organizada</h1>
+    <p>Genera el plan con la IA, después llena cada día aquí. Mezcla educativo, venta, testimonio y personal — así nunca se siente invasivo.</p>
+  </div>
+
+  <div class="datos-panel">
+    <label>Tu oficio (para el prompt)</label>
+    <input type="text" id="oficio" placeholder="Ej: Repostería" oninput="actualizarPrompt()">
+  </div>
+
+  <div class="prompt-master">
+    <div class="pm-label">⚡ El prompt — cópialo en ChatGPT o Claude</div>
+    <div class="pm-text">
+      Hazme un plan de contenido para 7 días para mi negocio de <span class="ph" id="phOficio">[tu oficio]</span> en Colombia. Formato tabla: Día / Tipo (post, reel, historia) / Tema / Primera línea del texto / Llamado a la acción. 3 días educativos, 2 de venta, 1 de testimonio o transformación, 1 personal. Tono: cercano y colombiano.
+    </div>
+    <div class="copy-row"><button class="copy-btn" onclick="copiarPrompt()">Copiar prompt</button></div>
+  </div>
+
+  <div class="resumen-bar">
+    <div class="resumen-pill">📚 Educativo: <b id="cntEducativo">0</b></div>
+    <div class="resumen-pill">💰 Venta: <b id="cntVenta">0</b></div>
+    <div class="resumen-pill">⭐ Testimonio: <b id="cntTestimonio">0</b></div>
+    <div class="resumen-pill">🙂 Personal: <b id="cntPersonal">0</b></div>
+  </div>
+
+  <div class="dias-grid" id="diasGrid"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="copiarSemana()">📋 Copiar mi semana completa</button>
+    <button class="btn btn-ghost" onclick="limpiarTodo()">↺ Empezar de nuevo</button>
+  </div>
+
+  <div class="footer-note">MENTALIDAD JR · Curso IA para Multiplicadores · Sesión 2 — Ventas + Contenido</div>
+
+</div>
+
+<script>
+const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const TIPOS_PUB = ['Post','Reel','Historia'];
+const TEMAS = {
+  educativo: { label: 'Educativo', color: 'var(--teal)', bg: 'rgba(61,191,160,.12)' },
+  venta: { label: 'Venta', color: 'var(--coral)', bg: 'rgba(232,97,74,.12)' },
+  testimonio: { label: 'Testimonio', color: 'var(--amber)', bg: 'rgba(224,168,71,.12)' },
+  personal: { label: 'Personal', color: 'var(--lav)', bg: 'rgba(155,143,224,.12)' },
+};
+
+let plan = DIAS.map((d,i)=>({
+  dia: d,
+  tema: i<3 ? 'educativo' : (i<5 ? 'venta' : (i===5 ? 'testimonio' : 'personal')),
+  tipoPub: TIPOS_PUB[i % 3],
+  texto: '',
+  cta: '',
+}));
+
+function actualizarPrompt(){
+  const oficio = document.getElementById('oficio').value || '[tu oficio]';
+  document.getElementById('phOficio').textContent = oficio;
+}
+
+function copiarPrompt(){
+  const oficio = document.getElementById('oficio').value || '[tu oficio]';
+  const texto = `Hazme un plan de contenido para 7 días para mi negocio de ${oficio} en Colombia. Formato tabla: Día / Tipo (post, reel, historia) / Tema / Primera línea del texto / Llamado a la acción. 3 días educativos, 2 de venta, 1 de testimonio o transformación, 1 personal. Tono: cercano y colombiano.`;
+  navigator.clipboard.writeText(texto).then(()=>alert('¡Prompt copiado! Pégalo en ChatGPT o Claude.'));
+}
+
+function render(){
+  const cont = document.getElementById('diasGrid');
+  cont.innerHTML = plan.map((p,i)=>{
+    const t = TEMAS[p.tema];
+    return `
+    <div class="dia-card">
+      <div class="dia-head">
+        <span class="dia-nombre">${p.dia}</span>
+        <select class="dia-tipo-select" onchange="actualizar(${i},'tipoPub',this.value)">
+          ${TIPOS_PUB.map(tp=>`<option ${tp===p.tipoPub?'selected':''}>${tp}</option>`).join('')}
+        </select>
+        <select class="dia-tipo-select" onchange="actualizar(${i},'tema',this.value)">
+          ${Object.entries(TEMAS).map(([k,v])=>`<option value="${k}" ${k===p.tema?'selected':''}>${v.label}</option>`).join('')}
+        </select>
+      </div>
+      <div class="dia-body">
+        <div class="dia-field">
+          <label>Tema / primera línea del texto</label>
+          <textarea oninput="actualizar(${i},'texto',this.value)" placeholder="Ej: 3 errores al elegir el corte perfecto...">${p.texto}</textarea>
+        </div>
+        <div class="dia-field">
+          <label>Llamado a la acción</label>
+          <input type="text" value="${p.cta}" oninput="actualizar(${i},'cta',this.value)" placeholder="Ej: Agenda tu cita por WhatsApp">
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  actualizarResumen();
+}
+
+function actualizar(i, campo, valor){
+  plan[i][campo] = valor;
+  if(campo==='tema') render();
+  else actualizarResumen();
+}
+
+function actualizarResumen(){
+  document.getElementById('cntEducativo').textContent = plan.filter(p=>p.tema==='educativo').length;
+  document.getElementById('cntVenta').textContent = plan.filter(p=>p.tema==='venta').length;
+  document.getElementById('cntTestimonio').textContent = plan.filter(p=>p.tema==='testimonio').length;
+  document.getElementById('cntPersonal').textContent = plan.filter(p=>p.tema==='personal').length;
+}
+
+function copiarSemana(){
+  const texto = plan.map(p => `${p.dia} (${p.tipoPub} · ${TEMAS[p.tema].label})\n${p.texto || '(sin texto)'}\nCTA: ${p.cta || '(sin CTA)'}`).join('\n\n');
+  navigator.clipboard.writeText(texto).then(()=>alert('¡Tu semana completa se copió! Pégala en una Nota o donde planifiques tus publicaciones.'));
+}
+
+function limpiarTodo(){
+  if(!confirm('¿Borrar todo el plan de la semana?')) return;
+  plan = DIAS.map((d,i)=>({ dia: d, tema: i<3?'educativo':(i<5?'venta':(i===5?'testimonio':'personal')), tipoPub: TIPOS_PUB[i%3], texto:'', cta:'' }));
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
