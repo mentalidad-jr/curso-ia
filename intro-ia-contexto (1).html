@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Mundo de la IA — Contexto Completo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #1c1e1b;
+  --s1:    #222420;
+  --s2:    #282a26;
+  --card:  #2e302c;
+  --card2: #343630;
+  --b1:    #3a3c38;
+  --b2:    #484a44;
+
+  --gold:  #d4a847;
+  --gold2: #f0c96a;
+  --goldb: #5c3e0a;
+  --goldbg:#1e1506;
+
+  --teal:  #4db8a0;
+  --tealb: #1a4d42;
+  --tealbg:#0d231e;
+
+  --rose:  #c9686a;
+  --roseb: #5c2020;
+  --rosebg:#201010;
+
+  --blue:  #6aa3d4;
+  --blueb: #1e3e5c;
+  --bluebg:#0d1e2e;
+
+  --lav:   #9b8fe0;
+  --lavb:  #3a2e70;
+  --lavbg: #18142e;
+
+  --lime:  #8ac46a;
+  --limeb: #2e5018;
+  --limebg:#141e0c;
+
+  --text:  #ece8de;
+  --t2:    #a8a49a;
+  --t3:    #6a6860;
+
+  --fplay: 'Playfair Display', serif;
+  --fdm:   'DM Sans', sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fdm);font-size:16px;line-height:1.7;overflow-x:hidden}
+
+/* ── NAV compacta ── */
+nav{
+  background:var(--s1);
+  border-bottom:1px solid var(--b1);
+  padding:10px 28px;
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;gap:0;
+  overflow-x:auto;
+}
+.nav-item{
+  padding:7px 16px;
+  font-size:12px;
+  color:var(--t3);
+  cursor:pointer;
+  border-radius:6px;
+  white-space:nowrap;
+  transition:all .15s;
+  font-family:var(--fdm);
+  border:none;background:transparent;
+}
+.nav-item:hover{color:var(--t2);}
+.nav-item.act{color:var(--gold);background:var(--goldbg);border:1px solid var(--goldb);}
+
+/* ── SECCIONES ── */
+section{max-width:960px;margin:0 auto;padding:64px 28px;}
+section:not(:last-child){border-bottom:1px solid var(--b1);}
+
+.sec-eye{
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+}
+.sec-title{
+  font-family:var(--fplay);
+  font-size:clamp(32px,5vw,54px);
+  font-weight:900;
+  line-height:1.1;
+  letter-spacing:-1px;
+  margin-bottom:20px;
+}
+.sec-title em{font-style:italic;color:var(--gold);}
+.sec-lead{font-size:18px;color:var(--t2);line-height:1.8;max-width:720px;}
+
+/* ── HÉRO ── */
+.hero{
+  min-height:88vh;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+  padding:80px 28px 60px;
+  max-width:100%;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 40%, rgba(212,168,71,.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 20% 80%, rgba(77,184,160,.05) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-year{
+  font-family:var(--fplay);
+  font-size:clamp(100px,18vw,220px);
+  font-weight:900;
+  color:rgba(212,168,71,.07);
+  position:absolute;right:-20px;top:50%;
+  transform:translateY(-50%);
+  line-height:1;
+  pointer-events:none;
+  letter-spacing:-8px;
+  user-select:none;
+}
+.hero-inner{max-width:960px;margin:0 auto;position:relative;width:100%;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--goldbg);border:1px solid var(--goldb);
+  border-radius:20px;padding:5px 14px;
+  font-size:12px;color:var(--gold);
+  letter-spacing:.5px;margin-bottom:24px;
+}
+.dot-pulse{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gold);
+  animation:pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+.hero h1{
+  font-family:var(--fplay);
+  font-size:clamp(38px,7vw,80px);
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-2px;
+  margin-bottom:24px;
+}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{
+  font-size:20px;color:var(--t2);
+  max-width:600px;line-height:1.75;
+  margin-bottom:40px;
+}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;}
+.stat-pill{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:10px;padding:12px 20px;
+  text-align:center;min-width:110px;
+}
+.stat-pill .sv{
+  font-family:var(--fplay);font-size:26px;
+  font-weight:700;color:var(--gold);
+  display:block;line-height:1.1;
+}
+.stat-pill .sl{font-size:11px;color:var(--t3);margin-top:2px;}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:36px;}
+.timeline::before{
+  content:'';position:absolute;left:11px;top:8px;bottom:8px;
+  width:2px;background:linear-gradient(to bottom,var(--gold),var(--teal),var(--lav));
+  border-radius:1px;
+}
+.tl-item{position:relative;margin-bottom:36px;}
+.tl-dot{
+  position:absolute;left:-31px;top:4px;
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid var(--b2);
+  display:flex;align-items:center;justify-content:center;
+}
+.tl-dot-inner{width:6px;height:6px;border-radius:50%;}
+.tl-year{
+  font-family:var(--fplay);font-size:13px;font-weight:700;
+  margin-bottom:4px;
+}
+.tl-title{font-size:17px;font-weight:500;margin-bottom:5px;color:var(--text);}
+.tl-desc{font-size:14px;color:var(--t2);line-height:1.65;}
+
+/* ── GRID HERRAMIENTAS ── */
+.tools-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;margin-top:32px;
+}
+.tool-card{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:12px;padding:18px 16px;
+  transition:border-color .2s,transform .2s;
+  cursor:default;
+}
+.tool-card:hover{border-color:var(--b2);transform:translateY(-2px);}
+.tool-card .tc-icon{font-size:28px;margin-bottom:10px;display:block;}
+.tool-card .tc-name{font-size:15px;font-weight:500;margin-bottom:4px;}
+.tool-card .tc-desc{font-size:12.5px;color:var(--t2);line-height:1.55;}
+.tool-card .tc-tag{
+  display:inline-block;margin-top:8px;
+  font-size:10px;font-weight:500;letter-spacing:.5px;
+  padding:2px 8px;border-radius:4px;border:1px solid;
+  text-transform:uppercase;
+}
+
+/* ── APPS DE VIDA ── */
+.vida-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:28px;}
+.vida-col{background:var(--card);border:1px solid var(--b1);border-radius:14px;padding:22px 20px;}
+.vida-col h3{font-family:var(--fplay);font-size:18px;font-weight:700;margin-bottom:16px;line-height:1.2;}
+.vida-item{
+  display:flex;gap:10px;align-items:flex-start;
+  margin-bottom:12px;
+  padding:10px 12px;
+  background:var(--card2);border-radius:8px;
+  font-size:13.5px;color:var(--text);line-height:1.5;
+}
+.vida-item .vi-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+.vida-item .vi-txt strong{display:block;font-weight:500;font-size:13px;margin-bottom:1px;}
+.vida-item .vi-txt span{font-size:12px;color:var(--t2);}
+
+/* ── PROMPT DIAGRAM ── */
+.prompt-wrap{margin-top:36px;}
+.prompt-sentence{
+  background:var(--s2);
+  border:1px solid var(--b1);
+  border-radius:14px;
+  padding:24px 26px;
+  font-family:var(--fplay);
+  font-size:clamp(16px,2.5vw,22px);
+  line-height:2.2;
+  margin-bottom:28px;
+  letter-spacing:.2px;
+}
+.pk{
+  display:inline;
+  padding:2px 0 4px;
+  border-radius:0;
+  border-bottom:3px solid;
+  cursor:default;
+  transition:opacity .15s;
+  position:relative;
+}
+.pk:hover{opacity:.8;}
+
+/* tooltip */
+.pk .tip{
+  display:none;
+  position:absolute;
+  bottom:calc(100% + 10px);
+  left:50%;transform:translateX(-50%);
+  background:var(--card2);
+  border:1px solid var(--b2);
+  border-radius:8px;
+  padding:10px 14px;
+  width:200px;
+  font-family:var(--fdm);
+  font-size:13px;
+  color:var(--text);
+  line-height:1.5;
+  z-index:100;
+  white-space:normal;
+  pointer-events:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+.pk:hover .tip{display:block;}
+.pk .tip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--b2);
+}
+
+/* Legend */
+.prompt-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.leg{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--t2);
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:7px;padding:5px 11px;
+}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+
+/* Partes del prompt: cards explicativas */
+.prompt-parts{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:10px;
+  margin-top:8px;
+}
+.pp{
+  border-radius:10px;padding:14px 16px;
+  border:1px solid;
+}
+.pp .pp-n{font-size:10px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px;}
+.pp .pp-title{font-size:15px;font-weight:500;margin-bottom:4px;}
+.pp .pp-ex{font-size:12.5px;line-height:1.55;}
+
+/* ── BIG NUMBERS ── */
+.bignums{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;margin-top:32px;
+}
+.bn{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:12px;padding:20px;
+  text-align:center;
+}
+.bn .bv{
+  font-family:var(--fplay);
+  font-size:clamp(28px,5vw,42px);
+  font-weight:900;
+  line-height:1;
+  margin-bottom:6px;
+}
+.bn .bd{font-size:13px;color:var(--t2);line-height:1.5;}
+
+/* ── QUOTE ── */
+.quote-block{
+  border-left:3px solid var(--gold);
+  padding:20px 26px;
+  background:var(--goldbg);
+  border-radius:0 12px 12px 0;
+  margin:36px 0;
+}
+.quote-block p{
+  font-family:var(--fplay);
+  font-size:clamp(18px,3vw,26px);
+  font-style:italic;
+  color:var(--text);
+  line-height:1.5;
+  margin-bottom:10px;
+}
+.quote-block cite{font-size:13px;color:var(--t3);}
+
+/* ── COMPARATIVA ANTES/DESPUÉS ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
+.compare-col{border-radius:12px;padding:20px 22px;border:1px solid;}
+.compare-col h4{font-size:14px;font-weight:500;letter-spacing:.3px;margin-bottom:14px;text-transform:uppercase;}
+.citem{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;color:var(--text);line-height:1.5;}
+.citem .ci{flex-shrink:0;margin-top:2px;font-size:15px;}
+
+/* ── IAS MAPA ── */
+.ia-mapa{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:12px;margin-top:28px;
+}
+.ia-card{
+  border-radius:12px;padding:18px 18px;
+  border:1px solid;
+}
+.ia-card .ia-logo{font-size:30px;margin-bottom:8px;display:block;}
+.ia-card .ia-name{font-size:16px;font-weight:500;margin-bottom:4px;}
+.ia-card .ia-tag{
+  font-size:10px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;
+  padding:2px 8px;border-radius:4px;border:1px solid;
+  display:inline-block;margin-bottom:8px;
+}
+.ia-card .ia-desc{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:10px;}
+.ia-card .ia-usos{font-size:12px;color:var(--t3);}
+.ia-card .ia-usos span{
+  display:inline-block;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--b1);
+  border-radius:4px;padding:1px 7px;
+  margin:2px 2px 0 0;
+}
+
+/* ── SCROLL UTIL ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+
+@media(max-width:700px){
+  .vida-grid{grid-template-columns:1fr}
+  .compare{grid-template-columns:1fr}
+  .hero h1{letter-spacing:-1px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-item act" onclick="scrollTo('hero')">🏠 Inicio</button>
+  <button class="nav-item" onclick="scrollTo('historia')">📅 Historia</button>
+  <button class="nav-item" onclick="scrollTo('que-es')">🧠 Qué es</button>
+  <button class="nav-item" onclick="scrollTo('ias')">🛠 Las IAs</button>
+  <button class="nav-item" onclick="scrollTo('vida')">🌍 En tu vida</button>
+  <button class="nav-item" onclick="scrollTo('trabajo')">💼 En tu negocio</button>
+  <button class="nav-item" onclick="scrollTo('prompt')">⚡ El Prompt</button>
+  <button class="nav-item" onclick="scrollTo('numeros')">📊 Los números</button>
+</nav>
+
+<!-- ══════════════ HÉRO ══════════════ -->
+<div id="hero" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-year">2026</div>
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <div class="dot-pulse"></div>
+      Curso IA para Multiplicadores · San Cristóbal · Bogotá
+    </div>
+    <h1>Bienvenidos<br>a la era de la<br><em>inteligencia artificial</em></h1>
+    <p class="hero-sub">No es el futuro. Es ahora. Y está disponible gratis en el celular que tienen en la mano.</p>
+    <div class="stat-row">
+      <div class="stat-pill"><span class="sv">70+</span><span class="sl">años de historia</span></div>
+      <div class="stat-pill"><span class="sv">1B+</span><span class="sl">usuarios activos</span></div>
+      <div class="stat-pill"><span class="sv">$15T</span><span class="sl">impacto global est.</span></div>
+      <div class="stat-pill"><span class="sv">100%</span><span class="sl">gratis para empezar</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ HISTORIA ══════════════ -->
+<section id="historia">
+  <div class="sec-eye">01 — Historia</div>
+  <h2 class="sec-title">70 años para llegar<br>a <em>tu celular</em></h2>
+  <p class="sec-lead">La inteligencia artificial no nació ayer. Lo que sí es nuevo es que hoy cualquier persona con un celular y WiFi puede usarla. Gratis.</p>
+
+  <div class="timeline" style="margin-top:44px">
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--gold)"></div></div>
+      <div class="tl-year" style="color:var(--gold)">1950</div>
+      <div class="tl-title">Alan Turing pregunta: ¿Pueden pensar las máquinas?</div>
+      <div class="tl-desc">El matemático británico publica el artículo que define la pregunta fundamental. Propone el "Test de Turing": si una máquina puede conversar como humano, ¿importa si "piensa"? Esa pregunta sigue vigente hoy.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--teal)"></div></div>
+      <div class="tl-year" style="color:var(--teal)">1956</div>
+      <div class="tl-title">Nace oficialmente la "Inteligencia Artificial"</div>
+      <div class="tl-desc">En Dartmouth College, John McCarthy acuña el término. Los científicos imaginan máquinas que aprenden como humanos. Los gobiernos invierten millones. Las expectativas son enormes — y la realidad tarda décadas en ponerse al nivel.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--lav)"></div></div>
+      <div class="tl-year" style="color:var(--lav)">1980–1990</div>
+      <div class="tl-title">Los sistemas expertos llegan a las empresas</div>
+      <div class="tl-desc">Las primeras IAs prácticas: sistemas que siguen reglas para diagnosticar enfermedades o aprobar créditos. Funcionaban, pero eran rígidos, caros y solo accesibles para grandes corporaciones.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--blue)"></div></div>
+      <div class="tl-year" style="color:var(--blue)">1997</div>
+      <div class="tl-title">Deep Blue derrota al campeón mundial de ajedrez</div>
+      <div class="tl-desc">La computadora de IBM vence a Garry Kasparov. El mundo entra en pánico y en asombro al mismo tiempo. Las máquinas ya superan al mejor humano en ajedrez — ¿qué sigue?</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--rose)"></div></div>
+      <div class="tl-year" style="color:var(--rose)">2006–2012</div>
+      <div class="tl-title">El aprendizaje profundo cambia todo</div>
+      <div class="tl-desc">Las redes neuronales, inspiradas en el cerebro humano, aprenden a reconocer imágenes, traducir idiomas y entender el habla. Google, Facebook y Amazon empiezan a usarlas para recomendarte videos y amigos.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--teal)"></div></div>
+      <div class="tl-year" style="color:var(--teal)">2017</div>
+      <div class="tl-title">Google inventa el "Transformer" — el motor de todo</div>
+      <div class="tl-desc">Un artículo titulado "Attention is All You Need" revoluciona el campo. Esta arquitectura permite que las IAs entiendan el lenguaje humano con una precisión sin precedentes. Es la base de ChatGPT, Claude y todos los modelos modernos.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--gold)"></div></div>
+      <div class="tl-year" style="color:var(--gold)">Nov 2022</div>
+      <div class="tl-title">ChatGPT llega al mundo — 1 millón de usuarios en 5 días</div>
+      <div class="tl-desc">OpenAI lanza ChatGPT al público. En una semana, un millón de personas lo están usando. En dos meses, cien millones. Ningún producto en la historia creció tan rápido. La IA deja de ser ciencia ficción para ser algo que cualquiera puede usar gratis.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--lime)"></div></div>
+      <div class="tl-year" style="color:var(--lime)">2023–2024</div>
+      <div class="tl-title">La carrera global: Claude, Gemini, Grok, Llama...</div>
+      <div class="tl-desc">Anthropic lanza Claude. Google lanza Gemini. Meta lanza Llama (código abierto). Elon Musk lanza Grok. En 18 meses, la IA pasa de ser producto de una empresa a ser una industria completa con docenas de competidores.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--card2)"><div class="tl-dot-inner" style="background:var(--gold2)"></div></div>
+      <div class="tl-year" style="color:var(--gold2)">2025–2026 → HOY</div>
+      <div class="tl-title">IA multimodal, agentes y herramientas gratuitas para todos</div>
+      <div class="tl-desc">Las IAs ya ven imágenes, escuchan audio, generan videos, navegan internet y toman decisiones. Y la mayoría tienen versión gratuita. Por primera vez en la historia, un emprendedor de San Cristóbal tiene acceso a las mismas herramientas que una empresa de Silicon Valley.</div>
+    </div>
+
+  </div>
+
+  <div class="quote-block">
+    <p>"La IA es la tecnología más transformadora que la humanidad ha creado. Más que el fuego. Más que la electricidad. Más que internet."</p>
+    <cite>— Demis Hassabis, CEO Google DeepMind, Premio Nobel de Química 2024</cite>
+  </div>
+</section>
+
+<!-- ══════════════ QUÉ ES ══════════════ -->
+<section id="que-es">
+  <div class="sec-eye">02 — Fundamentos</div>
+  <h2 class="sec-title">¿Qué es la IA?<br><em>Sin complicaciones</em></h2>
+  <p class="sec-lead">La explicación técnica no importa. Lo que importa es entender qué puede hacer por ti.</p>
+
+  <div class="compare" style="margin-top:36px">
+    <div class="compare-col" style="border-color:var(--roseb);background:var(--rosebg)">
+      <h4 style="color:var(--rose)">❌ Lo que NO es la IA</h4>
+      <div class="citem"><span class="ci">✕</span><span>Un robot físico que hace cosas en el mundo real</span></div>
+      <div class="citem"><span class="ci">✕</span><span>Una mente que siente, sueña o tiene conciencia</span></div>
+      <div class="citem"><span class="ci">✕</span><span>Un sistema que sabe todo — puede equivocarse</span></div>
+      <div class="citem"><span class="ci">✕</span><span>Algo que va a quitarle el trabajo a quien sepa usarla</span></div>
+      <div class="citem"><span class="ci">✕</span><span>Una tecnología del futuro — ya está aquí, gratis</span></div>
+    </div>
+    <div class="compare-col" style="border-color:var(--tealb);background:var(--tealbg)">
+      <h4 style="color:var(--teal)">✅ Lo que SÍ es la IA</h4>
+      <div class="citem"><span class="ci">✓</span><span>Un asistente que aprendió de millones de textos, libros e internet</span></div>
+      <div class="citem"><span class="ci">✓</span><span>Una herramienta que responde preguntas, escribe, diseña y analiza</span></div>
+      <div class="citem"><span class="ci">✓</span><span>Un colaborador disponible 24/7 que nunca se cansa ni se aburre</span></div>
+      <div class="citem"><span class="ci">✓</span><span>Una ventaja enorme para quien la use — desventaja para quien no</span></div>
+      <div class="citem"><span class="ci">✓</span><span>El vecino que sabe de todo: marketing, finanzas, diseño, ventas</span></div>
+    </div>
+  </div>
+
+  <div class="quote-block" style="margin-top:40px">
+    <p>"La IA no te va a quitar el trabajo. Te lo va a quitar alguien que sabe usar la IA."</p>
+    <cite>— Frase popular en Silicon Valley, 2023</cite>
+  </div>
+
+  <div style="margin-top:40px">
+    <h3 style="font-family:var(--fplay);font-size:24px;font-weight:700;margin-bottom:20px">¿Cómo funciona? La analogía del vecino sabio</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:18px 16px;text-align:center">
+        <div style="font-size:32px;margin-bottom:10px">📚</div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:6px">Leyó todo</div>
+        <div style="font-size:12.5px;color:var(--t2);line-height:1.55">Entrenada con miles de millones de textos: libros, artículos, conversaciones, código, recetas, contratos...</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:18px 16px;text-align:center">
+        <div style="font-size:32px;margin-bottom:10px">🧩</div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:6px">Reconoce patrones</div>
+        <div style="font-size:12.5px;color:var(--t2);line-height:1.55">No memoriza respuestas — aprende patrones del lenguaje para generar texto coherente y útil.</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:18px 16px;text-align:center">
+        <div style="font-size:32px;margin-bottom:10px">💬</div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:6px">Entiende contexto</div>
+        <div style="font-size:12.5px;color:var(--t2);line-height:1.55">Recuerda todo lo que dijiste en la conversación y usa ese contexto para darte mejores respuestas.</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:18px 16px;text-align:center">
+        <div style="font-size:32px;margin-bottom:10px">⚡</div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:6px">Responde en segundos</div>
+        <div style="font-size:12.5px;color:var(--t2);line-height:1.55">Lo que le tomaría horas a un humano, la IA lo hace en segundos. Sin cobrar, sin quejarse, sin cansarse.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ LAS IAs ══════════════ -->
+<section id="ias">
+  <div class="sec-eye">03 — El ecosistema</div>
+  <h2 class="sec-title">Las IAs que<br><em>debes conocer</em></h2>
+  <p class="sec-lead">No hay una sola IA. Hay un ecosistema completo. Cada una tiene un superpoder diferente. Todas tienen versión gratuita.</p>
+
+  <div class="ia-mapa">
+
+    <div class="ia-card" style="border-color:var(--tealb);background:var(--tealbg)">
+      <span class="ia-logo">🧠</span>
+      <div class="ia-name">Claude</div>
+      <div class="ia-tag" style="color:var(--teal);border-color:var(--tealb)">Anthropic · Gratis</div>
+      <div class="ia-desc">La más cuidadosa y reflexiva. Excelente para textos largos, análisis de documentos, estrategia y planes de negocio. Muy buena siguiendo instrucciones complejas.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>Redactar</span><span>Analizar</span><span>Planear</span><span>Organizar</span></div>
+    </div>
+
+    <div class="ia-card" style="border-color:var(--limeb);background:var(--limebg)">
+      <span class="ia-logo">💬</span>
+      <div class="ia-name">ChatGPT</div>
+      <div class="ia-tag" style="color:var(--lime);border-color:var(--limeb)">OpenAI · Gratis</div>
+      <div class="ia-desc">La más popular del mundo. Muy versátil para conversación, prompts rápidos, textos para redes, respuestas de WhatsApp y todo tipo de contenido.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>WhatsApp</span><span>Redes</span><span>Ideas</span><span>Textos rápidos</span></div>
+    </div>
+
+    <div class="ia-card" style="border-color:var(--blueb);background:var(--bluebg)">
+      <span class="ia-logo">✨</span>
+      <div class="ia-name">Gemini</div>
+      <div class="ia-tag" style="color:var(--blue);border-color:var(--blueb)">Google · Gratis</div>
+      <div class="ia-desc">La IA de Google. Integrada con Gmail, Docs y Sheets. Puede ver y analizar imágenes — ideal para sacarle partido a fotos de tus productos.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>Fotos</span><span>Google Docs</span><span>Gmail</span><span>Sheets</span></div>
+    </div>
+
+    <div class="ia-card" style="border-color:var(--goldb);background:var(--goldbg)">
+      <span class="ia-logo">⚡</span>
+      <div class="ia-name">Grok</div>
+      <div class="ia-tag" style="color:var(--gold);border-color:var(--goldb)">xAI · Gratis</div>
+      <div class="ia-desc">Tiene acceso a internet en tiempo real. Sabe qué está pasando HOY: tendencias, noticias, qué está de moda en redes. Ideal para estar siempre actualizado.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>Tendencias</span><span>Noticias</span><span>Viral</span><span>Actualidad</span></div>
+    </div>
+
+    <div class="ia-card" style="border-color:var(--lavb);background:var(--lavbg)">
+      <span class="ia-logo">🎨</span>
+      <div class="ia-name">Canva IA</div>
+      <div class="ia-tag" style="color:var(--lav);border-color:var(--lavb)">Canva · Gratis</div>
+      <div class="ia-desc">Diseño visual con IA integrada. Genera imágenes de productos, crea posts, flyers, logos y presentaciones. No necesitas ser diseñador.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>Posts</span><span>Imágenes</span><span>Flyers</span><span>Logos</span></div>
+    </div>
+
+    <div class="ia-card" style="border-color:var(--roseb);background:var(--rosebg)">
+      <span class="ia-logo">🎬</span>
+      <div class="ia-name">CapCut IA</div>
+      <div class="ia-tag" style="color:var(--rose);border-color:var(--roseb)">ByteDance · Gratis</div>
+      <div class="ia-desc">Edición de video con IA. Subtítulos automáticos, cortes inteligentes, efectos, voz en off. Un Reel de 30 segundos en minutos, desde el celular.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>Reels</span><span>Subtítulos</span><span>Videos</span><span>TikTok</span></div>
+    </div>
+
+    <div class="ia-card" style="border-color:var(--tealb);background:var(--tealbg)">
+      <span class="ia-logo">🔍</span>
+      <div class="ia-name">Perplexity</div>
+      <div class="ia-tag" style="color:var(--teal);border-color:var(--tealb)">Perplexity AI · Gratis</div>
+      <div class="ia-desc">IA + buscador. Responde preguntas con fuentes citadas. Ideal para investigar precios del mercado, competencia, tendencias del sector.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>Investigar</span><span>Verificar</span><span>Mercado</span><span>Competencia</span></div>
+    </div>
+
+    <div class="ia-card" style="border-color:var(--blueb);background:var(--bluebg)">
+      <span class="ia-logo">🎵</span>
+      <div class="ia-name">Suno / ElevenLabs</div>
+      <div class="ia-tag" style="color:var(--blue);border-color:var(--blueb)">Varios · Gratis limitado</div>
+      <div class="ia-desc">Generación de audio con IA. Suno crea música y jingles. ElevenLabs genera voces en off profesionales. Para videos y publicidad sin contratar locutores.</div>
+      <div class="ia-usos"><strong style="color:var(--t2);font-size:11px;display:block;margin-bottom:4px">Mejor para:</strong><span>Voz en off</span><span>Música</span><span>Jingles</span><span>Podcasts</span></div>
+    </div>
+
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--b1);border-radius:14px;padding:22px 24px;margin-top:20px">
+    <div style="font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:14px">💡 La regla de decisión rápida</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="font-size:14px;color:var(--t2);padding:8px 12px;background:var(--card2);border-radius:7px">¿Necesito escribir algo largo y estratégico? → <strong style="color:var(--teal)">Claude</strong></div>
+      <div style="font-size:14px;color:var(--t2);padding:8px 12px;background:var(--card2);border-radius:7px">¿Necesito texto rápido para WhatsApp? → <strong style="color:var(--lime)">ChatGPT</strong></div>
+      <div style="font-size:14px;color:var(--t2);padding:8px 12px;background:var(--card2);border-radius:7px">¿Qué está de moda HOY en redes? → <strong style="color:var(--gold)">Grok</strong></div>
+      <div style="font-size:14px;color:var(--t2);padding:8px 12px;background:var(--card2);border-radius:7px">¿Necesito diseñar algo visual? → <strong style="color:var(--lav)">Canva IA</strong></div>
+      <div style="font-size:14px;color:var(--t2);padding:8px 12px;background:var(--card2);border-radius:7px">¿Necesito analizar foto de mi producto? → <strong style="color:var(--blue)">Gemini</strong></div>
+      <div style="font-size:14px;color:var(--t2);padding:8px 12px;background:var(--card2);border-radius:7px">¿Quiero hacer un Reel desde el celular? → <strong style="color:var(--rose)">CapCut</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ EN TU VIDA ══════════════ -->
+<section id="vida">
+  <div class="sec-eye">04 — Aplicaciones cotidianas</div>
+  <h2 class="sec-title">La IA en tu<br><em>vida diaria</em></h2>
+  <p class="sec-lead">La IA no es solo para empresas ni ingenieros. Ya está en tu vida aunque no lo sepas — y puedes usarla a propósito.</p>
+
+  <div class="vida-grid">
+
+    <div class="vida-col" style="border:1px solid var(--tealb);background:var(--tealbg)">
+      <h3 style="color:var(--teal)">🏠 Vida<br>Personal</h3>
+      <div class="vida-item">
+        <span class="vi-ico">🍳</span>
+        <div class="vi-txt"><strong>Recetas con lo que tienes</strong><span>"Tengo pollo, papa y tomate. ¿Qué puedo hacer para comer?" — respuesta en segundos.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">📚</span>
+        <div class="vi-txt"><strong>Explicar temas difíciles</strong><span>"Explícame cómo funciona el SOAT como si tuviera 12 años" — la IA lo adapta.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">📝</span>
+        <div class="vi-txt"><strong>Cartas y documentos</strong><span>Cartas de queja, peticiones a entidades, hojas de vida — la IA las redacta por ti.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">💊</span>
+        <div class="vi-txt"><strong>Entender diagnósticos médicos</strong><span>"¿Qué significa este resultado de laboratorio?" — no reemplaza al médico, pero ayuda a entender.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">🧒</span>
+        <div class="vi-txt"><strong>Ayuda con tareas de los hijos</strong><span>Matemáticas, ciencias, historia — la IA explica paso a paso en lenguaje simple.</span></div>
+      </div>
+    </div>
+
+    <div class="vida-col" style="border:1px solid var(--goldb);background:var(--goldbg)">
+      <h3 style="color:var(--gold)">💼 Negocio<br>y Trabajo</h3>
+      <div class="vida-item">
+        <span class="vi-ico">💬</span>
+        <div class="vi-txt"><strong>Responder clientes más rápido</strong><span>Crea respuestas de WhatsApp profesionales y personalizadas en segundos.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">📣</span>
+        <div class="vi-txt"><strong>Publicar en redes sin esfuerzo</strong><span>Plan de contenido completo, posts redactados, ganchos creativos — todo generado.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">💰</span>
+        <div class="vi-txt"><strong>Calcular precios y costos</strong><span>"¿Cuánto debería cobrar por este servicio si quiero ganar el 40%?" — análisis en segundos.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">📊</span>
+        <div class="vi-txt"><strong>Analizar las finanzas</strong><span>Tablas de ingresos y gastos, punto de equilibrio, proyecciones — sin saber de contabilidad.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">🎨</span>
+        <div class="vi-txt"><strong>Diseñar sin ser diseñador</strong><span>Canva + IA genera posts, flyers y logos que antes costaban contratar a alguien.</span></div>
+      </div>
+    </div>
+
+    <div class="vida-col" style="border:1px solid var(--lavb);background:var(--lavbg)">
+      <h3 style="color:var(--lav)">🌱 Aprendizaje<br>y Crecimiento</h3>
+      <div class="vida-item">
+        <span class="vi-ico">🗣</span>
+        <div class="vi-txt"><strong>Practicar idiomas</strong><span>Conversaciones en inglés, corrección de frases, traducción en contexto real.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">🎯</span>
+        <div class="vi-txt"><strong>Preparar entrevistas</strong><span>"Hazme preguntas difíciles de una entrevista de trabajo para [cargo]" — practica antes.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">📖</span>
+        <div class="vi-txt"><strong>Resumir libros y artículos</strong><span>Sube un texto largo y la IA extrae los puntos clave. Aprende el doble en la mitad del tiempo.</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">🚀</span>
+        <div class="vi-txt"><strong>Crear tu plan de metas</strong><span>"Quiero aprender a vender por internet en 3 meses. Dame un plan semana a semana."</span></div>
+      </div>
+      <div class="vida-item">
+        <span class="vi-ico">🧠</span>
+        <div class="vi-txt"><strong>Pensar mejor</strong><span>"Tengo este problema en mi negocio, ayúdame a analizarlo desde diferentes ángulos."</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════ EN TU NEGOCIO ══════════════ -->
+<section id="trabajo">
+  <div class="sec-eye">05 — Para emprendedores</div>
+  <h2 class="sec-title">La IA como tu<br><em>socio de negocio</em></h2>
+  <p class="sec-lead">Lo que antes costaba contratar agencias, diseñadores y contadores, hoy lo puedes hacer con tu celular. Gratis.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:32px">
+
+    <div style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:18px 16px">
+      <div style="font-size:24px;margin-bottom:8px">✍️</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Marketing y contenido</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6">Posts, reels, stories, newsletters, emails de ventas, campañas de WhatsApp — todo generado con IA en minutos.</div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--teal);border-radius:0 12px 12px 0;padding:18px 16px">
+      <div style="font-size:24px;margin-bottom:8px">💰</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Finanzas y precios</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6">Cálculo de costos, precios con margen, punto de equilibrio, proyecciones de ventas — sin necesitar un contador.</div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--lav);border-radius:0 12px 12px 0;padding:18px 16px">
+      <div style="font-size:24px;margin-bottom:8px">🎨</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Diseño visual</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6">Logos, flyers, imágenes de productos, historias de Instagram, banners — calidad profesional sin pagar diseñador.</div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--rose);border-radius:0 12px 12px 0;padding:18px 16px">
+      <div style="font-size:24px;margin-bottom:8px">📱</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Atención al cliente</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6">Respuestas automáticas de WhatsApp, manejo de quejas, seguimiento de clientes, mensajes de cobro sin pena.</div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--blue);border-radius:0 12px 12px 0;padding:18px 16px">
+      <div style="font-size:24px;margin-bottom:8px">🎬</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Video y audio</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6">Reels con subtítulos automáticos, guiones de video, música para contenido, voz en off — desde el celular.</div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--lime);border-radius:0 12px 12px 0;padding:18px 16px">
+      <div style="font-size:24px;margin-bottom:8px">📋</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Operación y organización</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6">Listas de inventario, procesos del negocio, checklists de apertura, organización de pedidos y proveedores.</div>
+    </div>
+
+  </div>
+
+  <div class="quote-block" style="border-left-color:var(--teal);background:var(--tealbg)">
+    <p>"Por primera vez en la historia, un emprendedor de un barrio de Bogotá tiene acceso a las mismas herramientas que una empresa de Silicon Valley. La diferencia ya no es dinero — es quién sabe usarlas."</p>
+    <cite>— John Esteban Rodríguez, facilitador del curso</cite>
+  </div>
+</section>
+
+<!-- ══════════════ EL PROMPT ══════════════ -->
+<section id="prompt">
+  <div class="sec-eye">06 — La habilidad clave</div>
+  <h2 class="sec-title">El arte de<br><em>hablarle a la IA</em></h2>
+  <p class="sec-lead">La IA es tan útil como lo que le pides. Aprender a escribir un buen prompt es la habilidad más valiosa de los próximos años.</p>
+
+  <div class="prompt-wrap">
+
+    <!-- Leyenda -->
+    <div style="font-size:13px;color:var(--t2);margin-bottom:14px;margin-top:28px">Pasa el cursor sobre cada parte para ver qué es:</div>
+    <div class="prompt-legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--gold)"></div>ROL</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--teal)"></div>CONTEXTO</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--lav)"></div>OBJETIVO</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--rose)"></div>TONO</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--blue)"></div>FORMATO</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--lime)"></div>EJEMPLO</div>
+    </div>
+
+    <!-- Prompt visual -->
+    <div class="prompt-sentence">
+      <span class="pk" style="border-color:var(--gold)">
+        Actúa como experto en ventas para pequeños negocios
+        <span class="tip" style="border-color:var(--goldb)"><strong style="color:var(--gold)">ROL</strong><br>Le dices a la IA quién debe ser. Cambia completamente la calidad de la respuesta.</span>
+      </span>. <span class="pk" style="border-color:var(--teal)">
+        Soy dueña de una peluquería en San Cristóbal, Bogotá. Mi clienta típica es mujer de 20 a 45 años. Cobro $70.000 por tinte completo
+        <span class="tip" style="border-color:var(--tealb)"><strong style="color:var(--teal)">CONTEXTO</strong><br>Tu negocio, tu barrio, tu cliente, tu precio. Entre más específico, mejor resultado.</span>
+      </span>. <span class="pk" style="border-color:var(--lav)">
+        Quiero un mensaje de WhatsApp para cuando una clienta dice que el precio está caro y amenaza con irse a otra peluquería
+        <span class="tip" style="border-color:var(--lavb)"><strong style="color:var(--lav)">OBJETIVO</strong><br>Exactamente qué quieres lograr. No "ayúdame" — dile el problema concreto.</span>
+      </span>. <span class="pk" style="border-color:var(--rose)">
+        Tono: cercano, empático, seguro — que no suene desesperado ni robotizado
+        <span class="tip" style="border-color:var(--roseb)"><strong style="color:var(--rose)">TONO</strong><br>Cómo quieres que suene. Formal, informal, colombiano, urgente, cálido...</span>
+      </span>. <span class="pk" style="border-color:var(--blue)">
+        Dame 3 opciones de respuesta, máximo 4 líneas cada una
+        <span class="tip" style="border-color:var(--blueb)"><strong style="color:var(--blue)">FORMATO</strong><br>Cómo quieres la respuesta: lista, tabla, opciones, puntos cortos, texto largo...</span>
+      </span>. <span class="pk" style="border-color:var(--lime)">
+        Por ejemplo: algo como "Entiendo que el precio importa, pero quiero que sepas lo que incluye tu servicio hoy..."
+        <span class="tip" style="border-color:var(--limeb)"><strong style="color:var(--lime)">EJEMPLO</strong><br>Si tienes una idea de cómo quieres que suene, dala. La IA la toma como referencia.</span>
+      </span>.
+    </div>
+
+    <!-- Partes explicadas -->
+    <div class="prompt-parts">
+      <div class="pp" style="background:var(--goldbg);border-color:var(--goldb)">
+        <div class="pp-n" style="color:var(--gold)">01 · ROL</div>
+        <div class="pp-title">¿Quién es la IA?</div>
+        <div class="pp-ex" style="color:var(--t2)">"Actúa como..." cambia todo. <em>Experto en ventas</em> da consejos de ventas. <em>Contador</em> da análisis financiero. <em>Coach</em> da motivación.</div>
+      </div>
+      <div class="pp" style="background:var(--tealbg);border-color:var(--tealb)">
+        <div class="pp-n" style="color:var(--teal)">02 · CONTEXTO</div>
+        <div class="pp-title">¿Cuál es tu situación?</div>
+        <div class="pp-ex" style="color:var(--t2)">Tu oficio, barrio, precio, cliente, tiempo que llevas. Entre más detalles das, más personalizada es la respuesta.</div>
+      </div>
+      <div class="pp" style="background:var(--lavbg);border-color:var(--lavb)">
+        <div class="pp-n" style="color:var(--lav)">03 · OBJETIVO</div>
+        <div class="pp-title">¿Qué quieres lograr?</div>
+        <div class="pp-ex" style="color:var(--t2)">El resultado concreto que necesitas. No "ayúdame" — "necesito un mensaje para..." o "dame 3 ideas para..."</div>
+      </div>
+      <div class="pp" style="background:var(--rosebg);border-color:var(--roseb)">
+        <div class="pp-n" style="color:var(--rose)">04 · TONO</div>
+        <div class="pp-title">¿Cómo debe sonar?</div>
+        <div class="pp-ex" style="color:var(--t2)">Cercano, profesional, divertido, colombiano, urgente, cálido, serio. Define la voz de la respuesta.</div>
+      </div>
+      <div class="pp" style="background:var(--bluebg);border-color:var(--blueb)">
+        <div class="pp-n" style="color:var(--blue)">05 · FORMATO</div>
+        <div class="pp-title">¿Cómo quieres la respuesta?</div>
+        <div class="pp-ex" style="color:var(--t2)">Lista de puntos, tabla, texto corrido, 3 opciones, máximo X palabras, con emojis, sin emojis...</div>
+      </div>
+      <div class="pp" style="background:var(--limebg);border-color:var(--limeb)">
+        <div class="pp-n" style="color:var(--lime)">06 · EJEMPLO</div>
+        <div class="pp-title">¿Tienes una referencia?</div>
+        <div class="pp-ex" style="color:var(--t2)">Si tienes algo parecido a lo que quieres, compártelo. La IA lo usa como punto de partida y mejora.</div>
+      </div>
+    </div>
+
+    <!-- Regla de oro -->
+    <div style="background:var(--goldbg);border:1px solid var(--goldb);border-radius:14px;padding:24px;margin-top:24px;text-align:center">
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">La Regla de Oro</div>
+      <div style="font-family:var(--fplay);font-size:clamp(18px,3vw,28px);font-weight:700;color:var(--text);line-height:1.4;margin-bottom:12px">
+        La IA es tan útil como lo que le pides.<br>
+        <em style="color:var(--gold)">Sé específico. Siempre.</em>
+      </div>
+      <div style="font-size:15px;color:var(--t2);line-height:1.7;max-width:600px;margin:0 auto">
+        No le pidas a un amigo "ayúdame" sin explicarle nada — te dará cualquier cosa. Explícale bien el problema y te dará exactamente lo que necesitas.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════ NÚMEROS ══════════════ -->
+<section id="numeros">
+  <div class="sec-eye">07 — El impacto global</div>
+  <h2 class="sec-title">Los números<br><em>que lo dicen todo</em></h2>
+  <p class="sec-lead">La IA no es una moda pasajera. Estos datos muestran por qué quien no la use quedará atrás.</p>
+
+  <div class="bignums">
+    <div class="bn">
+      <div class="bv" style="color:var(--gold)">100M</div>
+      <div class="bd">usuarios de ChatGPT en los primeros 2 meses — el producto que más rápido creció en la historia</div>
+    </div>
+    <div class="bn">
+      <div class="bv" style="color:var(--teal)">$15T</div>
+      <div class="bd">impacto estimado de la IA en la economía global para 2030 según McKinsey</div>
+    </div>
+    <div class="bn">
+      <div class="bv" style="color:var(--lav)">77%</div>
+      <div class="bd">de los dispositivos que usamos hoy ya tienen alguna forma de IA integrada</div>
+    </div>
+    <div class="bn">
+      <div class="bv" style="color:var(--rose)">10x</div>
+      <div class="bd">más productivo puede ser un trabajador que usa IA bien vs uno que no la usa</div>
+    </div>
+    <div class="bn">
+      <div class="bv" style="color:var(--blue)">300M</div>
+      <div class="bd">empleos en el mundo se verán afectados por la IA — los que la usen serán los que sobrevivan</div>
+    </div>
+    <div class="bn">
+      <div class="bv" style="color:var(--lime)">1B+</div>
+      <div class="bd">personas usaron herramientas de IA generativa en 2024 — y el número sigue creciendo</div>
+    </div>
+  </div>
+
+  <div class="quote-block" style="margin-top:48px">
+    <p>"No importa si eres barbero, repostero, modista o tendero. Las reglas del juego cambiaron. Y tú puedes ganar — si empiezas hoy."</p>
+    <cite>— John Esteban Rodríguez · Facilitador · Módulo IA para Multiplicadores</cite>
+  </div>
+
+  <!-- CTA final -->
+  <div style="text-align:center;margin-top:48px;padding:48px 28px;background:var(--card);border:1px solid var(--b1);border-radius:20px">
+    <div style="font-family:var(--fplay);font-size:clamp(24px,4vw,42px);font-weight:900;line-height:1.2;margin-bottom:16px">
+      El mejor momento para<br>empezar fue ayer.<br>
+      <em style="color:var(--gold)">El segundo mejor es ahora.</em>
+    </div>
+    <div style="font-size:17px;color:var(--t2);max-width:500px;margin:0 auto 28px">
+      En las próximas horas vas a crear tu primera herramienta de IA para tu negocio. Algo real. Algo que funciona. Algo que puedes usar mañana.
+    </div>
+    <div style="display:inline-block;background:var(--goldbg);border:1px solid var(--gold);border-radius:10px;padding:12px 28px;font-size:15px;color:var(--gold);font-weight:500">
+      🚀 Abre ChatGPT o Claude en tu celular — empezamos
+    </div>
+  </div>
+
+</section>
+
+<script>
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('act'));
+  event.target.classList.add('act');
+}
+// Actualizar nav al hacer scroll
+const secs = ['hero','historia','que-es','ias','vida','trabajo','prompt','numeros'];
+const navBtns = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let cur = 0;
+  secs.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) cur = i;
+  });
+  navBtns.forEach((b, i) => b.classList.toggle('act', i === cur));
+}, { passive: true });
+</script>
+
+</body>
+</html>
